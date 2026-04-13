@@ -160,6 +160,29 @@
   .deliv-text strong{color:var(--text-bright);font-weight:600}
   .deliv-text code{font-family:var(--font-mono);font-size:11.5px;background:var(--accent-dim);color:var(--accent);padding:1px 5px;border-radius:3px}
 
+  /* ===== TESTING WORKFLOW (5 Steps) ===== */
+  .tw-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+  @media(max-width:900px){.tw-steps{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}}
+  .tw-step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 14px;border-top:3px solid var(--c,var(--amber));position:relative}
+  .tw-step.human{--c:var(--blue)}
+  .tw-step.ai{--c:var(--amber)}
+  .tw-step-num{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--c);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .tw-step-num::before{content:'';width:24px;height:24px;border-radius:50%;background:var(--c);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;counter-increment:step;content:counter(step)}
+  .tw-steps{counter-reset:step}
+  .tw-step-title{font-size:14px;font-weight:700;color:var(--text-bright);margin-bottom:6px;line-height:1.3}
+  .tw-step-who{font-family:var(--font-mono);font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:1px;display:inline-block;margin-bottom:8px}
+  .tw-step.ai .tw-step-who{background:var(--amber-dim);color:var(--amber)}
+  .tw-step.human .tw-step-who{background:var(--blue-dim);color:var(--blue)}
+  .tw-step-desc{font-size:12px;color:var(--text-dim);line-height:1.55}
+  .tw-step-out{font-size:11.5px;color:var(--text);margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)}
+  .tw-step-out strong{color:var(--c);font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:1px}
+  .tw-gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:16px}
+  .tw-gate{background:var(--amber-dim);border:1px solid var(--amber);border-radius:10px;padding:14px 16px}
+  .tw-gate-name{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:6px}
+  .tw-gate-text{font-size:12.5px;color:var(--text);line-height:1.5}
+  .tw-note{background:var(--rose-dim);border-left:3px solid var(--rose);border-radius:8px;padding:12px 16px;font-size:12.5px;color:var(--text);line-height:1.6}
+  .tw-note strong{color:var(--rose)}
+
   /* ===== PROCESSES (Coding & Testing) ===== */
   .proc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:720px){.proc-grid{grid-template-columns:1fr}}
@@ -210,8 +233,8 @@
     <p class="hero-sub anim" style="--i:3">Build 2 quy trình production-ready (AI Coding + AI Testing) trên nền framework <strong>Superpowers</strong> với 8-step mandatory flow, 6 hard gates, TDD bắt buộc. Output: tài liệu áp dụng trực tiếp vào dự án thực không cần chỉnh sửa lớn.</p>
     <div class="hero-meta anim" style="--i:4">
       <div class="hero-meta-item"><span class="hero-meta-label">Duration</span><span class="hero-meta-value">3 tuần (W1-W3)</span></div>
-      <div class="hero-meta-item"><span class="hero-meta-label">Deliverables</span><span class="hero-meta-value">9 outputs</span></div>
-      <div class="hero-meta-item"><span class="hero-meta-label">Quality Gates</span><span class="hero-meta-value">6 hard gates</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Deliverables</span><span class="hero-meta-value">16 outputs (9 Coding + 7 Testing)</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Quality Gates</span><span class="hero-meta-value">6 Coding + 3 Testing</span></div>
       <div class="hero-meta-item"><span class="hero-meta-label">Framework</span><span class="hero-meta-value">obra/superpowers</span></div>
       <div class="hero-meta-item"><span class="hero-meta-label">Tracks</span><span class="hero-meta-value">Greenfield &amp; Legacy</span></div>
     </div>
@@ -226,10 +249,10 @@
   <h2 class="section-heading anim" style="--i:1">4 Nguyên Tắc Cốt Lõi</h2>
   <p class="section-intro anim" style="--i:2">Hard rules &mdash; không exception. Toàn bộ quy trình phải enforce được 4 nguyên tắc này, nếu không quy trình failed dù đẹp đến đâu.</p>
   <div class="principles-grid">
-    <div class="principle anim" style="--i:3;--c:var(--green)"><div class="principle-num">P-01</div><div class="principle-title">Design trước, Code sau</div><div class="principle-desc">Không viết code khi chưa có design doc được human approve. Hard gate, không exception.</div></div>
+    <div class="principle anim" style="--i:3;--c:var(--green)"><div class="principle-num">P-01</div><div class="principle-title">Document trước, Code sau</div><div class="principle-desc">Không viết code khi chưa có design doc được human approve. Hard gate, không exception.</div></div>
     <div class="principle anim" style="--i:4;--c:var(--amber)"><div class="principle-num">P-02</div><div class="principle-title">TDD là bắt buộc</div><div class="principle-desc">Mỗi task: failing test → implement → verify. Không có "viết test sau" hay "skip vì gấp".</div></div>
     <div class="principle anim" style="--i:5;--c:var(--blue)"><div class="principle-num">P-03</div><div class="principle-title">Evidence, không tự claim</div><div class="principle-desc">AI phải CHỨNG MINH done bằng evidence (test pass, coverage, output logs). Không được nói "đã xong".</div></div>
-    <div class="principle anim" style="--i:6;--c:var(--plum)"><div class="principle-num">P-04</div><div class="principle-title">Human là Owner</div><div class="principle-desc">AI là force multiplier, không phải replacement. Dev hiểu 100% code, chịu trách nhiệm cuối cùng.</div></div>
+    <div class="principle anim" style="--i:6;--c:var(--plum)"><div class="principle-num">P-04</div><div class="principle-title">Human là Final Gate</div><div class="principle-desc">AI là force multiplier, không phải replacement. Dev hiểu 100% code, chịu trách nhiệm cuối cùng.</div></div>
   </div>
 </section>
 
@@ -244,27 +267,19 @@
         <div class="pt-week-head">W1</div><div class="pt-week-head">W2</div><div class="pt-week-head">W3</div>
       </div>
       <div class="pt-row">
-        <div class="pt-row-label"><span class="pt-row-title">AI Coding Process</span><span class="pt-row-owner">Tech Lead</span></div>
+        <div class="pt-row-label"><span class="pt-row-title">AI Coding Process</span></div>
         <div class="pt-track"><div class="pt-bar c-green" style="left:0%;width:66.66%">Build · Draft · Iterate · Final</div><div class="pt-tick" style="left:66.66%" title="M1 Coding v1"></div></div>
       </div>
       <div class="pt-row">
-        <div class="pt-row-label"><span class="pt-row-title">AI Testing Process</span><span class="pt-row-owner">QA Lead</span></div>
+        <div class="pt-row-label"><span class="pt-row-title">AI Testing Process</span></div>
         <div class="pt-track"><div class="pt-bar c-amber" style="left:33.33%;width:50%">Draft &amp; Final</div><div class="pt-tick" style="left:83.33%" title="M2 Testing v1"></div></div>
       </div>
       <div class="pt-row">
-        <div class="pt-row-label"><span class="pt-row-title">Superpowers Setup</span><span class="pt-row-owner">AI Champion</span></div>
-        <div class="pt-track"><div class="pt-bar c-plum" style="left:0%;width:33.33%">Install &amp; configure</div></div>
-      </div>
-      <div class="pt-row">
-        <div class="pt-row-label"><span class="pt-row-title">Templates &amp; Checklists</span><span class="pt-row-owner">Tech Lead + QA</span></div>
-        <div class="pt-track"><div class="pt-bar c-teal" style="left:33.33%;width:50%">CLAUDE.md · Rules · Gates · Design Doc</div></div>
-      </div>
-      <div class="pt-row">
-        <div class="pt-row-label"><span class="pt-row-title">Training Material</span><span class="pt-row-owner">AI Champion</span></div>
+        <div class="pt-row-label"><span class="pt-row-title">Training Material</span></div>
         <div class="pt-track"><div class="pt-bar c-plum" style="left:50%;width:50%">Slides + video demo end-to-end</div></div>
       </div>
       <div class="pt-row">
-        <div class="pt-row-label"><span class="pt-row-title">Review &amp; Publish</span><span class="pt-row-owner">COO + Leads</span></div>
+        <div class="pt-row-label"><span class="pt-row-title">Review &amp; Publish</span></div>
         <div class="pt-track"><div class="pt-bar c-green" style="left:83.33%;width:16.66%">Approve · Publish</div><div class="pt-tick" style="left:100%" title="M3 Publish"></div></div>
       </div>
     </div>
@@ -480,64 +495,80 @@
   </div>
 </section>
 
-<!-- ===== 6 QUALITY GATES ===== -->
+<!-- ===== TESTING WORKFLOW FOR TESTER ===== -->
 <section class="section">
-  <div class="section-title anim" style="--i:0">05 &middot; Quality Gates</div>
-  <h2 class="section-heading anim" style="--i:1">6 Hard Gates &mdash; không skip</h2>
-  <p class="section-intro anim" style="--i:2">Mỗi gate có <strong>trigger</strong> rõ ràng và <strong>điều kiện pass</strong> verifiable. Trong đó 3 gates chỉ áp dụng cho Dự án cũ.</p>
-  <div class="gates-grid">
-    <div class="gate-card anim" style="--i:3;--c:var(--rose);--cdim:var(--rose-dim)">
-      <div class="gate-head"><div class="gate-name">Design Gate</div><span class="gate-scope">Always</span></div>
-      <div class="gate-trigger">Trigger: Sau Phase 1 &middot; trước Plan</div>
-      <div class="gate-pass"><strong>Pass:</strong> Design doc được human approve. Legacy: thêm Impact Analysis.</div>
+  <div class="section-title anim" style="--i:0">07 &middot; Testing Workflow cho Tester</div>
+  <h2 class="section-heading anim" style="--i:1">Quy trình AI cho Testing &mdash; 5 bước</h2>
+  <p class="section-intro anim" style="--i:2">
+    Workflow dành cho <strong>QA / Tester</strong>. AI là <strong style="color:var(--amber)">content generator</strong> (viết testcase), Tester là <strong style="color:var(--blue)">quality gate</strong> (review + execute). Không để AI tự chạy test &amp; tự claim pass. 5 bước, 3 hard gates.
+  </p>
+
+  <div class="tw-steps anim" style="--i:3">
+    <div class="tw-step ai">
+      <div class="tw-step-num">Step 1</div>
+      <div class="tw-step-who">AI + Tester</div>
+      <div class="tw-step-title">Brainstorm Test Strategy</div>
+      <div class="tw-step-desc">AI đặt câu hỏi Socratic: scope, user flow critical, risk areas, test levels, data/env. Tester challenge &amp; bổ sung business context.</div>
+      <div class="tw-step-out"><strong>Out:</strong> Test Strategy Doc</div>
     </div>
-    <div class="gate-card optional anim" style="--i:4;--c:var(--blue);--cdim:var(--blue-dim)">
-      <div class="gate-head"><div class="gate-name">Safety Net Gate</div><span class="gate-scope">Legacy only</span></div>
-      <div class="gate-trigger">Trigger: Sau Phase 2 &middot; trước Execution</div>
-      <div class="gate-pass"><strong>Pass:</strong> Test coverage cho code sẽ bị sửa đã có TRƯỚC khi đụng vào.</div>
+    <div class="tw-step ai">
+      <div class="tw-step-num">Step 2</div>
+      <div class="tw-step-who">AI + Tester</div>
+      <div class="tw-step-title">Plan viết Testcase</div>
+      <div class="tw-step-desc">AI break-down strategy thành Testcase Backlog: ID · Feature · Scenario · Type · Priority · Count. Tester bổ sung case thiếu, xoá trùng, chốt priority.</div>
+      <div class="tw-step-out"><strong>Out:</strong> Testcase Writing Plan</div>
     </div>
-    <div class="gate-card anim" style="--i:5;--c:var(--amber);--cdim:var(--amber-dim)">
-      <div class="gate-head"><div class="gate-name">TDD Gate</div><span class="gate-scope">Always</span></div>
-      <div class="gate-trigger">Trigger: Mỗi task trong Phase 3-4</div>
-      <div class="gate-pass"><strong>Pass:</strong> Có failing test TRƯỚC khi có implementation.</div>
+    <div class="tw-step ai">
+      <div class="tw-step-num">Step 3</div>
+      <div class="tw-step-who">AI</div>
+      <div class="tw-step-title">AI viết Testcase theo Template</div>
+      <div class="tw-step-desc">Template: ID · Title · Precondition · Steps · Test Data · Expected · Priority · Type · Requirement. Không skip field, không placeholders, cite requirement ID (traceability).</div>
+      <div class="tw-step-out"><strong>Out:</strong> Draft Testcase Suite</div>
     </div>
-    <div class="gate-card anim" style="--i:6;--c:var(--rose);--cdim:var(--rose-dim)">
-      <div class="gate-head"><div class="gate-name">Verification Gate</div><span class="gate-scope">Always</span></div>
-      <div class="gate-trigger">Trigger: Sau Phase 5 &middot; trước Finalize</div>
-      <div class="gate-pass"><strong>Pass:</strong> Evidence-based verification pass toàn bộ checklist (tests, coverage, no TODOs, no placeholders).</div>
+    <div class="tw-step human">
+      <div class="tw-step-num">Step 4</div>
+      <div class="tw-step-who">Tester</div>
+      <div class="tw-step-title">Tester Review Testcase</div>
+      <div class="tw-step-desc">Checklist: đúng template · cover requirement · step actionable · expected đo được · không trùng · edge case hợp lý · data realistic · priority đúng. &gt;20% FIX &rarr; loop về Step 3.</div>
+      <div class="tw-step-out"><strong>Out:</strong> Testcase Suite approved</div>
     </div>
-    <div class="gate-card optional anim" style="--i:7;--c:var(--blue);--cdim:var(--blue-dim)">
-      <div class="gate-head"><div class="gate-name">Domain Gate</div><span class="gate-scope">Legacy only</span></div>
-      <div class="gate-trigger">Trigger: Trước merge</div>
-      <div class="gate-pass"><strong>Pass:</strong> Domain Expert approve business logic changes.</div>
-    </div>
-    <div class="gate-card optional anim" style="--i:8;--c:var(--blue);--cdim:var(--blue-dim)">
-      <div class="gate-head"><div class="gate-name">Rollback Gate</div><span class="gate-scope">Legacy only</span></div>
-      <div class="gate-trigger">Trigger: Trước merge</div>
-      <div class="gate-pass"><strong>Pass:</strong> Rollback plan có + đã test revert thành công.</div>
+    <div class="tw-step human">
+      <div class="tw-step-num">Step 5</div>
+      <div class="tw-step-who">Tester</div>
+      <div class="tw-step-title">Tester Execute Testing</div>
+      <div class="tw-step-desc">Chạy từng testcase manual / semi-auto, ghi Pass/Fail, attach evidence (screenshot/log/video). AI hỗ trợ optional: viết bug ticket, summarize report, phân tích bug patterns.</div>
+      <div class="tw-step-out"><strong>Out:</strong> Test Report + Bug Tickets</div>
     </div>
   </div>
-</section>
 
-<!-- ===== COMPARE TABLE ===== -->
-<section class="section">
-  <div class="section-title anim" style="--i:0">06 &middot; Quick Compare</div>
-  <h2 class="section-heading anim" style="--i:1">Greenfield vs Legacy</h2>
-  <div class="compare anim" style="--i:2">
-    <div class="compare-head"><div>Khía cạnh</div><div>Dự án mới</div><div>Dự án cũ</div></div>
-    <div class="compare-row"><div class="compare-cell">Core principle</div><div class="compare-cell"><strong>"Move fast, AI lead."</strong></div><div class="compare-cell"><strong>"Move carefully, AI assist."</strong></div></div>
-    <div class="compare-row"><div class="compare-cell">Time to full speed</div><div class="compare-cell">~3-4 tuần</div><div class="compare-cell">~8-10 tuần</div></div>
-    <div class="compare-row"><div class="compare-cell">Parallel dispatch</div><div class="compare-cell">Ngay từ sprint 1</div><div class="compare-cell">Sau khi team confident</div></div>
-    <div class="compare-row"><div class="compare-cell">Test strategy</div><div class="compare-cell">TDD song song code</div><div class="compare-cell">Test code cũ TRƯỚC khi đổi</div></div>
-    <div class="compare-row"><div class="compare-cell">Merge strategy</div><div class="compare-cell">Nhanh, ít risk</div><div class="compare-cell">Gradual + feature flags + rollback</div></div>
-    <div class="compare-row"><div class="compare-cell">Bug volume</div><div class="compare-cell">Ít (TDD từ đầu)</div><div class="compare-cell">Nhiều → 4-phase debug bắt buộc</div></div>
-    <div class="compare-row"><div class="compare-cell">Gates required</div><div class="compare-cell">3 (Design, TDD, Verify)</div><div class="compare-cell">6 (+ Safety Net, Domain, Rollback)</div></div>
+  <h3 style="font-size:16px;font-weight:700;color:var(--text-bright);margin:18px 0 10px">3 Quality Gates</h3>
+  <div class="tw-gates anim" style="--i:4">
+    <div class="tw-gate">
+      <div class="tw-gate-name">Strategy Gate</div>
+      <div class="tw-gate-text"><strong>After Step 1.</strong> Tester approve Test Strategy Doc trước khi sang Plan.</div>
+    </div>
+    <div class="tw-gate">
+      <div class="tw-gate-name">Plan Gate</div>
+      <div class="tw-gate-text"><strong>After Step 2.</strong> Tester approve Testcase Backlog trước khi AI viết case.</div>
+    </div>
+    <div class="tw-gate">
+      <div class="tw-gate-name">Review Gate</div>
+      <div class="tw-gate-text"><strong>After Step 4.</strong> 100% testcase pass checklist trước khi Tester execute.</div>
+    </div>
+  </div>
+
+  <div class="tw-note anim" style="--i:5">
+    <strong>Scope:</strong> Giai đoạn này <strong>chưa build agent tự động execute test</strong> (YAGNI). Khi team đã thuần workflow này (~6 tháng), sẽ đánh giá lại auto-execution, Playwright MCP, Allure integration ở phase sau.
+  </div>
+
+  <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+    <a href="workflow-testing-with-ai.html" style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;background:var(--amber);color:#fff">&#8599; Full Testing Workflow (5 bước chi tiết)</a>
   </div>
 </section>
 
 <!-- ===== 2 PROCESSES ===== -->
 <section class="section">
-  <div class="section-title anim" style="--i:0">07 &middot; Deliverables &middot; 2 Processes</div>
+  <div class="section-title anim" style="--i:0">08 &middot; Deliverables &middot; 2 Processes</div>
   <h2 class="section-heading anim" style="--i:1">AI Coding &amp; AI Testing</h2>
   <div class="proc-grid">
     <div class="proc anim" style="--i:2;--c:var(--green);--cdim:var(--green-dim)">
@@ -570,22 +601,24 @@
         <div class="proc-icon">&#9873;</div>
         <div><div class="proc-title">AI cho Testing</div><div class="proc-meta">W3 &middot; QA Lead</div></div>
       </div>
-      <div class="proc-goal">Tận dụng AI để tăng tốc &amp; nâng cao chất lượng testing. Tích hợp TDD cycle của Coding process.</div>
+      <div class="proc-goal">Tăng tốc viết testcase &amp; nâng chất lượng test coverage. AI = content generator, Tester = quality gate. Chưa build auto-execution (YAGNI).</div>
       <div class="proc-sec"><div class="proc-sec-title">Core content</div>
         <ul>
-          <li>AI-Assisted Test Writing (unit/integration/E2E/perf)</li>
-          <li>Workflow: code → AI gen test → dev review → run → fix</li>
-          <li>AI cho QA: test plan từ requirements, exploratory</li>
-          <li>Coverage gap analysis bằng AI</li>
+          <li>5 bước workflow: Strategy &rarr; Plan &rarr; Write &rarr; Review &rarr; Execute</li>
+          <li>3 Quality Gates: Strategy / Plan / Review</li>
+          <li>Template Testcase chuẩn (9 trường, traceability)</li>
+          <li>Checklist review testcase (8 tiêu chí)</li>
         </ul>
       </div>
       <div class="proc-sec"><div class="proc-sec-title">Deliverables</div>
         <ul>
-          <li>Template prompts cho từng loại test</li>
-          <li>Checklist quality cho AI-generated tests</li>
-          <li>Hướng dẫn tích hợp AI vào CI/CD pipeline</li>
-          <li>Template bug report tự động</li>
-          <li>Training material (slides + video)</li>
+          <li>Tài liệu quy trình Testing &mdash; 5 bước, ví dụ end-to-end</li>
+          <li>Template Test Strategy Doc (Step 1)</li>
+          <li>Template Testcase Backlog (Step 2)</li>
+          <li>Template Testcase &mdash; Excel/Markdown (Step 3)</li>
+          <li>Checklist Review Testcase (Step 4)</li>
+          <li>Prompt Library cho Step 1/2/3</li>
+          <li>Training material &mdash; workshop 1 ngày QA + demo</li>
         </ul>
       </div>
     </div>
@@ -594,8 +627,9 @@
 
 <!-- ===== ALL DELIVERABLES ===== -->
 <section class="section">
-  <div class="section-title anim" style="--i:0">08 &middot; Deliverables Checklist</div>
-  <h2 class="section-heading anim" style="--i:1">9 outputs Phase 1</h2>
+  <div class="section-title anim" style="--i:0">09 &middot; Deliverables Checklist</div>
+  <h2 class="section-heading anim" style="--i:1">Outputs Phase 1 &mdash; Coding (9) + Testing (7)</h2>
+  <h3 style="font-size:14px;font-weight:700;color:var(--green);margin:8px 0 10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1.3px">&rtrif; AI Coding (W1-W2)</h3>
   <div class="deliv-list">
     <div class="deliv anim" style="--i:2;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text"><strong>Tài liệu quy trình Coding</strong> &mdash; 6 phases, 2 nhánh, có ví dụ</div></div>
     <div class="deliv anim" style="--i:3;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text">Template <code>CLAUDE.md</code> chuẩn cho dự án</div></div>
@@ -605,7 +639,18 @@
     <div class="deliv anim" style="--i:7;--c:var(--teal)"><div class="deliv-box"></div><div class="deliv-text">Template Design Doc (Greenfield + Legacy Impact Analysis)</div></div>
     <div class="deliv anim" style="--i:8;--c:var(--teal)"><div class="deliv-box"></div><div class="deliv-text">Template Plan với TDD-first tasks (paths, code, commands)</div></div>
     <div class="deliv anim" style="--i:9;--c:var(--teal)"><div class="deliv-box"></div><div class="deliv-text">Template PR/Review với severity-based feedback</div></div>
-    <div class="deliv anim" style="--i:10;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text"><strong>Training material</strong> &mdash; slides + video demo end-to-end</div></div>
+    <div class="deliv anim" style="--i:10;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text"><strong>Training material</strong> &mdash; slides + video demo end-to-end cho cả 2 track</div></div>
+  </div>
+
+  <h3 style="font-size:14px;font-weight:700;color:var(--amber);margin:22px 0 10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1.3px">&rtrif; AI Testing (W3)</h3>
+  <div class="deliv-list">
+    <div class="deliv anim" style="--i:11;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text"><strong>Tài liệu quy trình Testing</strong> &mdash; 5 bước, ví dụ end-to-end</div></div>
+    <div class="deliv anim" style="--i:12;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text">Template <strong>Test Strategy Doc</strong> (Step 1 output)</div></div>
+    <div class="deliv anim" style="--i:13;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text">Template <strong>Testcase Backlog</strong> (Step 2 output)</div></div>
+    <div class="deliv anim" style="--i:14;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text">Template <strong>Testcase</strong> chuẩn &mdash; 9 trường, Excel/Markdown (Step 3)</div></div>
+    <div class="deliv anim" style="--i:15;--c:var(--rose)"><div class="deliv-box"></div><div class="deliv-text">Checklist <strong>Review Testcase</strong> &mdash; 8 tiêu chí (Step 4)</div></div>
+    <div class="deliv anim" style="--i:16;--c:var(--plum)"><div class="deliv-box"></div><div class="deliv-text"><strong>Prompt Library</strong> &mdash; prompt mẫu cho Step 1/2/3</div></div>
+    <div class="deliv anim" style="--i:17;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text"><strong>Training material</strong> &mdash; workshop 1 ngày QA + demo feature end-to-end</div></div>
   </div>
 </section>
 

@@ -242,22 +242,22 @@
 <div class="container">
 
   <h1 class="anim" style="--i:0">Superpowers &times; Software Development Workflow</h1>
-  <p class="subtitle anim" style="--i:1">obra/superpowers &mdash; ap dung vao du an moi vs du an cu</p>
+  <p class="subtitle anim" style="--i:1">obra/superpowers &mdash; áp dụng vào dự án mới vs dự án cũ</p>
   <p class="intro anim" style="--i:2">
-    <strong>Superpowers</strong> la framework bat buoc AI agents di theo quy trinh:
+    <strong>Superpowers</strong> là framework bắt buộc AI agents đi theo quy trình:
     Brainstorm &rarr; Design &rarr; Plan &rarr; Execute &rarr; Test (TDD) &rarr; Review &rarr; Finalize.
-    <strong>Khong duoc skip buoc nao.</strong>
-    Duoi day la cach ap dung <strong>14 superpowers</strong> vao tung phase cua SDLC cho 2 loai du an.
+    <strong>Không được skip bước nào.</strong>
+    Dưới đây là cách áp dụng <strong>14 superpowers</strong> vào từng phase của SDLC cho 2 loại dự án.
   </p>
 
   <!-- Legend -->
   <div class="legend anim" style="--i:3">
-    <div class="legend-item"><div class="legend-swatch" style="background:var(--green-dim);border:1.5px solid var(--green)"></div>Du an moi (Greenfield)</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:var(--blue-dim);border:1.5px solid var(--blue)"></div>Du an cu (Legacy)</div>
-    <div class="legend-item"><span class="tag tag--sp" style="margin:0">SP</span> Superpower duoc dung</div>
-    <div class="legend-item"><span class="tag tag--gate" style="margin:0">GATE</span> Hard gate / bat buoc</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--green-dim);border:1.5px solid var(--green)"></div>Dự án mới (Greenfield)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--blue-dim);border:1.5px solid var(--blue)"></div>Dự án cũ (Legacy)</div>
+    <div class="legend-item"><span class="tag tag--sp" style="margin:0">SP</span> Superpower được dùng</div>
+    <div class="legend-item"><span class="tag tag--gate" style="margin:0">GATE</span> Hard gate / bắt buộc</div>
     <div class="legend-item"><span class="tag tag--tdd" style="margin:0">TDD</span> Test-Driven</div>
-    <div class="legend-item"><span class="tag tag--human" style="margin:0">HUMAN</span> Nguoi quyet dinh</div>
+    <div class="legend-item"><span class="tag tag--human" style="margin:0">HUMAN</span> Người quyết định</div>
   </div>
 
   <!-- ============ 14 SUPERPOWERS OVERVIEW ============ -->
@@ -281,7 +281,7 @@
   </div>
 
   <!-- ============ MANDATORY FLOW ============ -->
-  <div class="section-title anim" style="--i:6">Mandatory Flow (khong duoc skip)</div>
+  <div class="section-title anim" style="--i:6">Mandatory Flow (không được skip)</div>
 
   <div class="flow-diagram anim" style="--i:7">
     <div class="flow-step">
@@ -326,7 +326,7 @@
   </div>
 
   <!-- ============ PHASE DETAILS ============ -->
-  <div class="section-title anim" style="--i:8">Chi Tiet Tung Phase &mdash; Du An Moi vs Du An Cu</div>
+  <div class="section-title anim" style="--i:8">Chi Tiết Từng Phase &mdash; Dự Án Mới vs Dự Án Cũ</div>
 
   <!-- PHASE 1: Brainstorm + Design -->
   <div class="phase-section open anim" style="--i:9">
@@ -339,36 +339,36 @@
     <div class="phase-body">
       <div class="phase-content">
         <div class="lane-cell lane-cell--green">
-          <div class="cell-label">Du an moi</div>
+          <div class="cell-label">Dự án mới</div>
           <ul class="action-list">
             <li class="action-item">
               <div class="action-title">Socratic Brainstorming <span class="tag tag--sp">Brainstorming</span></div>
-              <div class="action-desc">AI dat cau hoi Socratic 9 buoc: <strong>context &rarr; constraints &rarr; goals &rarr; 2-3 approaches &rarr; trade-offs</strong>. Khong viet code, chi hieu bai toan.</div>
+              <div class="action-desc">AI đặt câu hỏi Socratic 9 bước: <strong>context &rarr; constraints &rarr; goals &rarr; 2-3 approaches &rarr; trade-offs</strong>. Không viết code, chỉ hiểu bài toán.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Tao Design Doc <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc">Output: <strong>design spec file</strong>. Bao gom: goals, architecture, data flow, API contracts. <strong>Human PHAI approve truoc khi code.</strong></div>
+              <div class="action-title">Tạo Design Doc <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc">Output: <strong>design spec file</strong>. Bao gồm: goals, architecture, data flow, API contracts. <strong>Human PHẢI approve trước khi code.</strong></div>
             </li>
             <li class="action-item">
-              <div class="action-title">Bat dau tu zero &mdash; tu do chon architecture <span class="tag tag--human">HUMAN</span></div>
-              <div class="action-desc">Khong rang buoc boi code cu. AI de xuat architecture tot nhat, team chon. <strong>Co the dung greenfield-first approach.</strong></div>
+              <div class="action-title">Bắt đầu từ zero &mdash; tự do chọn architecture <span class="tag tag--human">HUMAN</span></div>
+              <div class="action-desc">Không ràng buộc bởi code cũ. AI đề xuất architecture tốt nhất, team chọn. <strong>Có thể dùng greenfield-first approach.</strong></div>
             </li>
           </ul>
         </div>
         <div class="lane-cell lane-cell--blue">
-          <div class="cell-label">Du an cu</div>
+          <div class="cell-label">Dự án cũ</div>
           <ul class="action-list">
             <li class="action-item">
-              <div class="action-title">Scan & Hieu Codebase Truoc <span class="tag tag--sp">Framework Literacy</span></div>
-              <div class="action-desc">AI <strong>doc toan bo code, map dependencies, hieu conventions</strong> dang dung. Framework Literacy (#13) de AI hieu "luat choi" cua du an.</div>
+              <div class="action-title">Scan & Hiểu Codebase Trước <span class="tag tag--sp">Framework Literacy</span></div>
+              <div class="action-desc">AI <strong>đọc toàn bộ code, map dependencies, hiểu conventions</strong> đang dùng. Framework Literacy (#13) để AI hiểu "luật chơi" của dự án.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Brainstorm Trong Rang Buoc <span class="tag tag--sp">Brainstorming</span></div>
-              <div class="action-desc">AI brainstorm nhung <strong>phai phu hop voi architecture hien tai</strong>. Cac approach deu can backward compatible. Khong de xuat "lam lai tu dau".</div>
+              <div class="action-title">Brainstorm Trong Ràng Buộc <span class="tag tag--sp">Brainstorming</span></div>
+              <div class="action-desc">AI brainstorm nhưng <strong>phải phù hợp với architecture hiện tại</strong>. Các approach đều cần backward compatible. Không đề xuất "làm lại từ đầu".</div>
             </li>
             <li class="action-item">
               <div class="action-title">Impact Analysis trong Design Doc <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc">Design doc PHAI co them: <strong>files bi anh huong, risk of breaking changes, rollback plan</strong>. Human approve.</div>
+              <div class="action-desc">Design doc PHẢI có thêm: <strong>files bị ảnh hưởng, risk of breaking changes, rollback plan</strong>. Human approve.</div>
             </li>
           </ul>
         </div>
@@ -389,36 +389,36 @@
     <div class="phase-body">
       <div class="phase-content">
         <div class="lane-cell lane-cell--green">
-          <div class="cell-label">Du an moi</div>
+          <div class="cell-label">Dự án mới</div>
           <ul class="action-list">
             <li class="action-item">
-              <div class="action-title">Breakdown thanh TDD Tasks <span class="tag tag--sp">Writing Plans</span> <span class="tag tag--tdd">TDD</span></div>
-              <div class="action-desc">Moi task 2-5 phut: <strong>viet failing test &rarr; implement &rarr; verify &rarr; commit</strong>. Exact file paths, code blocks, test commands. Khong placeholders.</div>
+              <div class="action-title">Breakdown thành TDD Tasks <span class="tag tag--sp">Writing Plans</span> <span class="tag tag--tdd">TDD</span></div>
+              <div class="action-desc">Mỗi task 2-5 phút: <strong>viết failing test &rarr; implement &rarr; verify &rarr; commit</strong>. Exact file paths, code blocks, test commands. Không placeholders.</div>
             </li>
             <li class="action-item">
               <div class="action-title">Subagent Assignment <span class="tag tag--sp">Subagent Driving</span></div>
-              <div class="action-desc">Phan cong: <strong>Planner tao plan &rarr; Coder implement &rarr; Tester verify &rarr; Reviewer check</strong>. Moi agent co role ro rang.</div>
+              <div class="action-desc">Phân công: <strong>Planner tạo plan &rarr; Coder implement &rarr; Tester verify &rarr; Reviewer check</strong>. Mỗi agent có role rõ ràng.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Plan tu design doc truc tiep</div>
-              <div class="action-desc">Plan sinh tu design doc da approve. <strong>Khong can tim hieu code cu</strong> vi chua co code. Nhanh va ro rang.</div>
+              <div class="action-title">Plan từ design doc trực tiếp</div>
+              <div class="action-desc">Plan sinh từ design doc đã approve. <strong>Không cần tìm hiểu code cũ</strong> vì chưa có code. Nhanh và rõ ràng.</div>
             </li>
           </ul>
         </div>
         <div class="lane-cell lane-cell--blue">
-          <div class="cell-label">Du an cu</div>
+          <div class="cell-label">Dự án cũ</div>
           <ul class="action-list">
             <li class="action-item">
-              <div class="action-title">Plan Phai Reference Code Cu <span class="tag tag--sp">Writing Plans</span></div>
-              <div class="action-desc">Moi task phai ghi ro: <strong>file nao can sua, function nao bi anh huong, test nao can update</strong>. AI doc code truoc khi tao plan.</div>
+              <div class="action-title">Plan Phải Reference Code Cũ <span class="tag tag--sp">Writing Plans</span></div>
+              <div class="action-desc">Mỗi task phải ghi rõ: <strong>file nào cần sửa, function nào bị ảnh hưởng, test nào cần update</strong>. AI đọc code trước khi tạo plan.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Test Coverage Tasks TRUOC <span class="tag tag--tdd">TDD</span> <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc"><strong>Buoc bat buoc cho du an cu:</strong> tasks dau tien la viet test cho code chua co test. Tao safety net truoc khi thay doi bat ky code nao.</div>
+              <div class="action-title">Test Coverage Tasks TRƯỚC <span class="tag tag--tdd">TDD</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Bước bắt buộc cho dự án cũ:</strong> tasks đầu tiên là viết test cho code chưa có test. Tạo safety net trước khi thay đổi bất kỳ code nào.</div>
             </li>
             <li class="action-item">
               <div class="action-title">Incremental Plan <span class="tag tag--sp">Subagent Driving</span></div>
-              <div class="action-desc">Plan <strong>chia nho hon binh thuong</strong>. Moi batch chi thay doi 1-2 files. Verify sau moi batch. Khong lam nhieu cung luc.</div>
+              <div class="action-desc">Plan <strong>chia nhỏ hơn bình thường</strong>. Mỗi batch chỉ thay đổi 1-2 files. Verify sau mỗi batch. Không làm nhiều cùng lúc.</div>
             </li>
           </ul>
         </div>
@@ -439,36 +439,36 @@
     <div class="phase-body">
       <div class="phase-content">
         <div class="lane-cell lane-cell--green">
-          <div class="cell-label">Du an moi</div>
+          <div class="cell-label">Dự án mới</div>
           <ul class="action-list">
             <li class="action-item">
               <div class="action-title">Git Worktrees cho Parallel Work <span class="tag tag--sp">Git Worktrees</span> <span class="tag tag--sp">Parallel Dispatch</span></div>
-              <div class="action-desc"><strong>Nhieu agents code song song</strong>, moi agent trong 1 worktree rieng. Backend/Frontend/DB dong thoi. Khong conflict.</div>
+              <div class="action-desc"><strong>Nhiều agents code song song</strong>, mỗi agent trong 1 worktree riêng. Backend/Frontend/DB đồng thời. Không conflict.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Execute Plan tung task <span class="tag tag--sp">Executing Plans</span> <span class="tag tag--tdd">TDD</span></div>
-              <div class="action-desc">Moi task: <strong>viet failing test truoc &rarr; implement code &rarr; test pass &rarr; commit</strong>. Khong skip buoc test. Khong commit code chua test.</div>
+              <div class="action-title">Execute Plan từng task <span class="tag tag--sp">Executing Plans</span> <span class="tag tag--tdd">TDD</span></div>
+              <div class="action-desc">Mỗi task: <strong>viết failing test trước &rarr; implement code &rarr; test pass &rarr; commit</strong>. Không skip bước test. Không commit code chưa test.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Toc do cao tu sprint 1 <span class="tag tag--sp">Parallel Dispatch</span></div>
-              <div class="action-desc">Khong co code cu can tim hieu. AI <strong>generate code truc tiep tu spec</strong>. Parallel dispatch (#9) cho max throughput.</div>
+              <div class="action-title">Tốc độ cao từ sprint 1 <span class="tag tag--sp">Parallel Dispatch</span></div>
+              <div class="action-desc">Không có code cũ cần tìm hiểu. AI <strong>generate code trực tiếp từ spec</strong>. Parallel dispatch (#9) cho max throughput.</div>
             </li>
           </ul>
         </div>
         <div class="lane-cell lane-cell--blue">
-          <div class="cell-label">Du an cu</div>
+          <div class="cell-label">Dự án cũ</div>
           <ul class="action-list">
             <li class="action-item">
-              <div class="action-title">Worktree de Isolate Changes <span class="tag tag--sp">Git Worktrees</span></div>
-              <div class="action-desc"><strong>KHONG code truc tiep tren main.</strong> Dung worktree de isolate. Neu fail thi discard, khong anh huong codebase chinh.</div>
+              <div class="action-title">Worktree để Isolate Changes <span class="tag tag--sp">Git Worktrees</span></div>
+              <div class="action-desc"><strong>KHÔNG code trực tiếp trên main.</strong> Dùng worktree để isolate. Nếu fail thì discard, không ảnh hưởng codebase chính.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Bat dau tu Bug Fixes & Small Tasks <span class="tag tag--sp">Executing Plans</span></div>
-              <div class="action-desc"><strong>Xay dung trust truoc.</strong> Cho AI lam task nho, verify dung, roi moi tang do phuc tap. Khong de AI refactor lon ngay.</div>
+              <div class="action-title">Bắt đầu từ Bug Fixes & Small Tasks <span class="tag tag--sp">Executing Plans</span></div>
+              <div class="action-desc"><strong>Xây dựng trust trước.</strong> Cho AI làm task nhỏ, verify đúng, rồi mới tăng độ phức tạp. Không để AI refactor lớn ngay.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Sequential, Khong Parallel Luc Dau <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc"><strong>Du an cu: lam tuan tu tung task.</strong> Verify xong moi task truoc khi lam task tiep. Parallel dispatch (#9) chi dung khi da confident.</div>
+              <div class="action-title">Sequential, Không Parallel Lúc Đầu <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Dự án cũ: làm tuần tự từng task.</strong> Verify xong mỗi task trước khi làm task tiếp. Parallel dispatch (#9) chỉ dùng khi đã confident.</div>
             </li>
           </ul>
         </div>
@@ -489,36 +489,36 @@
     <div class="phase-body">
       <div class="phase-content">
         <div class="lane-cell lane-cell--green">
-          <div class="cell-label">Du an moi</div>
+          <div class="cell-label">Dự án mới</div>
           <ul class="action-list">
             <li class="action-item">
               <div class="action-title">RED-GREEN-REFACTOR <span class="tag tag--sp">TDD</span> <span class="tag tag--tdd">TDD</span></div>
-              <div class="action-desc">Moi feature: <strong>viet test fail truoc (RED) &rarr; code du de pass (GREEN) &rarr; refactor cho dep (REFACTOR)</strong>. Khong bo qua buoc nao.</div>
+              <div class="action-desc">Mỗi feature: <strong>viết test fail trước (RED) &rarr; code đủ để pass (GREEN) &rarr; refactor cho đẹp (REFACTOR)</strong>. Không bỏ qua bước nào.</div>
             </li>
             <li class="action-item">
               <div class="action-title">Edge Case Discovery</div>
-              <div class="action-desc">AI <strong>generate edge cases, boundary tests, error scenarios</strong>. Coverage cao tu dau. Khong no test debt.</div>
+              <div class="action-desc">AI <strong>generate edge cases, boundary tests, error scenarios</strong>. Coverage cao từ đầu. Không nợ test debt.</div>
             </li>
             <li class="action-item">
               <div class="action-title">Debug = 4-Phase Root Cause <span class="tag tag--sp">Systematic Debug</span></div>
-              <div class="action-desc">Khi test fail: <strong>investigate &rarr; pattern analysis &rarr; hypothesis &rarr; minimal fix</strong>. Khong patch symptom, fix root cause.</div>
+              <div class="action-desc">Khi test fail: <strong>investigate &rarr; pattern analysis &rarr; hypothesis &rarr; minimal fix</strong>. Không patch symptom, fix root cause.</div>
             </li>
           </ul>
         </div>
         <div class="lane-cell lane-cell--blue">
-          <div class="cell-label">Du an cu</div>
+          <div class="cell-label">Dự án cũ</div>
           <ul class="action-list">
             <li class="action-item">
-              <div class="action-title">Viet Test Cho Code Cu TRUOC <span class="tag tag--sp">TDD</span> <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc"><strong>Quan trong nhat!</strong> AI generate tests cho code chua co test. Regression safety net phai co <strong>TRUOC khi thay doi bat ky dong code nao</strong>.</div>
+              <div class="action-title">Viết Test Cho Code Cũ TRƯỚC <span class="tag tag--sp">TDD</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Quan trọng nhất!</strong> AI generate tests cho code chưa có test. Regression safety net phải có <strong>TRƯỚC khi thay đổi bất kỳ dòng code nào</strong>.</div>
             </li>
             <li class="action-item">
               <div class="action-title">Systematic Debug cho Legacy Bugs <span class="tag tag--sp">Systematic Debug</span></div>
-              <div class="action-desc">Bug cu: AI <strong>khong guess fix</strong>. 4-phase debug: hieu root cause &rarr; viet failing test cho bug &rarr; fix &rarr; verify. 15-30 min thay vi 2-3h random fixes.</div>
+              <div class="action-desc">Bug cũ: AI <strong>không guess fix</strong>. 4-phase debug: hiểu root cause &rarr; viết failing test cho bug &rarr; fix &rarr; verify. 15-30 min thay vì 2-3h random fixes.</div>
             </li>
             <li class="action-item">
               <div class="action-title">Human Verify Test Logic <span class="tag tag--human">HUMAN</span></div>
-              <div class="action-desc">Developer <strong>review test de dam bao test dung business logic</strong>. AI co the tao tests pass nhung khong verify dung. Dac biet quan trong voi code cu.</div>
+              <div class="action-desc">Developer <strong>review test để đảm bảo test đúng business logic</strong>. AI có thể tạo tests pass nhưng không verify đúng. Đặc biệt quan trọng với code cũ.</div>
             </li>
           </ul>
         </div>
@@ -539,36 +539,36 @@
     <div class="phase-body">
       <div class="phase-content">
         <div class="lane-cell lane-cell--green">
-          <div class="cell-label">Du an moi</div>
+          <div class="cell-label">Dự án mới</div>
           <ul class="action-list">
             <li class="action-item">
               <div class="action-title">AI Request Review <span class="tag tag--sp">Request Review</span></div>
-              <div class="action-desc">Agent <strong>tu dong request review</strong>: check plan alignment, test coverage, code quality. Severity-based: blocking vs non-blocking issues.</div>
+              <div class="action-desc">Agent <strong>tự động request review</strong>: check plan alignment, test coverage, code quality. Severity-based: blocking vs non-blocking issues.</div>
             </li>
             <li class="action-item">
               <div class="action-title">AI Receive & Fix Feedback <span class="tag tag--sp">Receive Review</span></div>
-              <div class="action-desc">Agent <strong>doc feedback, phan loai severity, fix blocking issues</strong> truoc khi human review. Giam thoi gian review 60%+.</div>
+              <div class="action-desc">Agent <strong>đọc feedback, phân loại severity, fix blocking issues</strong> trước khi human review. Giảm thời gian review 60%+.</div>
             </li>
             <li class="action-item">
               <div class="action-title">Human Final Approve <span class="tag tag--human">HUMAN</span></div>
-              <div class="action-desc">Senior developer review ket qua cuoi cung. <strong>AI da xu ly 80% issues, human chi can focus vao design decisions.</strong></div>
+              <div class="action-desc">Senior developer review kết quả cuối cùng. <strong>AI đã xử lý 80% issues, human chỉ cần focus vào design decisions.</strong></div>
             </li>
           </ul>
         </div>
         <div class="lane-cell lane-cell--blue">
-          <div class="cell-label">Du an cu</div>
+          <div class="cell-label">Dự án cũ</div>
           <ul class="action-list">
             <li class="action-item">
-              <div class="action-title">Review Trong Context Code Cu <span class="tag tag--sp">Request Review</span></div>
-              <div class="action-desc">Review check them: <strong>consistency voi patterns cu, backward compatibility, no unintended side effects</strong> tren code khac.</div>
+              <div class="action-title">Review Trong Context Code Cũ <span class="tag tag--sp">Request Review</span></div>
+              <div class="action-desc">Review check thêm: <strong>consistency với patterns cũ, backward compatibility, no unintended side effects</strong> trên code khác.</div>
             </li>
             <li class="action-item">
               <div class="action-title">Regression Risk Assessment <span class="tag tag--sp">Receive Review</span></div>
-              <div class="action-desc">AI <strong>list tat ca files/features co the bi anh huong</strong>. Suggest test commands can chay de verify. Khong chi review code moi.</div>
+              <div class="action-desc">AI <strong>list tất cả files/features có thể bị ảnh hưởng</strong>. Suggest test commands cần chạy để verify. Không chỉ review code mới.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Domain Expert PHAI Review <span class="tag tag--human">HUMAN</span> <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc"><strong>Bat buoc:</strong> Nguoi hieu business domain review. AI khong hieu het business rules cua du an cu. Khong duoc skip.</div>
+              <div class="action-title">Domain Expert PHẢI Review <span class="tag tag--human">HUMAN</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Bắt buộc:</strong> Người hiểu business domain review. AI không hiểu hết business rules của dự án cũ. Không được skip.</div>
             </li>
           </ul>
         </div>
@@ -589,32 +589,32 @@
     <div class="phase-body">
       <div class="phase-content">
         <div class="lane-cell lane-cell--green">
-          <div class="cell-label">Du an moi</div>
+          <div class="cell-label">Dự án mới</div>
           <ul class="action-list">
             <li class="action-item">
               <div class="action-title">Verification Checklist <span class="tag tag--sp">Verification</span> <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc"><strong>AI verify:</strong> code match plan? tests all pass? coverage met? no TODOs left? no placeholders? Evidence-based, khong tu claim "done".</div>
+              <div class="action-desc"><strong>AI verify:</strong> code match plan? tests all pass? coverage met? no TODOs left? no placeholders? Evidence-based, không tự claim "done".</div>
             </li>
             <li class="action-item">
               <div class="action-title">Branch Finalize & Merge <span class="tag tag--sp">Branch Finalize</span></div>
-              <div class="action-desc">AI <strong>clean up branch, squash commits neu can, tao PR summary</strong>. Merge strategy: merge commit hoac rebase tuy team convention.</div>
+              <div class="action-desc">AI <strong>clean up branch, squash commits nếu cần, tạo PR summary</strong>. Merge strategy: merge commit hoặc rebase tùy team convention.</div>
             </li>
           </ul>
         </div>
         <div class="lane-cell lane-cell--blue">
-          <div class="cell-label">Du an cu</div>
+          <div class="cell-label">Dự án cũ</div>
           <ul class="action-list">
             <li class="action-item">
               <div class="action-title">Extended Verification <span class="tag tag--sp">Verification</span> <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc">Verify them: <strong>regression tests pass? Khong break existing features? Performance khong giam? Backward compatible?</strong></div>
+              <div class="action-desc">Verify thêm: <strong>regression tests pass? Không break existing features? Performance không giảm? Backward compatible?</strong></div>
             </li>
             <li class="action-item">
               <div class="action-title">Gradual Merge <span class="tag tag--sp">Branch Finalize</span> <span class="tag tag--human">HUMAN</span></div>
-              <div class="action-desc"><strong>Deploy tung batch nho.</strong> Monitor sau moi merge. Feature flags neu can. Khong merge tat ca AI changes cung luc.</div>
+              <div class="action-desc"><strong>Deploy từng batch nhỏ.</strong> Monitor sau mỗi merge. Feature flags nếu cần. Không merge tất cả AI changes cùng lúc.</div>
             </li>
             <li class="action-item">
-              <div class="action-title">Rollback Plan PHAI Co <span class="tag tag--gate">GATE</span></div>
-              <div class="action-desc"><strong>Moi merge phai co rollback plan.</strong> Neu something breaks, revert trong 5 phut. Khong chap nhan "chac khong sao dau".</div>
+              <div class="action-title">Rollback Plan PHẢI Có <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Mỗi merge phải có rollback plan.</strong> Nếu something breaks, revert trong 5 phút. Không chấp nhận "chắc không sao đâu".</div>
             </li>
           </ul>
         </div>
@@ -623,53 +623,53 @@
   </div>
 
   <!-- ============ COMPARISON TABLE ============ -->
-  <div class="section-title anim" style="--i:15">So Sanh Nhanh</div>
+  <div class="section-title anim" style="--i:15">So Sánh Nhanh</div>
 
   <div class="compare-section anim" style="--i:16">
     <div class="compare-header">
       <div class="compare-header-cell">Superpower</div>
-      <div class="compare-header-cell">Du An Moi</div>
-      <div class="compare-header-cell">Du An Cu</div>
+      <div class="compare-header-cell">Dự Án Mới</div>
+      <div class="compare-header-cell">Dự Án Cũ</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">#1 Brainstorming</div>
-      <div class="compare-cell"><strong>Tu do chon architecture.</strong> AI de xuat, human chon.</div>
-      <div class="compare-cell"><strong>Brainstorm trong rang buoc.</strong> Phai compatible voi code cu.</div>
+      <div class="compare-cell"><strong>Tự do chọn architecture.</strong> AI đề xuất, human chọn.</div>
+      <div class="compare-cell"><strong>Brainstorm trong ràng buộc.</strong> Phải compatible với code cũ.</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">#2 Writing Plans</div>
-      <div class="compare-cell"><strong>Plan tu zero.</strong> Tasks don gian, truc tiep.</div>
-      <div class="compare-cell"><strong>Plan phai reference code cu.</strong> Tasks kem: files can sua, impact.</div>
+      <div class="compare-cell"><strong>Plan từ zero.</strong> Tasks đơn giản, trực tiếp.</div>
+      <div class="compare-cell"><strong>Plan phải reference code cũ.</strong> Tasks kèm: files cần sửa, impact.</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">#4 Git Worktrees</div>
-      <div class="compare-cell"><strong>Parallel tu ngay 1.</strong> Nhieu agents song song.</div>
-      <div class="compare-cell"><strong>Isolate changes.</strong> Worktree de test truoc khi merge vao main.</div>
+      <div class="compare-cell"><strong>Parallel từ ngày 1.</strong> Nhiều agents song song.</div>
+      <div class="compare-cell"><strong>Isolate changes.</strong> Worktree để test trước khi merge vào main.</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">#6 TDD</div>
-      <div class="compare-cell"><strong>Test song song voi code.</strong> Coverage cao tu dau.</div>
-      <div class="compare-cell"><strong>Viet test cho code cu TRUOC.</strong> Safety net roi moi thay doi code.</div>
+      <div class="compare-cell"><strong>Test song song với code.</strong> Coverage cao từ đầu.</div>
+      <div class="compare-cell"><strong>Viết test cho code cũ TRƯỚC.</strong> Safety net rồi mới thay đổi code.</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">#7 Systematic Debug</div>
-      <div class="compare-cell"><strong>It bug hon</strong> vi TDD tu dau.</div>
-      <div class="compare-cell"><strong>Dung nhieu hon.</strong> Legacy bugs can 4-phase root cause analysis.</div>
+      <div class="compare-cell"><strong>Ít bug hơn</strong> vì TDD từ đầu.</div>
+      <div class="compare-cell"><strong>Dùng nhiều hơn.</strong> Legacy bugs cần 4-phase root cause analysis.</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">#9 Parallel Dispatch</div>
-      <div class="compare-cell"><strong>Dung ngay.</strong> Max throughput tu sprint 1.</div>
-      <div class="compare-cell"><strong>Dung sau.</strong> Sequential truoc, parallel khi da confident.</div>
+      <div class="compare-cell"><strong>Dùng ngay.</strong> Max throughput từ sprint 1.</div>
+      <div class="compare-cell"><strong>Dùng sau.</strong> Sequential trước, parallel khi đã confident.</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">#12 Branch Finalize</div>
-      <div class="compare-cell"><strong>Merge nhanh.</strong> It risk vi khong co code cu.</div>
-      <div class="compare-cell"><strong>Merge can than.</strong> Gradual, co rollback plan, feature flags.</div>
+      <div class="compare-cell"><strong>Merge nhanh.</strong> Ít risk vì không có code cũ.</div>
+      <div class="compare-cell"><strong>Merge cẩn thận.</strong> Gradual, có rollback plan, feature flags.</div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">Time to Full Speed</div>
-      <div class="compare-cell"><strong>~3-4 tuan</strong></div>
-      <div class="compare-cell"><strong>~8-10 tuan</strong></div>
+      <div class="compare-cell"><strong>~3-4 tuần</strong></div>
+      <div class="compare-cell"><strong>~8-10 tuần</strong></div>
     </div>
     <div class="compare-row">
       <div class="compare-cell">Core Principle</div>
@@ -679,24 +679,24 @@
   </div>
 
   <!-- ============ PRINCIPLES ============ -->
-  <div class="section-title anim" style="--i:17">Nguyen Tac Cot Loi Cua Superpowers</div>
+  <div class="section-title anim" style="--i:17">Nguyên Tắc Cốt Lõi Của Superpowers</div>
 
   <div class="principles anim" style="--i:18">
     <div class="principle-card">
-      <div class="principle-title">Design Truoc, Code Sau</div>
-      <div class="principle-desc">KHONG viet code khi chua co design doc duoc human approve. Hard gate, khong exception.</div>
+      <div class="principle-title">Design Trước, Code Sau</div>
+      <div class="principle-desc">KHÔNG viết code khi chưa có design doc được human approve. Hard gate, không exception.</div>
     </div>
     <div class="principle-card">
-      <div class="principle-title">TDD La Bat Buoc</div>
-      <div class="principle-desc">Moi task: viet test fail truoc, implement, verify. Khong co "viet test sau" hay "skip test vi gap".</div>
+      <div class="principle-title">TDD Là Bắt Buộc</div>
+      <div class="principle-desc">Mỗi task: viết test fail trước, implement, verify. Không có "viết test sau" hay "skip test vì gấp".</div>
     </div>
     <div class="principle-card">
-      <div class="principle-title">Evidence, Khong Tu Claim</div>
-      <div class="principle-desc">Verification (#3): AI phai CHUNG MINH work done bang evidence (test pass, coverage report), khong duoc noi "da xong".</div>
+      <div class="principle-title">Evidence, Không Tự Claim</div>
+      <div class="principle-desc">Verification (#3): AI phải CHỨNG MINH work done bằng evidence (test pass, coverage report), không được nói "đã xong".</div>
     </div>
     <div class="principle-card">
-      <div class="principle-title">Human La Owner</div>
-      <div class="principle-desc">AI la force multiplier, khong phai replacement. Developer hieu 100% code, approve moi decision. Trach nhiem thuoc developer.</div>
+      <div class="principle-title">Human Là Owner</div>
+      <div class="principle-desc">AI là force multiplier, không phải replacement. Developer hiểu 100% code, approve mọi decision. Trách nhiệm thuộc developer.</div>
     </div>
   </div>
 
