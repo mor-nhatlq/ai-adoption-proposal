@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow Ap Dung AI Superpowers Vao Du An</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ THEME — Blueprint + Deep Blue/Gold ============ */
+  :root {
+    --font-body: 'Outfit', system-ui, sans-serif;
+    --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
+
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8eef4;
+    --surface-elevated: #ffffff;
+    --border: rgba(30, 58, 95, 0.1);
+    --border-bright: rgba(30, 58, 95, 0.2);
+    --text: #1a2a3a;
+    --text-dim: #5a7090;
+    --text-bright: #0d1b2a;
+    --accent: #1e3a5f;
+    --accent-dim: rgba(30, 58, 95, 0.06);
+
+    /* Greenfield lane */
+    --green-lane: #059669;
+    --green-lane-dim: rgba(5, 150, 105, 0.07);
+    --green-lane-bg: rgba(5, 150, 105, 0.03);
+
+    /* Legacy lane */
+    --blue-lane: #0369a1;
+    --blue-lane-dim: rgba(3, 105, 161, 0.07);
+    --blue-lane-bg: rgba(3, 105, 161, 0.03);
+
+    /* Convergence */
+    --gold: #d4a73a;
+    --gold-dim: rgba(212, 167, 58, 0.08);
+
+    /* Semantic */
+    --amber: #b45309;
+    --amber-dim: rgba(180, 83, 9, 0.07);
+    --teal: #0891b2;
+    --teal-dim: rgba(8, 145, 178, 0.07);
+    --plum: #7e22ce;
+    --plum-dim: rgba(126, 34, 206, 0.07);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1421;
+      --surface: #111d2e;
+      --surface2: #162438;
+      --surface-elevated: #1a2d42;
+      --border: rgba(100, 160, 220, 0.1);
+      --border-bright: rgba(100, 160, 220, 0.2);
+      --text: #c8d8e8;
+      --text-dim: #607080;
+      --text-bright: #e8f0f8;
+      --accent: #4a90d9;
+      --accent-dim: rgba(74, 144, 217, 0.08);
+
+      --green-lane: #34d399;
+      --green-lane-dim: rgba(52, 211, 153, 0.1);
+      --green-lane-bg: rgba(52, 211, 153, 0.03);
+
+      --blue-lane: #38bdf8;
+      --blue-lane-dim: rgba(56, 189, 248, 0.1);
+      --blue-lane-bg: rgba(56, 189, 248, 0.03);
+
+      --gold: #fbbf24;
+      --gold-dim: rgba(251, 191, 36, 0.1);
+
+      --amber: #fbbf24;
+      --amber-dim: rgba(251, 191, 36, 0.1);
+      --teal: #22d3ee;
+      --teal-dim: rgba(34, 211, 238, 0.1);
+      --plum: #c084fc;
+      --plum-dim: rgba(192, 132, 252, 0.1);
+    }
+  }
+
+  [data-theme="dark"] {
+    --bg: #0d1421;
+    --surface: #111d2e;
+    --surface2: #162438;
+    --surface-elevated: #1a2d42;
+    --border: rgba(100, 160, 220, 0.1);
+    --border-bright: rgba(100, 160, 220, 0.2);
+    --text: #c8d8e8;
+    --text-dim: #607080;
+    --text-bright: #e8f0f8;
+    --accent: #4a90d9;
+    --accent-dim: rgba(74, 144, 217, 0.08);
+
+    --green-lane: #34d399;
+    --green-lane-dim: rgba(52, 211, 153, 0.1);
+    --green-lane-bg: rgba(52, 211, 153, 0.03);
+
+    --blue-lane: #38bdf8;
+    --blue-lane-dim: rgba(56, 189, 248, 0.1);
+    --blue-lane-bg: rgba(56, 189, 248, 0.03);
+
+    --gold: #fbbf24;
+    --gold-dim: rgba(251, 191, 36, 0.1);
+
+    --amber: #fbbf24;
+    --amber-dim: rgba(251, 191, 36, 0.1);
+    --teal: #22d3ee;
+    --teal-dim: rgba(34, 211, 238, 0.1);
+    --plum: #c084fc;
+    --plum-dim: rgba(192, 132, 252, 0.1);
+  }
+
+  /* ============ THEME TOGGLE ============ */
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 300;
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text-dim); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: background 0.15s, color 0.15s;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  }
+  .theme-toggle:hover { background: var(--surface2); color: var(--text); }
+
+  /* ============ RESET ============ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle, var(--border) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--text);
+    font-family: var(--font-body);
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+
+  /* ============ ANIMATION ============ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim { animation: fadeUp 0.4s ease-out both; animation-delay: calc(var(--i, 0) * 0.06s); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ============ LAYOUT ============ */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    margin-bottom: 6px;
+    color: var(--text-bright);
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+  }
+
+  /* ============ LEGEND ============ */
+  .legend {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+  }
+
+  /* ============ DUAL LANES ============ */
+  .lanes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-bottom: 28px;
+  }
+
+  .lane {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 16px;
+    padding: 24px 20px;
+    position: relative;
+  }
+
+  .lane--green {
+    background: var(--green-lane-bg);
+    border: 1.5px solid var(--green-lane-dim);
+  }
+
+  .lane--blue {
+    background: var(--blue-lane-bg);
+    border: 1.5px solid var(--blue-lane-dim);
+  }
+
+  .lane-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .lane-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 6px;
+  }
+
+  .lane--green .lane-badge {
+    background: var(--green-lane-dim);
+    color: var(--green-lane);
+    border: 1px solid var(--green-lane);
+  }
+
+  .lane--blue .lane-badge {
+    background: var(--blue-lane-dim);
+    color: var(--blue-lane);
+    border: 1px solid var(--blue-lane);
+  }
+
+  .lane-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .lane--green .lane-title { color: var(--green-lane); }
+  .lane--blue .lane-title { color: var(--blue-lane); }
+
+  .lane-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  /* ============ STEP CARD ============ */
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    position: relative;
+  }
+
+  .lane--green .step { border-left: 3px solid var(--green-lane); }
+  .lane--blue .step { border-left: 3px solid var(--blue-lane); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .lane--green .step-num {
+    background: var(--green-lane-dim);
+    color: var(--green-lane);
+  }
+
+  .lane--blue .step-num {
+    background: var(--blue-lane-dim);
+    color: var(--blue-lane);
+  }
+
+  .step-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .step-time {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .step-body {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    padding-left: 34px;
+  }
+
+  .step-body strong { color: var(--text); font-weight: 500; }
+
+  .step-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding-left: 34px;
+    margin-top: 6px;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tag--ai { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--gold); }
+  .tag--dev { background: var(--teal-dim); color: var(--teal); border: 1px solid var(--teal); }
+  .tag--team { background: var(--plum-dim); color: var(--plum); border: 1px solid var(--plum); }
+
+  /* ============ STEP CONNECTOR ============ */
+  .connector {
+    display: flex;
+    justify-content: center;
+    padding: 6px 0;
+  }
+
+  .connector svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .lane--green .connector svg { stroke: var(--green-lane); opacity: 0.4; }
+  .lane--blue .connector svg { stroke: var(--blue-lane); opacity: 0.4; }
+
+  /* ============ CONVERGENCE ============ */
+  .convergence {
+    position: relative;
+    margin-top: 8px;
+  }
+
+  .converge-arrows {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 0;
+    height: 50px;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  .converge-arrows svg {
+    width: 100%;
+    height: 50px;
+  }
+
+  .converge-box {
+    background: var(--surface-elevated);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 24px 32px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    position: relative;
+  }
+
+  .converge-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .converge-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .converge-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ============ KEY DIFF ============ */
+  .key-diff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .diff-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+
+  .diff-card--green { border-top: 3px solid var(--green-lane); }
+  .diff-card--blue { border-top: 3px solid var(--blue-lane); }
+
+  .diff-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+
+  .diff-card--green .diff-label { color: var(--green-lane); }
+  .diff-card--blue .diff-label { color: var(--blue-lane); }
+
+  .diff-list {
+    list-style: none;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text-dim);
+  }
+
+  .diff-list li {
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .diff-list li::before {
+    content: '>';
+    font-family: var(--font-mono);
+    font-weight: 700;
+    position: absolute;
+    left: 0;
+  }
+
+  .diff-card--green .diff-list li::before { color: var(--green-lane); }
+  .diff-card--blue .diff-list li::before { color: var(--blue-lane); }
+
+  .diff-list li strong { color: var(--text); font-weight: 500; }
+
+  /* ============ SPEED GRAPH ============ */
+  .speed-section {
+    margin-top: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  .speed-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .speed-label::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .speed-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 80px;
+    padding-bottom: 24px;
+    position: relative;
+  }
+
+  .speed-chart::after {
+    content: '';
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .speed-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .speed-bar {
+    width: 100%;
+    max-width: 48px;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s ease;
+  }
+
+  .speed-bar--green { background: var(--green-lane); opacity: 0.7; }
+  .speed-bar--blue { background: var(--blue-lane); opacity: 0.7; }
+
+  .speed-week {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    position: absolute;
+    bottom: -20px;
+    white-space: nowrap;
+  }
+
+  .speed-legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 860px) {
+    body { padding: 20px 12px; }
+    h1 { font-size: 26px; }
+    .lanes { grid-template-columns: 1fr; }
+    .key-diff { grid-template-columns: 1fr; }
+    .converge-arrows { display: none; }
+  }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle light/dark theme"></button>
+<script>
+(function() {
+  var t = document.getElementById('themeToggle');
+  var s = localStorage.getItem('theme');
+  var i = s || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (s) document.documentElement.setAttribute('data-theme', i);
+  t.textContent = i === 'dark' ? '\u2600' : '\u263E';
+  t.addEventListener('click', function() {
+    var c = document.documentElement.getAttribute('data-theme')
+      || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var n = c === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', n);
+    localStorage.setItem('theme', n);
+    t.textContent = n === 'dark' ? '\u2600' : '\u263E';
+  });
+})();
+</script>
+
+<div class="container">
+
+  <!-- Title -->
+  <h1 class="anim" style="--i:0">Flow Ap Dung AI Superpowers</h1>
+  <p class="subtitle anim" style="--i:1">du an moi (greenfield) vs du an da co (legacy) &mdash; so sanh 2 luong ap dung</p>
+
+  <!-- Legend -->
+  <div class="legend anim" style="--i:2">
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--green-lane-dim);border:1.5px solid var(--green-lane)"></div>
+      Greenfield
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--blue-lane-dim);border:1.5px solid var(--blue-lane)"></div>
+      Legacy / Existing
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--gold-dim);border:1.5px solid var(--gold)"></div>
+      Diem hoi tu
+    </div>
+    <div class="legend-item"><span class="tag tag--ai" style="margin:0">AI</span> AI thuc hien</div>
+    <div class="legend-item"><span class="tag tag--dev" style="margin:0">DEV</span> Developer</div>
+    <div class="legend-item"><span class="tag tag--team" style="margin:0">TEAM</span> Ca team</div>
+  </div>
+
+  <!-- ============ DUAL LANES ============ -->
+  <div class="lanes">
+
+    <!-- ===== GREENFIELD LANE ===== -->
+    <div class="lane lane--green anim" style="--i:3">
+      <div class="lane-header">
+        <span class="lane-badge">New</span>
+        <span class="lane-title">Du An Moi</span>
+      </div>
+      <p class="lane-desc">AI tham gia tu dau &mdash; setup chuan ngay, toc do nhanh tu ngay 1</p>
+
+      <!-- Step 1 -->
+      <div class="step anim" style="--i:4">
+        <div class="step-header">
+          <span class="step-num">1</span>
+          <span class="step-name">Khoi tao du an</span>
+          <span class="step-time">Ngay 1</span>
+        </div>
+        <div class="step-body">Setup <strong>CLAUDE.md</strong>, rules, conventions, memory system ngay tu dau. Cau hinh AI agent cho toan bo team.</div>
+        <div class="step-tags"><span class="tag tag--dev">DEV</span><span class="tag tag--ai">AI</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 2 -->
+      <div class="step anim" style="--i:5">
+        <div class="step-header">
+          <span class="step-num">2</span>
+          <span class="step-name">Planning voi AI</span>
+          <span class="step-time">Tuan 1</span>
+        </div>
+        <div class="step-body">AI phan tich requirements, breakdown tasks, effort estimation, risk assessment. PM dung AI de tao project plan.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--team">TEAM</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 3 -->
+      <div class="step anim" style="--i:6">
+        <div class="step-header">
+          <span class="step-num">3</span>
+          <span class="step-name">Architecture Design</span>
+          <span class="step-time">Tuan 1-2</span>
+        </div>
+        <div class="step-body">AI brainstorm giai phap, so sanh trade-offs, chon tech stack, ve system design. Developer review va quyet dinh cuoi.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--dev">DEV</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 4 -->
+      <div class="step anim" style="--i:7">
+        <div class="step-header">
+          <span class="step-num">4</span>
+          <span class="step-name">Coding voi AI Agent</span>
+          <span class="step-time">Tuan 2+</span>
+        </div>
+        <div class="step-body">AI generate code theo spec. Developer review 100% truoc khi commit. Quality gates tu dong kiem tra.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--dev">DEV</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 5 -->
+      <div class="step anim" style="--i:8">
+        <div class="step-header">
+          <span class="step-num">5</span>
+          <span class="step-name">Testing voi AI</span>
+          <span class="step-time">Song song</span>
+        </div>
+        <div class="step-body">AI generate unit / integration / e2e test. Coverage analysis tu dong. AI phat hien test gaps va suggest bo sung.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 6 -->
+      <div class="step anim" style="--i:9">
+        <div class="step-header">
+          <span class="step-num">6</span>
+          <span class="step-name">Code Review bang AI</span>
+          <span class="step-time">Moi PR</span>
+        </div>
+        <div class="step-body">AI review code quality, security, performance. Phat hien van de truoc khi human review. Giam thoi gian review 50%+.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--dev">DEV</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 7 -->
+      <div class="step anim" style="--i:10">
+        <div class="step-header">
+          <span class="step-num">7</span>
+          <span class="step-name">CI/CD Integration</span>
+          <span class="step-time">Tuan 3</span>
+        </div>
+        <div class="step-body">AI-assisted pipeline setup. Tu dong hoa checks, linting, testing, deployment trong CI/CD.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--dev">DEV</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 8 -->
+      <div class="step anim" style="--i:11">
+        <div class="step-header">
+          <span class="step-num">8</span>
+          <span class="step-name">Monitoring va Kaizen</span>
+          <span class="step-time">Lien tuc</span>
+        </div>
+        <div class="step-body">AI phan tich metrics, suggest improvements. Kaizen loop: do luong, phan tich, cai tien, lap lai.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--team">TEAM</span></div>
+      </div>
+    </div>
+
+    <!-- ===== LEGACY LANE ===== -->
+    <div class="lane lane--blue anim" style="--i:3">
+      <div class="lane-header">
+        <span class="lane-badge">Existing</span>
+        <span class="lane-title">Du An Da Co</span>
+      </div>
+      <p class="lane-desc">AI can hieu truoc &mdash; setup dan, can than backward compatibility</p>
+
+      <!-- Step 1 -->
+      <div class="step anim" style="--i:4">
+        <div class="step-header">
+          <span class="step-num">1</span>
+          <span class="step-name">Assessment Phase</span>
+          <span class="step-time">Tuan 1</span>
+        </div>
+        <div class="step-body">AI scan codebase, phan tich code quality, tech debt, architecture. Tao bao cao hien trang toan dien.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--dev">DEV</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 2 -->
+      <div class="step anim" style="--i:5">
+        <div class="step-header">
+          <span class="step-num">2</span>
+          <span class="step-name">Setup AI Infrastructure</span>
+          <span class="step-time">Tuan 1-2</span>
+        </div>
+        <div class="step-body">Tao <strong>CLAUDE.md</strong> tu existing codebase. Define rules/conventions dua tren patterns hien tai. Setup memory system.</div>
+        <div class="step-tags"><span class="tag tag--dev">DEV</span><span class="tag tag--ai">AI</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 3 -->
+      <div class="step anim" style="--i:6">
+        <div class="step-header">
+          <span class="step-num">3</span>
+          <span class="step-name">Knowledge Transfer</span>
+          <span class="step-time">Tuan 2-3</span>
+        </div>
+        <div class="step-body">AI doc va hieu codebase. Tao documentation tu dong, map dependencies, identify hot spots va tech debt.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 4 -->
+      <div class="step anim" style="--i:7">
+        <div class="step-header">
+          <span class="step-num">4</span>
+          <span class="step-name">Gradual Integration</span>
+          <span class="step-time">Tuan 3-4</span>
+        </div>
+        <div class="step-body">Bat dau voi tasks nho: bug fixes, small features. AI assist voi context da hieu tu codebase. <strong>Xay dung su tu tin dan.</strong></div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--dev">DEV</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 5 -->
+      <div class="step anim" style="--i:8">
+        <div class="step-header">
+          <span class="step-num">5</span>
+          <span class="step-name">Test Coverage Boost</span>
+          <span class="step-time">Tuan 4-6</span>
+        </div>
+        <div class="step-body">AI generate tests cho code chua co test. Tang coverage dan dan. Tao regression safety net truoc khi refactor.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--dev">DEV</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 6 -->
+      <div class="step anim" style="--i:9">
+        <div class="step-header">
+          <span class="step-num">6</span>
+          <span class="step-name">Refactoring voi AI</span>
+          <span class="step-time">Tuan 5-8</span>
+        </div>
+        <div class="step-body">AI suggest refactoring opportunities. Lam tung module mot. Maintain backward compatibility. Khong break existing features.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--dev">DEV</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 7 -->
+      <div class="step anim" style="--i:10">
+        <div class="step-header">
+          <span class="step-num">7</span>
+          <span class="step-name">Full AI Workflow</span>
+          <span class="step-time">Tuan 8+</span>
+        </div>
+        <div class="step-body">Toan bo team dung AI cho daily tasks: coding, testing, review, PM. Quy trinh da duoc chuan hoa va kiem chung.</div>
+        <div class="step-tags"><span class="tag tag--team">TEAM</span><span class="tag tag--ai">AI</span></div>
+      </div>
+
+      <div class="connector"><svg viewBox="0 0 16 16"><path d="M8 2 L8 14 M4 10 L8 14 L12 10"/></svg></div>
+
+      <!-- Step 8 -->
+      <div class="step anim" style="--i:11">
+        <div class="step-header">
+          <span class="step-num">8</span>
+          <span class="step-name">Monitoring va Toi Uu</span>
+          <span class="step-time">Lien tuc</span>
+        </div>
+        <div class="step-body">Track productivity metrics. So sanh before/after. Continuous improvement. AI tu suggest cai tien quy trinh.</div>
+        <div class="step-tags"><span class="tag tag--ai">AI</span><span class="tag tag--team">TEAM</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ CONVERGENCE ARROWS ============ -->
+  <div class="convergence anim" style="--i:12">
+    <div class="converge-arrows">
+      <svg viewBox="0 0 1200 50" preserveAspectRatio="none">
+        <path d="M 300 0 Q 300 40 600 45" fill="none" stroke="var(--green-lane)" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/>
+        <path d="M 900 0 Q 900 40 600 45" fill="none" stroke="var(--blue-lane)" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/>
+        <circle cx="600" cy="45" r="4" fill="var(--gold)"/>
+      </svg>
+    </div>
+
+    <div class="converge-box anim" style="--i:13">
+      <div class="converge-label">Diem Hoi Tu</div>
+      <div class="converge-title">AI-Powered Operations</div>
+      <div class="converge-desc">Ca 2 luong deu dat toi trang thai: toan bo team su dung AI Agent hieu qua trong cong viec hang ngay. Quy trinh duoc chuan hoa, do luong va cai tien lien tuc.</div>
+    </div>
+  </div>
+
+  <!-- ============ KEY DIFFERENCES ============ -->
+  <div class="key-diff anim" style="--i:14">
+    <div class="diff-card diff-card--green">
+      <div class="diff-label">Greenfield &mdash; Uu diem</div>
+      <ul class="diff-list">
+        <li><strong>AI tham gia tu ngay 1</strong> &mdash; khong co legacy debt</li>
+        <li><strong>Setup chuan ngay</strong> &mdash; conventions, rules, memory tu dau</li>
+        <li><strong>Toc do nhanh</strong> &mdash; AI hieu context tu dau, khong can "hoc lai"</li>
+        <li><strong>Architecture AI-friendly</strong> &mdash; thiet ke phu hop AI tu dau</li>
+        <li><strong>~3-4 tuan</strong> de dat full AI workflow</li>
+      </ul>
+    </div>
+    <div class="diff-card diff-card--blue">
+      <div class="diff-label">Legacy &mdash; Luu y</div>
+      <ul class="diff-list">
+        <li><strong>AI can HIEU truoc</strong> &mdash; can thoi gian doc va map codebase</li>
+        <li><strong>Setup dan dan</strong> &mdash; khong the ap dung 100% ngay</li>
+        <li><strong>Backward compatibility</strong> &mdash; can than khong break existing features</li>
+        <li><strong>Test coverage first</strong> &mdash; can safety net truoc khi refactor</li>
+        <li><strong>~8-10 tuan</strong> de dat full AI workflow</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ PRODUCTIVITY OVER TIME ============ -->
+  <div class="speed-section anim" style="--i:15">
+    <div class="speed-label">Nang Suat Theo Thoi Gian (minh hoa)</div>
+    <div class="speed-chart">
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:45%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:15%"></div>
+        <span class="speed-week">T1</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:60%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:25%"></div>
+        <span class="speed-week">T2</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:72%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:38%"></div>
+        <span class="speed-week">T3</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:80%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:50%"></div>
+        <span class="speed-week">T4</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:85%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:60%"></div>
+        <span class="speed-week">T5</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:88%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:70%"></div>
+        <span class="speed-week">T6</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:90%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:78%"></div>
+        <span class="speed-week">T7</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:92%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:85%"></div>
+        <span class="speed-week">T8</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:93%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:88%"></div>
+        <span class="speed-week">T9</span>
+      </div>
+      <div class="speed-col">
+        <div class="speed-bar speed-bar--green" style="height:94%"></div>
+        <div class="speed-bar speed-bar--blue" style="height:91%"></div>
+        <span class="speed-week">T10</span>
+      </div>
+    </div>
+    <div class="speed-legend">
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:var(--green-lane);border-radius:3px;opacity:0.7"></div>
+        Greenfield: nhanh tu dau, on dinh som
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:var(--blue-lane);border-radius:3px;opacity:0.7"></div>
+        Legacy: cham ban dau, bat kip sau ~T8
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

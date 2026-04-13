@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 1 Detail — Xây Dựng Bộ Quy Trình AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body:'Outfit',system-ui,sans-serif;
+    --font-mono:'Space Mono','SF Mono',Consolas,monospace;
+    --bg:#f0f4f8; --surface:#fff; --surface2:#e8eef4;
+    --border:rgba(30,58,95,.12); --border-bright:rgba(30,58,95,.22);
+    --text:#1a2a3a; --text-dim:#5a7090; --text-bright:#0d1b2a;
+    --accent:#1e3a5f; --accent-dim:rgba(30,58,95,.06);
+    --green:#059669; --green-dim:rgba(5,150,105,.08); --green-bg:rgba(5,150,105,.04);
+    --blue:#0369a1; --blue-dim:rgba(3,105,161,.08); --blue-bg:rgba(3,105,161,.04);
+    --amber:#b45309; --amber-dim:rgba(180,83,9,.08);
+    --teal:#0891b2; --teal-dim:rgba(8,145,178,.08);
+    --plum:#7e22ce; --plum-dim:rgba(126,34,206,.08);
+    --rose:#be123c; --rose-dim:rgba(190,18,60,.08);
+    --gold:#d4a73a; --gold-dim:rgba(212,167,58,.1);
+    --hero-grad:linear-gradient(135deg,#059669 0%,#0891b2 60%,#1e3a5f 100%);
+  }
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0d1421;--surface:#111d2e;--surface2:#162438;--border:rgba(100,160,220,.12);--border-bright:rgba(100,160,220,.24);--text:#c8d8e8;--text-dim:#607080;--text-bright:#e8f0f8;--accent:#4a90d9;--accent-dim:rgba(74,144,217,.08);--green:#34d399;--green-dim:rgba(52,211,153,.12);--green-bg:rgba(52,211,153,.04);--blue:#38bdf8;--blue-dim:rgba(56,189,248,.12);--blue-bg:rgba(56,189,248,.04);--amber:#fbbf24;--amber-dim:rgba(251,191,36,.12);--teal:#22d3ee;--teal-dim:rgba(34,211,238,.12);--plum:#c084fc;--plum-dim:rgba(192,132,252,.12);--rose:#fb7185;--rose-dim:rgba(251,113,133,.12);--gold:#fbbf24;--gold-dim:rgba(251,191,36,.12);--hero-grad:linear-gradient(135deg,#065f46 0%,#0e4d6b 50%,#1e3a5f 100%)}}
+  [data-theme="dark"]{--bg:#0d1421;--surface:#111d2e;--surface2:#162438;--border:rgba(100,160,220,.12);--border-bright:rgba(100,160,220,.24);--text:#c8d8e8;--text-dim:#607080;--text-bright:#e8f0f8;--accent:#4a90d9;--accent-dim:rgba(74,144,217,.08);--green:#34d399;--green-dim:rgba(52,211,153,.12);--green-bg:rgba(52,211,153,.04);--blue:#38bdf8;--blue-dim:rgba(56,189,248,.12);--blue-bg:rgba(56,189,248,.04);--amber:#fbbf24;--amber-dim:rgba(251,191,36,.12);--teal:#22d3ee;--teal-dim:rgba(34,211,238,.12);--plum:#c084fc;--plum-dim:rgba(192,132,252,.12);--rose:#fb7185;--rose-dim:rgba(251,113,133,.12);--gold:#fbbf24;--gold-dim:rgba(251,191,36,.12);--hero-grad:linear-gradient(135deg,#065f46 0%,#0e4d6b 50%,#1e3a5f 100%)}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;min-height:100vh}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .anim{animation:fadeUp .5s ease-out both;animation-delay:calc(var(--i,0)*.05s)}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+  .theme-toggle{position:fixed;top:16px;right:16px;z-index:300;width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .theme-toggle:hover{background:var(--surface2);color:var(--text)}
+
+  /* HERO */
+  .hero{background:var(--hero-grad);color:#fff;padding:56px 32px 68px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:28px 28px;opacity:.5;pointer-events:none}
+  .hero-inner{max-width:1300px;margin:0 auto;position:relative;z-index:2}
+  .crumb{font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.7);margin-bottom:14px;letter-spacing:1.5px;text-transform:uppercase}
+  .crumb a{color:rgba(255,255,255,.85);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3)}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 13px;border-radius:100px;margin-bottom:18px}
+  .badge-dot{width:7px;height:7px;border-radius:50%;background:#fbbf24;box-shadow:0 0 0 4px rgba(251,191,36,.3)}
+  .hero h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-1.2px;line-height:1.1;margin-bottom:14px;max-width:900px}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,#fbbf24,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:16px;max-width:760px;opacity:.9;line-height:1.65}
+  .hero-meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:30px;padding-top:24px;border-top:1px solid rgba(255,255,255,.18)}
+  .hero-meta-item{display:flex;flex-direction:column;gap:3px}
+  .hero-meta-label{font-family:var(--font-mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;opacity:.7}
+  .hero-meta-value{font-size:14.5px;font-weight:600}
+
+  /* CONTAINER */
+  .container{max-width:1300px;margin:0 auto;padding:48px 32px}
+  .section{margin-bottom:56px}
+  .section-title{font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2.2px;color:var(--text-dim);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+  .section-heading{font-size:26px;font-weight:800;letter-spacing:-.6px;color:var(--text-bright);margin-bottom:10px;line-height:1.2}
+  .section-intro{font-size:14.5px;color:var(--text-dim);max-width:820px;line-height:1.7;margin-bottom:24px}
+  .section-intro strong{color:var(--text);font-weight:600}
+
+  /* ===== CORE PRINCIPLES ===== */
+  .principles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .principle{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;position:relative;border-top:3px solid var(--c,var(--accent));transition:transform .15s,box-shadow .15s}
+  .principle:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.08)}
+  .principle-num{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--c,var(--accent));margin-bottom:8px;letter-spacing:1.5px}
+  .principle-title{font-size:16px;font-weight:700;color:var(--text-bright);margin-bottom:6px;line-height:1.3}
+  .principle-desc{font-size:13px;color:var(--text-dim);line-height:1.55}
+
+  /* ===== INTRA-PHASE TIMELINE ===== */
+  .phase-timeline{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;overflow-x:auto}
+  .pt-inner{min-width:700px}
+  .pt-weeks{display:grid;grid-template-columns:180px repeat(3,1fr);margin-bottom:8px}
+  .pt-week-head{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--text-dim);text-align:center;padding:8px;border-bottom:2px solid var(--border-bright)}
+  .pt-week-head:first-child{text-align:left;color:var(--text);text-transform:uppercase;letter-spacing:1.3px}
+  .pt-row{display:grid;grid-template-columns:180px repeat(3,1fr);align-items:center;min-height:56px;border-bottom:1px dashed var(--border)}
+  .pt-row:last-child{border-bottom:none}
+  .pt-row-label{padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+  .pt-row-title{font-size:14px;font-weight:700;color:var(--text-bright)}
+  .pt-row-owner{font-family:var(--font-mono);font-size:9.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
+  .pt-track{grid-column:span 3;position:relative;height:42px}
+  .pt-track::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:var(--border);transform:translateY(-50%)}
+  .pt-bar{position:absolute;top:50%;transform:translateY(-50%);height:34px;border-radius:8px;padding:0 14px;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.12);white-space:nowrap}
+  .pt-bar.c-green{background:linear-gradient(90deg,#059669,#10b981)}
+  .pt-bar.c-amber{background:linear-gradient(90deg,#b45309,#d97706)}
+  .pt-bar.c-teal{background:linear-gradient(90deg,#0891b2,#06b6d4)}
+  .pt-bar.c-plum{background:linear-gradient(90deg,#7e22ce,#a855f7)}
+  .pt-tick{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:var(--gold);box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--gold);border-radius:50%;z-index:2}
+
+  /* ===== MANDATORY FLOW (8-step horizontal) ===== */
+  .flow-h{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:6px 2px 12px}
+  .flow-step{min-width:120px;flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;position:relative}
+  .flow-box{background:var(--surface);border:2px solid var(--accent);border-radius:10px;padding:10px 8px;font-size:12.5px;font-weight:700;color:var(--text-bright);width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;line-height:1.2}
+  .flow-box.gate{border-color:var(--rose);background:var(--rose-dim);color:var(--rose)}
+  .flow-sub{font-family:var(--font-mono);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px}
+  .flow-gap{flex-shrink:0;display:flex;align-items:center;color:var(--text-dim);padding:0 4px;font-size:18px;font-weight:700;align-self:center;margin-top:12px}
+
+  /* ===== 6 PHASES TABLE (compact) ===== */
+  .phases-stack{display:flex;flex-direction:column;gap:14px}
+  .ph-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .15s,box-shadow .15s}
+  .ph-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.06)}
+  .ph-head{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--accent-dim);border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+  .ph-head:hover{background:var(--accent-dim);filter:brightness(.97)}
+  .ph-num{width:32px;height:32px;border-radius:9px;background:var(--c,var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:700;flex-shrink:0}
+  .ph-title{font-size:15.5px;font-weight:700;color:var(--text-bright);letter-spacing:-.2px;flex:1}
+  .ph-gate-tag{font-family:var(--font-mono);font-size:9px;font-weight:700;background:var(--rose-dim);color:var(--rose);border:1px solid var(--rose);padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.6px}
+  .ph-sp{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-left:auto}
+  .ph-arrow{color:var(--text-dim);font-size:13px;transition:transform .2s}
+  .ph-card.open .ph-arrow{transform:rotate(180deg)}
+  .ph-body{display:none}
+  .ph-card.open .ph-body{display:grid;grid-template-columns:1fr 1fr}
+  @media(max-width:720px){.ph-card.open .ph-body{grid-template-columns:1fr}}
+  .ph-lane{padding:16px 18px}
+  .ph-lane.green-side{background:var(--green-bg);border-right:1px solid var(--border)}
+  .ph-lane.blue-side{background:var(--blue-bg)}
+  @media(max-width:720px){.ph-lane.green-side{border-right:none;border-bottom:1px solid var(--border)}}
+  .ph-lane-label{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .ph-lane.green-side .ph-lane-label{color:var(--green)}
+  .ph-lane.blue-side .ph-lane-label{color:var(--blue)}
+  .ph-lane-label::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}
+  .ph-items{display:flex;flex-direction:column;gap:8px}
+  .ph-item{font-size:13px;line-height:1.55;padding:8px 10px;background:var(--surface);border-radius:7px;border-left:3px solid var(--c2)}
+  .ph-lane.green-side .ph-item{--c2:var(--green)}
+  .ph-lane.blue-side .ph-item{--c2:var(--blue)}
+  .ph-item strong{color:var(--text-bright);font-weight:600}
+  .ph-item-k{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--c2);margin-right:6px;text-transform:uppercase;letter-spacing:.5px}
+
+  /* ===== GATES ===== */
+  .gates-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+  .gate-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;border-left:4px solid var(--c,var(--rose));position:relative}
+  .gate-card.optional{border-left-style:dashed}
+  .gate-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .gate-name{font-size:14.5px;font-weight:700;color:var(--text-bright)}
+  .gate-scope{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--c,var(--rose));padding:2px 8px;background:var(--cdim);border-radius:4px;text-transform:uppercase;letter-spacing:.8px}
+  .gate-trigger{font-family:var(--font-mono);font-size:10.5px;color:var(--text-dim);margin-bottom:8px}
+  .gate-pass{font-size:12.5px;color:var(--text);line-height:1.55}
+  .gate-pass strong{color:var(--text-bright)}
+
+  /* ===== COMPARE ===== */
+  .compare{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .compare-head{display:grid;grid-template-columns:180px 1fr 1fr;background:var(--surface2);border-bottom:2px solid var(--border)}
+  .compare-head > div{padding:12px 18px;font-family:var(--font-mono);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;border-right:1px solid var(--border)}
+  .compare-head > div:last-child{border-right:none}
+  .compare-head > div:nth-child(2){color:var(--green);background:var(--green-bg)}
+  .compare-head > div:nth-child(3){color:var(--blue);background:var(--blue-bg)}
+  .compare-row{display:grid;grid-template-columns:180px 1fr 1fr;border-bottom:1px solid var(--border)}
+  .compare-row:last-child{border-bottom:none}
+  .compare-cell{padding:12px 18px;font-size:13px;color:var(--text);line-height:1.55;border-right:1px solid var(--border)}
+  .compare-cell:last-child{border-right:none}
+  .compare-cell:first-child{font-weight:700;color:var(--text-bright);background:var(--accent-dim)}
+  .compare-cell strong{color:var(--text-bright);font-weight:600}
+
+  /* ===== DELIVERABLES ===== */
+  .deliv-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+  .deliv{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;border-left:4px solid var(--c,var(--accent))}
+  .deliv-box{width:20px;height:20px;border:2px solid var(--c,var(--accent));border-radius:5px;flex-shrink:0;margin-top:2px;background:var(--surface)}
+  .deliv-text{font-size:13.5px;color:var(--text);line-height:1.5}
+  .deliv-text strong{color:var(--text-bright);font-weight:600}
+  .deliv-text code{font-family:var(--font-mono);font-size:11.5px;background:var(--accent-dim);color:var(--accent);padding:1px 5px;border-radius:3px}
+
+  /* ===== PROCESSES (Coding & Testing) ===== */
+  .proc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.proc-grid{grid-template-columns:1fr}}
+  .proc{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;border-top:4px solid var(--c,var(--green))}
+  .proc-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .proc-icon{width:42px;height:42px;background:var(--cdim);color:var(--c);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;font-family:var(--font-mono)}
+  .proc-title{font-size:17px;font-weight:700;color:var(--text-bright)}
+  .proc-meta{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:2px;text-transform:uppercase;letter-spacing:1.1px}
+  .proc-goal{font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:14px;padding:10px 12px;background:var(--cdim);border-radius:8px;border-left:3px solid var(--c)}
+  .proc-sec{margin-top:12px}
+  .proc-sec-title{font-family:var(--font-mono);font-size:10.5px;font-weight:700;color:var(--c);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:6px}
+  .proc-sec ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+  .proc-sec li{font-size:12.5px;color:var(--text);padding-left:14px;position:relative;line-height:1.5}
+  .proc-sec li::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--c)}
+
+  footer{padding:24px 32px;border-top:1px solid var(--border);text-align:center;font-family:var(--font-mono);font-size:10.5px;color:var(--text-dim);letter-spacing:1.2px}
+
+  /* Nav footer */
+  .nav-footer{background:var(--hero-grad);color:#fff;border-radius:20px;padding:38px 32px;text-align:center;margin-top:24px;position:relative;overflow:hidden}
+  .nav-footer::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:22px 22px;opacity:.5;pointer-events:none}
+  .nav-footer-inner{position:relative;z-index:2;max-width:820px;margin:0 auto}
+  .nav-footer h3{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:10px}
+  .nav-footer p{font-size:14px;opacity:.88;margin-bottom:22px;line-height:1.6}
+  .nav-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .nav-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:10px;font-size:13.5px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;transition:all .15s;font-family:var(--font-body)}
+  .nav-btn:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+  .nav-btn.primary{background:#fff;color:var(--accent)}
+  .nav-btn.primary:hover{background:#fbbf24;color:#0d1b2a}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+  <span id="theme-icon">&#9790;</span>
+</button>
+<script>
+  function toggleTheme(){const c=document.documentElement.getAttribute('data-theme');const n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);document.getElementById('theme-icon').innerHTML=n==='dark'?'&#9788;':'&#9790;';localStorage.setItem('theme',n)}
+  const s=localStorage.getItem('theme');if(s){document.documentElement.setAttribute('data-theme',s);document.getElementById('theme-icon').innerHTML=s==='dark'?'&#9788;':'&#9790;'}
+  function togglePhase(el){el.parentElement.classList.toggle('open')}
+</script>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="crumb anim" style="--i:0"><a href="proposal-ai-adoption.html">&larr; Proposal</a> &middot; Phase 1 Detail</div>
+    <div class="badge anim" style="--i:1"><span class="badge-dot"></span>Phase 1 &middot; Critical &middot; Not Started</div>
+    <h1 class="anim" style="--i:2">Xây Dựng <em>Bộ Quy Trình AI</em> &mdash; 3 tuần</h1>
+    <p class="hero-sub anim" style="--i:3">Build 2 quy trình production-ready (AI Coding + AI Testing) trên nền framework <strong>Superpowers</strong> với 8-step mandatory flow, 6 hard gates, TDD bắt buộc. Output: tài liệu áp dụng trực tiếp vào dự án thực không cần chỉnh sửa lớn.</p>
+    <div class="hero-meta anim" style="--i:4">
+      <div class="hero-meta-item"><span class="hero-meta-label">Duration</span><span class="hero-meta-value">3 tuần (W1-W3)</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Deliverables</span><span class="hero-meta-value">9 outputs</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Quality Gates</span><span class="hero-meta-value">6 hard gates</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Framework</span><span class="hero-meta-value">obra/superpowers</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Tracks</span><span class="hero-meta-value">Greenfield &amp; Legacy</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+<!-- ===== 4 CORE PRINCIPLES ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">01 &middot; Core Principles</div>
+  <h2 class="section-heading anim" style="--i:1">4 Nguyên Tắc Cốt Lõi</h2>
+  <p class="section-intro anim" style="--i:2">Hard rules &mdash; không exception. Toàn bộ quy trình phải enforce được 4 nguyên tắc này, nếu không quy trình failed dù đẹp đến đâu.</p>
+  <div class="principles-grid">
+    <div class="principle anim" style="--i:3;--c:var(--green)"><div class="principle-num">P-01</div><div class="principle-title">Design trước, Code sau</div><div class="principle-desc">Không viết code khi chưa có design doc được human approve. Hard gate, không exception.</div></div>
+    <div class="principle anim" style="--i:4;--c:var(--amber)"><div class="principle-num">P-02</div><div class="principle-title">TDD là bắt buộc</div><div class="principle-desc">Mỗi task: failing test → implement → verify. Không có "viết test sau" hay "skip vì gấp".</div></div>
+    <div class="principle anim" style="--i:5;--c:var(--blue)"><div class="principle-num">P-03</div><div class="principle-title">Evidence, không tự claim</div><div class="principle-desc">AI phải CHỨNG MINH done bằng evidence (test pass, coverage, output logs). Không được nói "đã xong".</div></div>
+    <div class="principle anim" style="--i:6;--c:var(--plum)"><div class="principle-num">P-04</div><div class="principle-title">Human là Owner</div><div class="principle-desc">AI là force multiplier, không phải replacement. Dev hiểu 100% code, chịu trách nhiệm cuối cùng.</div></div>
+  </div>
+</section>
+
+<!-- ===== INTRA-PHASE TIMELINE (4 weeks) ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">02 &middot; Timeline Phase 1</div>
+  <h2 class="section-heading anim" style="--i:1">Lộ trình 3 tuần</h2>
+  <div class="phase-timeline anim" style="--i:2">
+    <div class="pt-inner">
+      <div class="pt-weeks">
+        <div class="pt-week-head">Workstream</div>
+        <div class="pt-week-head">W1</div><div class="pt-week-head">W2</div><div class="pt-week-head">W3</div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-row-label"><span class="pt-row-title">AI Coding Process</span><span class="pt-row-owner">Tech Lead</span></div>
+        <div class="pt-track"><div class="pt-bar c-green" style="left:0%;width:66.66%">Build · Draft · Iterate · Final</div><div class="pt-tick" style="left:66.66%" title="M1 Coding v1"></div></div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-row-label"><span class="pt-row-title">AI Testing Process</span><span class="pt-row-owner">QA Lead</span></div>
+        <div class="pt-track"><div class="pt-bar c-amber" style="left:33.33%;width:50%">Draft &amp; Final</div><div class="pt-tick" style="left:83.33%" title="M2 Testing v1"></div></div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-row-label"><span class="pt-row-title">Superpowers Setup</span><span class="pt-row-owner">AI Champion</span></div>
+        <div class="pt-track"><div class="pt-bar c-plum" style="left:0%;width:33.33%">Install &amp; configure</div></div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-row-label"><span class="pt-row-title">Templates &amp; Checklists</span><span class="pt-row-owner">Tech Lead + QA</span></div>
+        <div class="pt-track"><div class="pt-bar c-teal" style="left:33.33%;width:50%">CLAUDE.md · Rules · Gates · Design Doc</div></div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-row-label"><span class="pt-row-title">Training Material</span><span class="pt-row-owner">AI Champion</span></div>
+        <div class="pt-track"><div class="pt-bar c-plum" style="left:50%;width:50%">Slides + video demo end-to-end</div></div>
+      </div>
+      <div class="pt-row">
+        <div class="pt-row-label"><span class="pt-row-title">Review &amp; Publish</span><span class="pt-row-owner">COO + Leads</span></div>
+        <div class="pt-track"><div class="pt-bar c-green" style="left:83.33%;width:16.66%">Approve · Publish</div><div class="pt-tick" style="left:100%" title="M3 Publish"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MANDATORY FLOW ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">03 &middot; Mandatory Flow</div>
+  <h2 class="section-heading anim" style="--i:1">8 bước bắt buộc (không skip)</h2>
+  <p class="section-intro anim" style="--i:2">Mỗi feature/task đi qua đúng 8 bước này. 2 bước là <strong>HARD GATES</strong> &mdash; không vượt qua thì không được sang bước kế.</p>
+  <div class="flow-h anim" style="--i:3">
+    <div class="flow-step"><div class="flow-box">1. Brainstorm</div><div class="flow-sub">#1 Socratic</div></div>
+    <div class="flow-gap">&rarr;</div>
+    <div class="flow-step"><div class="flow-box gate">2. Design Doc</div><div class="flow-sub">GATE · Human</div></div>
+    <div class="flow-gap">&rarr;</div>
+    <div class="flow-step"><div class="flow-box">3. Plan</div><div class="flow-sub">#2 TDD tasks</div></div>
+    <div class="flow-gap">&rarr;</div>
+    <div class="flow-step"><div class="flow-box">4. Execute</div><div class="flow-sub">#4 #8 #9</div></div>
+    <div class="flow-gap">&rarr;</div>
+    <div class="flow-step"><div class="flow-box">5. Test</div><div class="flow-sub">#6 RED-GREEN</div></div>
+    <div class="flow-gap">&rarr;</div>
+    <div class="flow-step"><div class="flow-box">6. Review</div><div class="flow-sub">#10 #11</div></div>
+    <div class="flow-gap">&rarr;</div>
+    <div class="flow-step"><div class="flow-box gate">7. Verify</div><div class="flow-sub">GATE · #3</div></div>
+    <div class="flow-gap">&rarr;</div>
+    <div class="flow-step"><div class="flow-box">8. Finalize</div><div class="flow-sub">#12 Merge</div></div>
+  </div>
+  <div class="anim" style="--i:4;margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px">Tìm hiểu thêm:</span>
+    <a href="workflow-software-development-ai-superpowers.html" style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;background:var(--accent);color:#fff;transition:transform .15s,box-shadow .15s">&#8599; Full Superpowers Workflow &middot; 14 SP × 6 phases</a>
+    <a href="../phase-01-process-development.md" style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;background:var(--surface);color:var(--text);border:1px solid var(--border)">Raw Spec (MD)</a>
+  </div>
+</section>
+
+<!-- ===== 6 PHASES DETAIL ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">04 &middot; 6 Phases &middot; Greenfield vs Legacy</div>
+  <h2 class="section-heading anim" style="--i:1">Chi tiết từng phase &mdash; 2 tracks</h2>
+  <p class="section-intro anim" style="--i:2">Click vào mỗi phase để mở chi tiết. Lane <strong style="color:var(--green)">xanh lá</strong> = Dự án mới · Lane <strong style="color:var(--blue)">xanh dương</strong> = Dự án cũ.</p>
+
+  <div class="phases-stack">
+    <!-- Phase 1 -->
+    <div class="ph-card open anim" style="--i:3">
+      <div class="ph-head" onclick="togglePhase(this)">
+        <div class="ph-num" style="--c:var(--accent)">1</div>
+        <div class="ph-title">Brainstorm &amp; Design</div>
+        <span class="ph-gate-tag">Gate</span>
+        <span class="ph-sp">#1 · #13</span>
+        <span class="ph-arrow">&#9660;</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-lane green-side">
+          <div class="ph-lane-label">Dự án mới</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Input</span>Requirements / user story</div>
+            <div class="ph-item"><span class="ph-item-k">Do</span>AI đặt câu hỏi <strong>Socratic 9 bước</strong>: context → constraints → goals → 2-3 approaches → trade-offs. Không viết code.</div>
+            <div class="ph-item"><span class="ph-item-k">Out</span>Design Doc (goals, architecture, data flow, API contracts)</div>
+            <div class="ph-item"><span class="ph-item-k">Gate</span>Human approve trước Plan</div>
+          </div>
+        </div>
+        <div class="ph-lane blue-side">
+          <div class="ph-lane-label">Dự án cũ</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Input</span>Requirements + existing codebase</div>
+            <div class="ph-item"><span class="ph-item-k">Do</span>AI <strong>scan &amp; hiểu toàn bộ codebase</strong>, map dependencies, hiểu conventions. Brainstorm trong ràng buộc, phải compatible với architecture hiện tại.</div>
+            <div class="ph-item"><span class="ph-item-k">Out</span>Design Doc + <strong>Impact Analysis</strong> (files ảnh hưởng, risk breaking changes, rollback plan)</div>
+            <div class="ph-item"><span class="ph-item-k">Gate</span>Human + Domain Expert approve</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="ph-card anim" style="--i:4">
+      <div class="ph-head" onclick="togglePhase(this)">
+        <div class="ph-num" style="--c:var(--accent)">2</div>
+        <div class="ph-title">Planning (TDD-First Tasks)</div>
+        <span class="ph-sp">#2 · #5</span>
+        <span class="ph-arrow">&#9660;</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-lane green-side">
+          <div class="ph-lane-label">Dự án mới</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Task</span>2-5 phút/task: failing test → implement → verify → commit. Exact file paths, code blocks, test commands. <strong>Không placeholders.</strong></div>
+            <div class="ph-item"><span class="ph-item-k">Source</span>Plan từ design doc trực tiếp</div>
+            <div class="ph-item"><span class="ph-item-k">Roles</span>Planner → Coder → Tester → Reviewer</div>
+          </div>
+        </div>
+        <div class="ph-lane blue-side">
+          <div class="ph-lane-label">Dự án cũ</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Task</span>Mỗi task ghi rõ: file sửa, function ảnh hưởng, test cần update. AI đọc code trước khi plan.</div>
+            <div class="ph-item"><span class="ph-item-k">Priority</span><strong>Test Coverage Tasks TRƯỚC</strong> &mdash; safety net trước khi thay đổi code</div>
+            <div class="ph-item"><span class="ph-item-k">Batch</span><strong>Incremental</strong> &mdash; mỗi batch 1-2 files, Domain Expert review mọi batch</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="ph-card anim" style="--i:5">
+      <div class="ph-head" onclick="togglePhase(this)">
+        <div class="ph-num" style="--c:var(--accent)">3</div>
+        <div class="ph-title">Execution (Coding)</div>
+        <span class="ph-sp">#4 · #8 · #9</span>
+        <span class="ph-arrow">&#9660;</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-lane green-side">
+          <div class="ph-lane-label">Dự án mới</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Git</span>Worktrees song song &mdash; nhiều agents code cùng lúc (BE/FE/DB)</div>
+            <div class="ph-item"><span class="ph-item-k">Exec</span>Failing test → implement → test pass → commit. <strong>Không skip test.</strong></div>
+            <div class="ph-item"><span class="ph-item-k">Speed</span>Parallel dispatch từ sprint 1 &mdash; max throughput</div>
+          </div>
+        </div>
+        <div class="ph-lane blue-side">
+          <div class="ph-lane-label">Dự án cũ</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Git</span><strong>KHÔNG code trực tiếp trên main.</strong> Worktree để isolate &mdash; fail thì discard</div>
+            <div class="ph-item"><span class="ph-item-k">Start</span>Bug fixes &amp; small tasks trước &mdash; build trust rồi mới tăng độ phức tạp</div>
+            <div class="ph-item"><span class="ph-item-k">Speed</span><strong>Sequential trước</strong>, parallel chỉ khi đã confident</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="ph-card anim" style="--i:6">
+      <div class="ph-head" onclick="togglePhase(this)">
+        <div class="ph-num" style="--c:var(--accent)">4</div>
+        <div class="ph-title">Testing (TDD Mandatory)</div>
+        <span class="ph-sp">#6 · #7</span>
+        <span class="ph-arrow">&#9660;</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-lane green-side">
+          <div class="ph-lane-label">Dự án mới</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">TDD</span><strong>RED</strong> (test fail) → <strong>GREEN</strong> (code vừa đủ) → <strong>REFACTOR</strong>. Không bỏ bước.</div>
+            <div class="ph-item"><span class="ph-item-k">Edge</span>AI generate edge cases, boundary tests, error scenarios &mdash; coverage cao từ đầu</div>
+            <div class="ph-item"><span class="ph-item-k">Debug</span>4-phase root cause: investigate → pattern → hypothesis → minimal fix</div>
+          </div>
+        </div>
+        <div class="ph-lane blue-side">
+          <div class="ph-lane-label">Dự án cũ</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Safety</span><strong>Viết test cho code cũ TRƯỚC</strong> &mdash; regression safety net phải có TRƯỚC khi sửa</div>
+            <div class="ph-item"><span class="ph-item-k">Debug</span>Legacy bug: viết failing test cho bug trước, rồi fix. 15-30 min thay vì 2-3h random fixes</div>
+            <div class="ph-item"><span class="ph-item-k">Review</span>Developer verify test logic &mdash; AI có thể tạo test pass nhưng sai business logic</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="ph-card anim" style="--i:7">
+      <div class="ph-head" onclick="togglePhase(this)">
+        <div class="ph-num" style="--c:var(--accent)">5</div>
+        <div class="ph-title">Code Review</div>
+        <span class="ph-sp">#10 · #11</span>
+        <span class="ph-arrow">&#9660;</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-lane green-side">
+          <div class="ph-lane-label">Dự án mới</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Self</span>Agent tự request review: plan alignment, test coverage, code quality. Severity-based.</div>
+            <div class="ph-item"><span class="ph-item-k">Fix</span>Agent phân loại severity + fix blocking issues trước human review (giảm 60%+ thời gian)</div>
+            <div class="ph-item"><span class="ph-item-k">Human</span>Senior dev focus vào design decisions (80% issues đã xử lý)</div>
+          </div>
+        </div>
+        <div class="ph-lane blue-side">
+          <div class="ph-lane-label">Dự án cũ</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Context</span>Thêm check: consistency patterns cũ, backward compatibility, no side effects</div>
+            <div class="ph-item"><span class="ph-item-k">Risk</span>AI list files/features ảnh hưởng + suggest test commands cần chạy</div>
+            <div class="ph-item"><span class="ph-item-k">Human</span><strong>BẮT BUỘC Domain Expert review</strong> &mdash; không được skip</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 6 -->
+    <div class="ph-card anim" style="--i:8">
+      <div class="ph-head" onclick="togglePhase(this)">
+        <div class="ph-num" style="--c:var(--accent)">6</div>
+        <div class="ph-title">Verify &amp; Finalize</div>
+        <span class="ph-gate-tag">Gate</span>
+        <span class="ph-sp">#3 · #12</span>
+        <span class="ph-arrow">&#9660;</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-lane green-side">
+          <div class="ph-lane-label">Dự án mới</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Check</span>Evidence: code match plan? tests pass? coverage met? no TODOs? no placeholders? <strong>Không tự claim "done".</strong></div>
+            <div class="ph-item"><span class="ph-item-k">Merge</span>Clean branch, squash commits, PR summary. Merge nhanh &mdash; ít risk.</div>
+          </div>
+        </div>
+        <div class="ph-lane blue-side">
+          <div class="ph-lane-label">Dự án cũ</div>
+          <div class="ph-items">
+            <div class="ph-item"><span class="ph-item-k">Check</span>Extended: regression pass? không break existing? perf không giảm? backward compatible?</div>
+            <div class="ph-item"><span class="ph-item-k">Merge</span><strong>Gradual</strong> &mdash; từng batch nhỏ, monitor sau mỗi merge, feature flags</div>
+            <div class="ph-item"><span class="ph-item-k">Safety</span><strong>Rollback plan PHẢI CÓ</strong> &mdash; revert trong 5 phút nếu break</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6 QUALITY GATES ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">05 &middot; Quality Gates</div>
+  <h2 class="section-heading anim" style="--i:1">6 Hard Gates &mdash; không skip</h2>
+  <p class="section-intro anim" style="--i:2">Mỗi gate có <strong>trigger</strong> rõ ràng và <strong>điều kiện pass</strong> verifiable. Trong đó 3 gates chỉ áp dụng cho Dự án cũ.</p>
+  <div class="gates-grid">
+    <div class="gate-card anim" style="--i:3;--c:var(--rose);--cdim:var(--rose-dim)">
+      <div class="gate-head"><div class="gate-name">Design Gate</div><span class="gate-scope">Always</span></div>
+      <div class="gate-trigger">Trigger: Sau Phase 1 &middot; trước Plan</div>
+      <div class="gate-pass"><strong>Pass:</strong> Design doc được human approve. Legacy: thêm Impact Analysis.</div>
+    </div>
+    <div class="gate-card optional anim" style="--i:4;--c:var(--blue);--cdim:var(--blue-dim)">
+      <div class="gate-head"><div class="gate-name">Safety Net Gate</div><span class="gate-scope">Legacy only</span></div>
+      <div class="gate-trigger">Trigger: Sau Phase 2 &middot; trước Execution</div>
+      <div class="gate-pass"><strong>Pass:</strong> Test coverage cho code sẽ bị sửa đã có TRƯỚC khi đụng vào.</div>
+    </div>
+    <div class="gate-card anim" style="--i:5;--c:var(--amber);--cdim:var(--amber-dim)">
+      <div class="gate-head"><div class="gate-name">TDD Gate</div><span class="gate-scope">Always</span></div>
+      <div class="gate-trigger">Trigger: Mỗi task trong Phase 3-4</div>
+      <div class="gate-pass"><strong>Pass:</strong> Có failing test TRƯỚC khi có implementation.</div>
+    </div>
+    <div class="gate-card anim" style="--i:6;--c:var(--rose);--cdim:var(--rose-dim)">
+      <div class="gate-head"><div class="gate-name">Verification Gate</div><span class="gate-scope">Always</span></div>
+      <div class="gate-trigger">Trigger: Sau Phase 5 &middot; trước Finalize</div>
+      <div class="gate-pass"><strong>Pass:</strong> Evidence-based verification pass toàn bộ checklist (tests, coverage, no TODOs, no placeholders).</div>
+    </div>
+    <div class="gate-card optional anim" style="--i:7;--c:var(--blue);--cdim:var(--blue-dim)">
+      <div class="gate-head"><div class="gate-name">Domain Gate</div><span class="gate-scope">Legacy only</span></div>
+      <div class="gate-trigger">Trigger: Trước merge</div>
+      <div class="gate-pass"><strong>Pass:</strong> Domain Expert approve business logic changes.</div>
+    </div>
+    <div class="gate-card optional anim" style="--i:8;--c:var(--blue);--cdim:var(--blue-dim)">
+      <div class="gate-head"><div class="gate-name">Rollback Gate</div><span class="gate-scope">Legacy only</span></div>
+      <div class="gate-trigger">Trigger: Trước merge</div>
+      <div class="gate-pass"><strong>Pass:</strong> Rollback plan có + đã test revert thành công.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPARE TABLE ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">06 &middot; Quick Compare</div>
+  <h2 class="section-heading anim" style="--i:1">Greenfield vs Legacy</h2>
+  <div class="compare anim" style="--i:2">
+    <div class="compare-head"><div>Khía cạnh</div><div>Dự án mới</div><div>Dự án cũ</div></div>
+    <div class="compare-row"><div class="compare-cell">Core principle</div><div class="compare-cell"><strong>"Move fast, AI lead."</strong></div><div class="compare-cell"><strong>"Move carefully, AI assist."</strong></div></div>
+    <div class="compare-row"><div class="compare-cell">Time to full speed</div><div class="compare-cell">~3-4 tuần</div><div class="compare-cell">~8-10 tuần</div></div>
+    <div class="compare-row"><div class="compare-cell">Parallel dispatch</div><div class="compare-cell">Ngay từ sprint 1</div><div class="compare-cell">Sau khi team confident</div></div>
+    <div class="compare-row"><div class="compare-cell">Test strategy</div><div class="compare-cell">TDD song song code</div><div class="compare-cell">Test code cũ TRƯỚC khi đổi</div></div>
+    <div class="compare-row"><div class="compare-cell">Merge strategy</div><div class="compare-cell">Nhanh, ít risk</div><div class="compare-cell">Gradual + feature flags + rollback</div></div>
+    <div class="compare-row"><div class="compare-cell">Bug volume</div><div class="compare-cell">Ít (TDD từ đầu)</div><div class="compare-cell">Nhiều → 4-phase debug bắt buộc</div></div>
+    <div class="compare-row"><div class="compare-cell">Gates required</div><div class="compare-cell">3 (Design, TDD, Verify)</div><div class="compare-cell">6 (+ Safety Net, Domain, Rollback)</div></div>
+  </div>
+</section>
+
+<!-- ===== 2 PROCESSES ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">07 &middot; Deliverables &middot; 2 Processes</div>
+  <h2 class="section-heading anim" style="--i:1">AI Coding &amp; AI Testing</h2>
+  <div class="proc-grid">
+    <div class="proc anim" style="--i:2;--c:var(--green);--cdim:var(--green-dim)">
+      <div class="proc-head">
+        <div class="proc-icon">&lt;/&gt;</div>
+        <div><div class="proc-title">AI cho Coding</div><div class="proc-meta">W1-W2 &middot; Tech Lead</div></div>
+      </div>
+      <div class="proc-goal">Chuẩn hóa cách developer dùng AI khi code. 6 phases × 2 tracks (Greenfield / Legacy) + 6 hard gates.</div>
+      <div class="proc-sec"><div class="proc-sec-title">Core content</div>
+        <ul>
+          <li>Setup &amp; Configuration (CLAUDE.md, rules, MCP)</li>
+          <li>6-phase Workflow Coding với AI</li>
+          <li>Quality Gates (6 gates có checklist)</li>
+          <li>Prompting theo loại task (feature/bug/refactor)</li>
+        </ul>
+      </div>
+      <div class="proc-sec"><div class="proc-sec-title">Deliverables</div>
+        <ul>
+          <li>Template <code>CLAUDE.md</code> + <code>.claude/rules/</code></li>
+          <li>Template Design Doc (Greenfield + Legacy Impact)</li>
+          <li>Template Plan với TDD-first tasks</li>
+          <li>Template PR/Review severity-based</li>
+          <li>Superpowers skill pack cài &amp; tested</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proc anim" style="--i:3;--c:var(--amber);--cdim:var(--amber-dim)">
+      <div class="proc-head">
+        <div class="proc-icon">&#9873;</div>
+        <div><div class="proc-title">AI cho Testing</div><div class="proc-meta">W3 &middot; QA Lead</div></div>
+      </div>
+      <div class="proc-goal">Tận dụng AI để tăng tốc &amp; nâng cao chất lượng testing. Tích hợp TDD cycle của Coding process.</div>
+      <div class="proc-sec"><div class="proc-sec-title">Core content</div>
+        <ul>
+          <li>AI-Assisted Test Writing (unit/integration/E2E/perf)</li>
+          <li>Workflow: code → AI gen test → dev review → run → fix</li>
+          <li>AI cho QA: test plan từ requirements, exploratory</li>
+          <li>Coverage gap analysis bằng AI</li>
+        </ul>
+      </div>
+      <div class="proc-sec"><div class="proc-sec-title">Deliverables</div>
+        <ul>
+          <li>Template prompts cho từng loại test</li>
+          <li>Checklist quality cho AI-generated tests</li>
+          <li>Hướng dẫn tích hợp AI vào CI/CD pipeline</li>
+          <li>Template bug report tự động</li>
+          <li>Training material (slides + video)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ALL DELIVERABLES ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">08 &middot; Deliverables Checklist</div>
+  <h2 class="section-heading anim" style="--i:1">9 outputs Phase 1</h2>
+  <div class="deliv-list">
+    <div class="deliv anim" style="--i:2;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text"><strong>Tài liệu quy trình Coding</strong> &mdash; 6 phases, 2 nhánh, có ví dụ</div></div>
+    <div class="deliv anim" style="--i:3;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text">Template <code>CLAUDE.md</code> chuẩn cho dự án</div></div>
+    <div class="deliv anim" style="--i:4;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text">Bộ <code>.claude/rules/</code> templates (dev-rules, orchestration, workflow)</div></div>
+    <div class="deliv anim" style="--i:5;--c:var(--plum)"><div class="deliv-box"></div><div class="deliv-text"><strong>Superpowers skill pack</strong> cài &amp; tested trên máy dev</div></div>
+    <div class="deliv anim" style="--i:6;--c:var(--rose)"><div class="deliv-box"></div><div class="deliv-text">Checklist 6 Gates (Design/Safety/TDD/Verify/Domain/Rollback)</div></div>
+    <div class="deliv anim" style="--i:7;--c:var(--teal)"><div class="deliv-box"></div><div class="deliv-text">Template Design Doc (Greenfield + Legacy Impact Analysis)</div></div>
+    <div class="deliv anim" style="--i:8;--c:var(--teal)"><div class="deliv-box"></div><div class="deliv-text">Template Plan với TDD-first tasks (paths, code, commands)</div></div>
+    <div class="deliv anim" style="--i:9;--c:var(--teal)"><div class="deliv-box"></div><div class="deliv-text">Template PR/Review với severity-based feedback</div></div>
+    <div class="deliv anim" style="--i:10;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text"><strong>Training material</strong> &mdash; slides + video demo end-to-end</div></div>
+  </div>
+</section>
+
+<!-- ===== NAV FOOTER ===== -->
+<section class="nav-footer anim" style="--i:0">
+  <div class="nav-footer-inner">
+    <h3>Tiếp theo sẽ là gì?</h3>
+    <p>Xem workflow Superpowers chi tiết cho từng phase, quay lại proposal tổng, hoặc đọc raw spec trong markdown.</p>
+    <div class="nav-btns">
+      <a href="proposal-ai-adoption.html" class="nav-btn primary">&larr; Proposal tổng</a>
+      <a href="workflow-software-development-ai-superpowers.html" class="nav-btn">Superpowers Workflow</a>
+      <a href="../phase-01-process-development.md" class="nav-btn">Raw Spec (MD)</a>
+      <a href="../plan.md" class="nav-btn">Plan Overview</a>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  PHASE 1 DETAIL &middot; XÂY DỰNG BỘ QUY TRÌNH AI &middot; 2026-04-12
+</footer>
+
+</body>
+</html>

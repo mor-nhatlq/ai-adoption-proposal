@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quy Trình Testing Với AI — 5 Bước</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --font-body: 'Outfit', system-ui, sans-serif;
+    --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8eef4;
+    --border: rgba(30,58,95,.12);
+    --border-bright: rgba(30,58,95,.22);
+    --text: #1a2a3a;
+    --text-dim: #5a7090;
+    --text-bright: #0d1b2a;
+    --accent: #1e3a5f;
+    --accent-dim: rgba(30,58,95,.06);
+    --green: #059669; --green-dim: rgba(5,150,105,.08);
+    --blue: #0369a1; --blue-dim: rgba(3,105,161,.08);
+    --gold: #d4a73a; --gold-dim: rgba(212,167,58,.1);
+    --amber: #b45309; --amber-dim: rgba(180,83,9,.08);
+    --teal: #0891b2; --teal-dim: rgba(8,145,178,.08);
+    --plum: #7e22ce; --plum-dim: rgba(126,34,206,.08);
+    --rose: #be123c; --rose-dim: rgba(190,18,60,.08);
+    --hero-grad: linear-gradient(135deg,#1e3a5f 0%,#0891b2 60%,#059669 100%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#0d1421; --surface:#111d2e; --surface2:#162438;
+      --border:rgba(100,160,220,.12); --border-bright:rgba(100,160,220,.24);
+      --text:#c8d8e8; --text-dim:#607080; --text-bright:#e8f0f8;
+      --accent:#4a90d9; --accent-dim:rgba(74,144,217,.08);
+      --green:#34d399; --green-dim:rgba(52,211,153,.12);
+      --blue:#38bdf8; --blue-dim:rgba(56,189,248,.12);
+      --gold:#fbbf24; --gold-dim:rgba(251,191,36,.12);
+      --amber:#fbbf24; --amber-dim:rgba(251,191,36,.12);
+      --teal:#22d3ee; --teal-dim:rgba(34,211,238,.12);
+      --plum:#c084fc; --plum-dim:rgba(192,132,252,.12);
+      --rose:#fb7185; --rose-dim:rgba(251,113,133,.12);
+      --hero-grad: linear-gradient(135deg,#1e3a5f 0%,#0e4d6b 50%,#0b5c47 100%);
+    }
+  }
+  [data-theme="dark"] {
+    --bg:#0d1421; --surface:#111d2e; --surface2:#162438;
+    --border:rgba(100,160,220,.12); --border-bright:rgba(100,160,220,.24);
+    --text:#c8d8e8; --text-dim:#607080; --text-bright:#e8f0f8;
+    --accent:#4a90d9; --accent-dim:rgba(74,144,217,.08);
+    --green:#34d399; --green-dim:rgba(52,211,153,.12);
+    --blue:#38bdf8; --blue-dim:rgba(56,189,248,.12);
+    --gold:#fbbf24; --gold-dim:rgba(251,191,36,.12);
+    --amber:#fbbf24; --amber-dim:rgba(251,191,36,.12);
+    --teal:#22d3ee; --teal-dim:rgba(34,211,238,.12);
+    --plum:#c084fc; --plum-dim:rgba(192,132,252,.12);
+    --rose:#fb7185; --rose-dim:rgba(251,113,133,.12);
+    --hero-grad: linear-gradient(135deg,#1e3a5f 0%,#0e4d6b 50%,#0b5c47 100%);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;min-height:100vh}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .anim{animation:fadeUp .5s ease-out both;animation-delay:calc(var(--i,0)*.06s)}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+  .theme-toggle{position:fixed;top:16px;right:16px;z-index:300;width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .theme-toggle:hover{background:var(--surface2);color:var(--text)}
+
+  /* ===== HERO ===== */
+  .hero{background:var(--hero-grad);color:#fff;padding:72px 32px 88px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:28px 28px;opacity:.5;pointer-events:none}
+  .hero-inner{max-width:1200px;margin:0 auto;position:relative;z-index:2}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:100px;margin-bottom:22px}
+  .badge-dot{width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.2);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(255,255,255,.2)}50%{box-shadow:0 0 0 7px rgba(255,255,255,0)}}
+  .hero h1{font-size:clamp(34px,5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.08;margin-bottom:18px;max-width:900px}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,#fbbf24,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:clamp(15px,1.6vw,18px);max-width:820px;opacity:.88;font-weight:400;line-height:1.65}
+  .hero-meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:36px;padding-top:28px;border-top:1px solid rgba(255,255,255,.18)}
+  .hero-meta-item{display:flex;flex-direction:column;gap:3px}
+  .hero-meta-label{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.7}
+  .hero-meta-value{font-size:15px;font-weight:600}
+
+  /* ===== CONTAINER ===== */
+  .container{max-width:1200px;margin:0 auto;padding:56px 32px}
+  .section{margin-bottom:64px}
+  .section-title{font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2.2px;color:var(--text-dim);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+  .section-heading{font-size:30px;font-weight:800;letter-spacing:-.8px;color:var(--text-bright);margin-bottom:14px;line-height:1.15}
+  .section-intro{font-size:15.5px;color:var(--text-dim);max-width:820px;line-height:1.7;margin-bottom:28px}
+  .section-intro strong{color:var(--text);font-weight:600}
+
+  /* ===== PRINCIPLE CARD ===== */
+  .principle-card{background:linear-gradient(135deg,var(--accent-dim),var(--green-dim));border:1.5px solid var(--border-bright);border-radius:18px;padding:28px;position:relative;overflow:hidden}
+  .principle-label{font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px}
+  .principle-text{font-size:17px;font-weight:500;line-height:1.55;color:var(--text-bright);max-width:900px}
+  .principle-text strong{color:var(--accent);font-weight:700}
+
+  /* ===== DIAGRAM CARD ===== */
+  .diagram-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px;overflow-x:auto}
+  .diagram-card .mermaid{text-align:center;min-width:800px}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+  .legend-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text)}
+  .legend-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0}
+  .legend-dot.ai{background:var(--teal)}
+  .legend-dot.human{background:var(--amber)}
+  .legend-dot.gate{background:var(--rose)}
+
+  /* ===== STEP CARDS ===== */
+  .steps-grid{display:flex;flex-direction:column;gap:18px}
+  .step-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px 28px;border-left:4px solid var(--c,var(--teal));transition:transform .15s,box-shadow .15s;position:relative}
+  .step-card:hover{transform:translateX(4px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  .step-header{display:flex;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+  .step-num{width:48px;height:48px;border-radius:12px;background:var(--cdim,var(--teal-dim));color:var(--c,var(--teal));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;flex-shrink:0;font-family:var(--font-body)}
+  .step-title{font-size:20px;font-weight:700;color:var(--text-bright);letter-spacing:-.3px;flex:1;min-width:200px}
+  .step-tag{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;padding:5px 12px;border-radius:100px;background:var(--cdim,var(--teal-dim));color:var(--c,var(--teal))}
+  .step-table{width:100%;border-collapse:collapse;font-size:13.5px}
+  .step-table th, .step-table td{text-align:left;padding:10px 14px;vertical-align:top;border-bottom:1px dashed var(--border)}
+  .step-table tr:last-child th, .step-table tr:last-child td{border-bottom:none}
+  .step-table th{width:140px;color:var(--text-dim);font-family:var(--font-mono);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;background:var(--surface2);border-radius:6px 0 0 6px}
+  .step-table td{color:var(--text);line-height:1.6}
+  .step-table td strong{color:var(--text-bright);font-weight:600}
+  .gate-banner{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--rose-dim);color:var(--rose);padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;border:1px solid var(--rose)}
+  .gate-banner::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--rose)}
+
+  /* ===== GATES TABLE ===== */
+  .gates-table{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .gates-row{display:grid;grid-template-columns:1.2fr 1fr 2fr;border-bottom:1px solid var(--border);align-items:center}
+  .gates-row:last-child{border-bottom:none}
+  .gates-header{background:var(--surface2);font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--text-dim)}
+  .gates-cell{padding:14px 18px;font-size:13.5px;color:var(--text);line-height:1.5}
+  .gates-cell strong{color:var(--rose);font-weight:700}
+  @media(max-width:768px){
+    .gates-row{grid-template-columns:1fr}
+    .gates-header{display:none}
+    .gates-cell{padding:8px 18px}
+    .gates-cell:first-child{padding-top:14px;font-weight:700}
+    .gates-cell:last-child{padding-bottom:14px}
+  }
+
+  /* ===== DELIVERABLES ===== */
+  .deliv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+  .deliv-item{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:10px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px}
+  .deliv-check{width:22px;height:22px;border-radius:50%;background:var(--green-dim);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;border:1.5px solid var(--green)}
+  .deliv-text{font-size:13.5px;color:var(--text);line-height:1.5}
+
+  /* ===== SCOPE NOTE ===== */
+  .scope-note{background:var(--gold-dim);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;font-size:14px;color:var(--text);line-height:1.7}
+  .scope-note strong{color:var(--text-bright);font-weight:700}
+  .scope-note em{color:var(--text-dim);font-style:italic}
+
+  /* ===== FOOTER ===== */
+  footer{padding:28px 32px;border-top:1px solid var(--border);text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--text-dim);letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+  <span id="theme-icon">&#9790;</span>
+</button>
+<script>
+  function toggleTheme(){
+    const cur=document.documentElement.getAttribute('data-theme');
+    const next=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',next);
+    document.getElementById('theme-icon').innerHTML=next==='dark'?'&#9788;':'&#9790;';
+    localStorage.setItem('theme',next);
+    renderMermaid();
+  }
+  const saved=localStorage.getItem('theme');
+  if(saved){document.documentElement.setAttribute('data-theme',saved);
+    document.getElementById('theme-icon').innerHTML=saved==='dark'?'&#9788;':'&#9790;';}
+</script>
+
+<!-- ============== HERO ============== -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="badge anim" style="--i:0"><span class="badge-dot"></span>Phase 1 &middot; Testing Process &middot; Tuần 3</div>
+    <h1 class="anim" style="--i:1">Quy Trình Testing Với AI &mdash; <em>5 Bước</em></h1>
+    <p class="hero-sub anim" style="--i:2">
+      AI là <strong>content generator</strong> (viết testcase). Tester là <strong>quality gate</strong> (review + execute).
+      Không build agent tự động execute trong giai đoạn này &mdash; tập trung tăng tốc viết testcase &amp; nâng chất lượng coverage.
+    </p>
+    <div class="hero-meta anim" style="--i:3">
+      <div class="hero-meta-item"><span class="hero-meta-label">Owner</span><span class="hero-meta-value">QA Lead</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Duration</span><span class="hero-meta-value">1 tuần build · 1 ngày workshop</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Scope</span><span class="hero-meta-value">5 bước &middot; 3 quality gates</span></div>
+      <div class="hero-meta-item"><span class="hero-meta-label">Principle</span><span class="hero-meta-value">YAGNI &middot; KISS &middot; Human-in-the-loop</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== BODY ============== -->
+<div class="container">
+
+<!-- PRINCIPLE -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">01 &middot; Nguyên Tắc</div>
+  <h2 class="section-heading anim" style="--i:1">AI viết &mdash; Tester quyết</h2>
+  <p class="section-intro anim" style="--i:2">
+    Trong giai đoạn này, AI đóng vai trò <strong>force multiplier cho việc viết testcase</strong>. Không để AI tự chạy test &amp; tự claim pass &mdash;
+    mọi kết quả test phải có <strong>evidence người thật</strong> (screenshot, log, video).
+  </p>
+  <div class="principle-card anim" style="--i:3">
+    <div class="principle-label">Core Principle</div>
+    <p class="principle-text">
+      <strong>AI:</strong> brainstorm strategy, break-down plan, viết testcase theo template.
+      <strong>Tester:</strong> approve strategy, review testcase, execute &amp; attach evidence.
+      Mỗi bước AI làm đều có Tester đứng sau kiểm soát &mdash; không agent nào tự "done" mà không qua human gate.
+    </p>
+  </div>
+</section>
+
+<!-- FLOW DIAGRAM -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">02 &middot; Workflow</div>
+  <h2 class="section-heading anim" style="--i:1">Flow 5 bước &mdash; 3 gates</h2>
+  <p class="section-intro anim" style="--i:2">
+    Từ requirements &rarr; test report. 3 bước đầu AI hỗ trợ (với Tester điều hướng), 2 bước cuối Tester thực hiện.
+    Gate sau mỗi phase AI để đảm bảo chất lượng trước khi đi tiếp.
+  </p>
+
+  <div class="diagram-card anim" style="--i:3">
+    <div class="mermaid" id="mermaid-flow">
+flowchart LR
+    A[Requirements<br/>User Story / Spec] --> S1
+    S1[Step 1<br/>Brainstorm<br/>Test Strategy]
+    S1 --> G1{Tester<br/>approve?}
+    G1 -->|No| S1
+    G1 -->|Yes| S2[Step 2<br/>Plan viết<br/>Testcase]
+    S2 --> G2{Tester<br/>approve?}
+    G2 -->|No| S2
+    G2 -->|Yes| S3[Step 3<br/>AI viết Testcase<br/>theo Template]
+    S3 --> S4[Step 4<br/>Tester Review<br/>Testcase]
+    S4 --> G3{Pass<br/>checklist?}
+    G3 -->|No - fix| S3
+    G3 -->|Yes| S5[Step 5<br/>Tester Execute<br/>Testing]
+    S5 --> R[Test Report<br/>+ Bug Tickets]
+
+    classDef ai fill:#e0f2f5,stroke:#0891b2,stroke-width:2px,color:#0d1b2a
+    classDef human fill:#fef3e0,stroke:#b45309,stroke-width:2px,color:#0d1b2a
+    classDef gate fill:#fde4ea,stroke:#be123c,stroke-width:2px,color:#0d1b2a
+    classDef io fill:#f0f4f8,stroke:#1e3a5f,stroke-width:1.5px,color:#0d1b2a
+    class S1,S2,S3 ai
+    class S4,S5 human
+    class G1,G2,G3 gate
+    class A,R io
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot ai"></span> AI thực hiện (Tester điều hướng)</div>
+      <div class="legend-item"><span class="legend-dot human"></span> Tester thực hiện (Human-in-the-loop)</div>
+      <div class="legend-item"><span class="legend-dot gate"></span> Quality Gate (bắt buộc pass)</div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP DETAILS -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">03 &middot; Chi Tiết Từng Bước</div>
+  <h2 class="section-heading anim" style="--i:1">5 bước chi tiết</h2>
+
+  <div class="steps-grid">
+
+    <!-- Step 1 -->
+    <div class="step-card anim" style="--i:2;--c:var(--teal);--cdim:var(--teal-dim)">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">Brainstorm Test Strategy với AI</div>
+        <span class="step-tag">AI + Tester</span>
+      </div>
+      <table class="step-table">
+        <tr><th>Input</th><td>Requirements / User Story / Acceptance Criteria / Design Doc</td></tr>
+        <tr><th>Hoạt động</th><td>Tester prompt AI đặt câu hỏi Socratic: scope là gì? user flow nào critical? risk ở đâu? test levels cần cover (unit / integration / E2E)? data &amp; environment cần chuẩn bị?</td></tr>
+        <tr><th>AI output</th><td>Draft Test Strategy: scope in/out, test levels, test types (functional / regression / edge case), priority matrix, risk areas, entry / exit criteria</td></tr>
+        <tr><th>Tester action</th><td>Challenge AI &mdash; bổ sung context business, loại bỏ phần không liên quan, confirm scope</td></tr>
+        <tr><th>Output</th><td><strong>Test Strategy Doc</strong> (đã được Tester approve)</td></tr>
+      </table>
+      <div class="gate-banner">Gate: Tester approve strategy &rarr; tiếp Step 2</div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-card anim" style="--i:3;--c:var(--teal);--cdim:var(--teal-dim)">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">Plan Viết Testcase với AI</div>
+        <span class="step-tag">AI + Tester</span>
+      </div>
+      <table class="step-table">
+        <tr><th>Input</th><td>Test Strategy Doc (từ Step 1) + Template Testcase</td></tr>
+        <tr><th>Hoạt động</th><td>AI chia strategy &rarr; danh sách testcase cần viết: mỗi nhóm feature có bao nhiêu case, loại gì (happy / unhappy / edge / boundary), priority</td></tr>
+        <tr><th>AI output</th><td><strong>Testcase Backlog</strong> &mdash; bảng list: ID &middot; Feature &middot; Scenario &middot; Type &middot; Priority &middot; Estimated count</td></tr>
+        <tr><th>Tester action</th><td>Review backlog &mdash; bổ sung case thiếu, xoá case trùng, chốt priority</td></tr>
+        <tr><th>Output</th><td><strong>Testcase Writing Plan</strong> (approved backlog)</td></tr>
+      </table>
+      <div class="gate-banner">Gate: Tester approve plan &rarr; tiếp Step 3</div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-card anim" style="--i:4;--c:var(--blue);--cdim:var(--blue-dim)">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">AI Viết Testcase Theo Template</div>
+        <span class="step-tag">AI</span>
+      </div>
+      <table class="step-table">
+        <tr><th>Input</th><td>Testcase Writing Plan + Template chuẩn của công ty</td></tr>
+        <tr><th>Template fields</th><td>ID &middot; Title &middot; Precondition &middot; Test Steps &middot; Test Data &middot; Expected Result &middot; Priority &middot; Type &middot; Related Requirement</td></tr>
+        <tr><th>Hoạt động</th><td>AI viết tuần tự từng testcase theo template &mdash; KHÔNG skip field, KHÔNG placeholders, mỗi step phải actionable</td></tr>
+        <tr><th>AI output</th><td><strong>Testcase Suite</strong> đầy đủ theo template (Excel / Markdown / TestRail format)</td></tr>
+        <tr><th>Lưu ý</th><td>AI phải cite <strong>requirement ID</strong> cho mỗi testcase (traceability)</td></tr>
+      </table>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-card anim" style="--i:5;--c:var(--amber);--cdim:var(--amber-dim)">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">Tester Review Testcase Theo Tài Liệu</div>
+        <span class="step-tag">Tester</span>
+      </div>
+      <table class="step-table">
+        <tr><th>Input</th><td>Draft testcase suite + Requirements + Template checklist</td></tr>
+        <tr><th>Checklist</th><td>
+          &#9744; Đúng template &nbsp;&middot;&nbsp;
+          &#9744; Cover đủ requirement (traceability) &nbsp;&middot;&nbsp;
+          &#9744; Step rõ ràng, actionable &nbsp;&middot;&nbsp;
+          &#9744; Expected result đo lường được &nbsp;&middot;&nbsp;
+          &#9744; Không trùng lặp &nbsp;&middot;&nbsp;
+          &#9744; Edge case hợp lý &nbsp;&middot;&nbsp;
+          &#9744; Test data realistic &nbsp;&middot;&nbsp;
+          &#9744; Priority đúng
+        </td></tr>
+        <tr><th>Action</th><td>Đánh dấu <strong>PASS / FIX / REJECT</strong> từng case. Case FIX &rarr; yêu cầu AI viết lại với feedback cụ thể.</td></tr>
+        <tr><th>Loop</th><td>Nếu &gt; 20% case cần FIX &rarr; quay lại Step 3 với prompt refined</td></tr>
+        <tr><th>Output</th><td><strong>Testcase Suite đã approve</strong> &mdash; production-ready</td></tr>
+      </table>
+      <div class="gate-banner">Gate: 100% case pass checklist &rarr; tiếp Step 5</div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-card anim" style="--i:6;--c:var(--amber);--cdim:var(--amber-dim)">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">Tester Execute Testing Theo Testcase</div>
+        <span class="step-tag">Tester</span>
+      </div>
+      <table class="step-table">
+        <tr><th>Input</th><td>Testcase Suite đã approve + Build / Environment cần test</td></tr>
+        <tr><th>Hoạt động</th><td>Tester chạy từng testcase manual (hoặc semi-auto với tool hỗ trợ), ghi kết quả Pass / Fail, attach <strong>evidence</strong> (screenshot / log / video)</td></tr>
+        <tr><th>AI hỗ trợ</th><td>AI giúp: viết bug ticket từ fail case, summarize test report, phân tích pattern của các bug <em>(optional)</em></td></tr>
+        <tr><th>Output</th><td><strong>Test Report</strong> + <strong>Bug Tickets</strong> (có evidence)</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- QUALITY GATES -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">04 &middot; Quality Gates</div>
+  <h2 class="section-heading anim" style="--i:1">3 gates bắt buộc</h2>
+  <p class="section-intro anim" style="--i:2">Không bước nào được skip. Gate không pass &rarr; quay lại bước trước đó để refine.</p>
+
+  <div class="gates-table anim" style="--i:3">
+    <div class="gates-row gates-header">
+      <div class="gates-cell">Gate</div>
+      <div class="gates-cell">Trigger</div>
+      <div class="gates-cell">Điều kiện pass</div>
+    </div>
+    <div class="gates-row">
+      <div class="gates-cell"><strong>Strategy Gate</strong></div>
+      <div class="gates-cell">Sau Step 1</div>
+      <div class="gates-cell">Tester approve Test Strategy Doc (scope, test levels, priority matrix)</div>
+    </div>
+    <div class="gates-row">
+      <div class="gates-cell"><strong>Plan Gate</strong></div>
+      <div class="gates-cell">Sau Step 2</div>
+      <div class="gates-cell">Tester approve Testcase Backlog (đủ feature, đúng priority, không trùng)</div>
+    </div>
+    <div class="gates-row">
+      <div class="gates-cell"><strong>Review Gate</strong></div>
+      <div class="gates-cell">Sau Step 4</div>
+      <div class="gates-cell">100% testcase pass review checklist (traceability, actionability, edge cases)</div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">05 &middot; Deliverables</div>
+  <h2 class="section-heading anim" style="--i:1">Tài liệu &amp; template cần build</h2>
+
+  <div class="deliv-grid">
+    <div class="deliv-item anim" style="--i:2"><div class="deliv-check">&#10003;</div><div class="deliv-text">Tài liệu quy trình Testing với AI &mdash; 5 bước, có ví dụ thực tế end-to-end</div></div>
+    <div class="deliv-item anim" style="--i:3"><div class="deliv-check">&#10003;</div><div class="deliv-text">Template <strong>Test Strategy Doc</strong> (Step 1 output)</div></div>
+    <div class="deliv-item anim" style="--i:4"><div class="deliv-check">&#10003;</div><div class="deliv-text">Template <strong>Testcase Backlog</strong> (Step 2 output)</div></div>
+    <div class="deliv-item anim" style="--i:5"><div class="deliv-check">&#10003;</div><div class="deliv-text">Template <strong>Testcase</strong> chuẩn (Step 3 &mdash; Excel / Markdown)</div></div>
+    <div class="deliv-item anim" style="--i:6"><div class="deliv-check">&#10003;</div><div class="deliv-text"><strong>Checklist Review Testcase</strong> (Step 4)</div></div>
+    <div class="deliv-item anim" style="--i:7"><div class="deliv-check">&#10003;</div><div class="deliv-text"><strong>Prompt Library</strong> &mdash; prompt mẫu cho Step 1 / 2 / 3</div></div>
+    <div class="deliv-item anim" style="--i:8"><div class="deliv-check">&#10003;</div><div class="deliv-text">Training material &mdash; workshop 1 ngày cho QA team + demo 1 feature end-to-end</div></div>
+  </div>
+</section>
+
+<!-- SCOPE NOTE -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">06 &middot; Scope Note</div>
+  <h2 class="section-heading anim" style="--i:1">Chưa làm gì trong giai đoạn này</h2>
+
+  <div class="scope-note anim" style="--i:2">
+    <strong>Chưa build agent tự động execute test.</strong> Khi team đã thuần quy trình 5 bước này (~6 tháng áp dụng thực tế), sẽ đánh giá lại việc
+    auto-execution, Playwright MCP, Allure integration, flaky detection ở phase sau.
+    <em>(Theo nguyên tắc YAGNI &mdash; không build thứ chưa cần.)</em>
+  </div>
+</section>
+
+</div>
+
+<footer>Quy Trình Testing Với AI &middot; Phase 1 Week 3 &middot; AI Adoption Plan 2026</footer>
+
+<script>
+  function renderMermaid(){
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        fontFamily: "'Outfit', system-ui, sans-serif",
+        fontSize: '14px'
+      },
+      flowchart: { curve: 'basis', padding: 24, nodeSpacing: 40, rankSpacing: 60 }
+    });
+    const el = document.getElementById('mermaid-flow');
+    if(el && el.dataset.source){
+      el.innerHTML = el.dataset.source;
+    } else if(el){
+      el.dataset.source = el.innerHTML;
+    }
+    el.removeAttribute('data-processed');
+    mermaid.run({ nodes: [el] });
+  }
+  renderMermaid();
+</script>
+</body>
+</html>

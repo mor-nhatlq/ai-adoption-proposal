@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMAD Method &mdash; Software Development Workflow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'Outfit', system-ui, sans-serif;
+    --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8eef4;
+    --border: rgba(30,58,95,0.1);
+    --border-bright: rgba(30,58,95,0.2);
+    --text: #1a2a3a;
+    --text-dim: #5a7090;
+    --text-bright: #0d1b2a;
+    --accent: #1e3a5f;
+    --accent-dim: rgba(30,58,95,0.06);
+    --green: #059669; --green-dim: rgba(5,150,105,0.07); --green-bg: rgba(5,150,105,0.03);
+    --blue: #0369a1; --blue-dim: rgba(3,105,161,0.07); --blue-bg: rgba(3,105,161,0.03);
+    --gold: #d4a73a; --gold-dim: rgba(212,167,58,0.08);
+    --amber: #b45309; --amber-dim: rgba(180,83,9,0.07);
+    --teal: #0891b2; --teal-dim: rgba(8,145,178,0.07);
+    --plum: #7e22ce; --plum-dim: rgba(126,34,206,0.07);
+    --rose: #be123c; --rose-dim: rgba(190,18,60,0.07);
+    --phase-bg: rgba(30,58,95,0.03);
+    /* BMAD uses orange/red accent as brand color */
+    --bmad: #dc2626; --bmad-dim: rgba(220,38,38,0.08);
+    /* Phase colors */
+    --phase1: #0891b2; --phase1-dim: rgba(8,145,178,0.1);
+    --phase2: #7e22ce; --phase2-dim: rgba(126,34,206,0.1);
+    --phase3: #059669; --phase3-dim: rgba(5,150,105,0.1);
+    --phase4: #d4a73a; --phase4-dim: rgba(212,167,58,0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1421; --surface: #111d2e; --surface2: #162438;
+      --border: rgba(100,160,220,0.1); --border-bright: rgba(100,160,220,0.2);
+      --text: #c8d8e8; --text-dim: #607080; --text-bright: #e8f0f8;
+      --accent: #4a90d9; --accent-dim: rgba(74,144,217,0.08);
+      --green: #34d399; --green-dim: rgba(52,211,153,0.1); --green-bg: rgba(52,211,153,0.03);
+      --blue: #38bdf8; --blue-dim: rgba(56,189,248,0.1); --blue-bg: rgba(56,189,248,0.03);
+      --gold: #fbbf24; --gold-dim: rgba(251,191,36,0.1);
+      --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.1);
+      --teal: #22d3ee; --teal-dim: rgba(34,211,238,0.1);
+      --plum: #c084fc; --plum-dim: rgba(192,132,252,0.1);
+      --rose: #fb7185; --rose-dim: rgba(251,113,133,0.1);
+      --phase-bg: rgba(74,144,217,0.04);
+      --bmad: #f87171; --bmad-dim: rgba(248,113,113,0.1);
+      --phase1: #22d3ee; --phase1-dim: rgba(34,211,238,0.12);
+      --phase2: #c084fc; --phase2-dim: rgba(192,132,252,0.12);
+      --phase3: #34d399; --phase3-dim: rgba(52,211,153,0.12);
+      --phase4: #fbbf24; --phase4-dim: rgba(251,191,36,0.12);
+    }
+  }
+  [data-theme="dark"] {
+    --bg: #0d1421; --surface: #111d2e; --surface2: #162438;
+    --border: rgba(100,160,220,0.1); --border-bright: rgba(100,160,220,0.2);
+    --text: #c8d8e8; --text-dim: #607080; --text-bright: #e8f0f8;
+    --accent: #4a90d9; --accent-dim: rgba(74,144,217,0.08);
+    --green: #34d399; --green-dim: rgba(52,211,153,0.1); --green-bg: rgba(52,211,153,0.03);
+    --blue: #38bdf8; --blue-dim: rgba(56,189,248,0.1); --blue-bg: rgba(56,189,248,0.03);
+    --gold: #fbbf24; --gold-dim: rgba(251,191,36,0.1);
+    --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.1);
+    --teal: #22d3ee; --teal-dim: rgba(34,211,238,0.1);
+    --plum: #c084fc; --plum-dim: rgba(192,132,252,0.1);
+    --rose: #fb7185; --rose-dim: rgba(251,113,133,0.1);
+    --phase-bg: rgba(74,144,217,0.04);
+    --bmad: #f87171; --bmad-dim: rgba(248,113,113,0.1);
+    --phase1: #22d3ee; --phase1-dim: rgba(34,211,238,0.12);
+    --phase2: #c084fc; --phase2-dim: rgba(192,132,252,0.12);
+    --phase3: #34d399; --phase3-dim: rgba(52,211,153,0.12);
+    --phase4: #fbbf24; --phase4-dim: rgba(251,191,36,0.12);
+  }
+
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 300;
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text-dim); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: background .15s, color .15s;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .theme-toggle:hover { background: var(--surface2); color: var(--text); }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--text); font-family: var(--font-body);
+    padding: 40px 24px; min-height: 100vh;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  .anim { animation: fadeUp .4s ease-out both; animation-delay: calc(var(--i,0)*.06s); }
+  @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+
+  .container { max-width: 1300px; margin: 0 auto; }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 6px; color: var(--text-bright); }
+  .subtitle { font-family: var(--font-mono); font-size: 13px; color: var(--text-dim); margin-bottom: 8px; }
+  .intro { font-size: 15px; color: var(--text-dim); line-height: 1.7; max-width: 860px; margin-bottom: 28px; }
+  .intro strong { color: var(--text); font-weight: 600; }
+  .bmad-logo {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--bmad-dim);
+    color: var(--bmad);
+    border: 1px solid var(--bmad);
+    letter-spacing: 1px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .legend { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:28px; }
+  .legend-item { display:flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:12px; color:var(--text-dim); }
+  .legend-swatch { width:14px; height:14px; border-radius:4px; }
+
+  .tag { font-family:var(--font-mono); font-size:10px; font-weight:600; padding:2px 7px; border-radius:4px; text-transform:uppercase; letter-spacing:.5px; display:inline-block; white-space:nowrap; }
+  .tag--gate { background:var(--rose-dim); color:var(--rose); border:1px solid var(--rose); }
+  .tag--artifact { background:var(--gold-dim); color:var(--gold); border:1px solid var(--gold); }
+  .tag--agent { background:var(--bmad-dim); color:var(--bmad); border:1px solid var(--bmad); }
+  .tag--brown { background:var(--amber-dim); color:var(--amber); border:1px solid var(--amber); }
+
+  .section-title { font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); margin-top:36px; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+  .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* ============ 4 PHASES OVERVIEW ============ */
+  .phases-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
+  .phase-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:18px 18px 16px; position:relative;
+    border-top:4px solid var(--phase1);
+  }
+  .phase-card--p1 { border-top-color:var(--phase1); }
+  .phase-card--p2 { border-top-color:var(--phase2); }
+  .phase-card--p3 { border-top-color:var(--phase3); }
+  .phase-card--p4 { border-top-color:var(--phase4); }
+
+  .phase-card-num {
+    font-family:var(--font-mono); font-size:10px; font-weight:700;
+    letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;
+  }
+  .phase-card--p1 .phase-card-num { color:var(--phase1); }
+  .phase-card--p2 .phase-card-num { color:var(--phase2); }
+  .phase-card--p3 .phase-card-num { color:var(--phase3); }
+  .phase-card--p4 .phase-card-num { color:var(--phase4); }
+
+  .phase-card-title { font-size:16px; font-weight:700; color:var(--text-bright); margin-bottom:8px; }
+  .phase-card-desc { font-size:12.5px; color:var(--text-dim); line-height:1.5; margin-bottom:10px; }
+  .phase-card-agents {
+    font-family:var(--font-mono); font-size:10px; color:var(--text-dim);
+    padding-top:8px; border-top:1px dashed var(--border);
+  }
+  .phase-card-agents strong { color:var(--text); font-weight:500; }
+
+  /* ============ AGENT ROSTER ============ */
+  .agents-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:28px; }
+  .agent-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; border-left:3px solid var(--bmad);
+    display:flex; align-items:center; gap:10px;
+  }
+  .agent-avatar {
+    width:32px; height:32px; border-radius:8px;
+    background:var(--bmad-dim); color:var(--bmad);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:11px; font-weight:700;
+    flex-shrink:0; border:1px solid var(--bmad);
+  }
+  .agent-info { flex:1; min-width:0; }
+  .agent-name { font-size:13px; font-weight:700; color:var(--text-bright); line-height:1.2; }
+  .agent-role { font-family:var(--font-mono); font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+
+  /* ============ PHASE SECTIONS ============ */
+  .phase-section { margin-bottom:20px; border-radius:14px; background:var(--phase-bg); border:1px solid var(--border); overflow:hidden; }
+  .phase-header {
+    display:flex; align-items:center; gap:14px; padding:16px 22px;
+    border-bottom:1px solid var(--border); cursor:pointer; user-select:none; transition:background .15s;
+  }
+  .phase-header:hover { background:var(--accent-dim); }
+  .phase-num { font-family:var(--font-mono); font-size:13px; font-weight:700; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .phase-section--p1 .phase-num { background:var(--phase1-dim); color:var(--phase1); border:1.5px solid var(--phase1); }
+  .phase-section--p2 .phase-num { background:var(--phase2-dim); color:var(--phase2); border:1.5px solid var(--phase2); }
+  .phase-section--p3 .phase-num { background:var(--phase3-dim); color:var(--phase3); border:1.5px solid var(--phase3); }
+  .phase-section--p4 .phase-num { background:var(--phase4-dim); color:var(--phase4); border:1.5px solid var(--phase4); }
+
+  .phase-title-group { display:flex; flex-direction:column; gap:2px; }
+  .phase-title { font-size:17px; font-weight:700; letter-spacing:-.3px; color:var(--text-bright); }
+  .phase-title-sub { font-family:var(--font-mono); font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+
+  .phase-agents-inline { margin-left:auto; display:flex; gap:4px; flex-wrap:wrap; }
+  .phase-arrow { font-size:13px; color:var(--text-dim); transition:transform .2s; margin-left:8px; }
+  .phase-section.open .phase-arrow { transform:rotate(180deg); }
+  .phase-body { display:none; }
+  .phase-section.open .phase-body { display:block; }
+
+  .phase-content { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+  .lane-cell { padding:18px 22px; }
+  .lane-cell:first-child { border-right:1px solid var(--border); }
+  .lane-cell--green { background:var(--green-bg); }
+  .lane-cell--blue { background:var(--blue-bg); }
+  .cell-label { font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .lane-cell--green .cell-label { color:var(--green); }
+  .lane-cell--blue .cell-label { color:var(--blue); }
+  .cell-label::before { content:''; width:8px; height:8px; border-radius:50%; }
+  .lane-cell--green .cell-label::before { background:var(--green); }
+  .lane-cell--blue .cell-label::before { background:var(--blue); }
+
+  .action-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .action-item { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+  .lane-cell--green .action-item { border-left:3px solid var(--green); }
+  .lane-cell--blue .action-item { border-left:3px solid var(--blue); }
+  .action-title { font-size:13.5px; font-weight:600; color:var(--text-bright); margin-bottom:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .action-desc { font-size:12.5px; color:var(--text-dim); line-height:1.6; }
+  .action-desc strong { color:var(--text); font-weight:500; }
+
+  .phase-connector { display:flex; justify-content:center; padding:3px 0; }
+  .phase-connector svg { width:18px; height:18px; fill:none; stroke:var(--accent); stroke-width:2; stroke-linecap:round; opacity:.3; }
+
+  /* ============ ARTIFACTS PANEL ============ */
+  .artifacts-section { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:24px; }
+  .artifacts-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+  .art-col { padding:20px 22px; }
+  .art-col:first-child { border-right:1px solid var(--border); background:var(--green-bg); }
+  .art-col:last-child { background:var(--blue-bg); }
+  .art-title { font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .art-col:first-child .art-title { color:var(--green); }
+  .art-col:last-child .art-title { color:var(--blue); }
+  .art-list { list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .art-item {
+    font-family:var(--font-mono); font-size:12px;
+    padding:6px 10px; background:var(--surface); border-radius:6px;
+    border:1px solid var(--border); color:var(--text);
+    display:flex; align-items:center; gap:8px;
+  }
+  .art-item strong { color:var(--text-bright); font-weight:500; }
+  .art-item .art-desc { color:var(--text-dim); font-size:11px; font-family:var(--font-body); margin-left:auto; }
+  .art-col:last-child .art-item.art-extra { border-left:3px solid var(--amber); }
+
+  /* ============ FLOW LINE ============ */
+  .flow-line { display:flex; align-items:center; gap:0; margin-bottom:28px; overflow-x:auto; padding:12px 0; }
+  .flow-step { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:150px; text-align:center; }
+  .flow-box { background:var(--surface); border-radius:10px; padding:10px 14px; font-size:13px; font-weight:600; color:var(--text-bright); width:150px; border:2px solid var(--accent); }
+  .flow-box--p1 { border-color:var(--phase1); background:var(--phase1-dim); }
+  .flow-box--p2 { border-color:var(--phase2); background:var(--phase2-dim); }
+  .flow-box--p3 { border-color:var(--phase3); background:var(--phase3-dim); }
+  .flow-box--p4 { border-color:var(--phase4); background:var(--phase4-dim); }
+  .flow-box--gate { border-color:var(--rose); background:var(--rose-dim); }
+  .flow-sub { font-family:var(--font-mono); font-size:9px; color:var(--text-dim); }
+  .flow-arrow { display:flex; align-items:center; color:var(--accent); opacity:.4; font-size:18px; padding:0 2px; }
+
+  /* ============ COMPARE TABLE ============ */
+  .compare-section { margin-top:16px; background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .compare-header { display:grid; grid-template-columns:200px 1fr 1fr; border-bottom:2px solid var(--border); }
+  .compare-header-cell { padding:12px 18px; font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-dim); border-right:1px solid var(--border); }
+  .compare-header-cell:last-child { border-right:none; }
+  .compare-header-cell:nth-child(2) { color:var(--green); background:var(--green-bg); }
+  .compare-header-cell:nth-child(3) { color:var(--blue); background:var(--blue-bg); }
+  .compare-row { display:grid; grid-template-columns:200px 1fr 1fr; border-bottom:1px solid var(--border); }
+  .compare-row:last-child { border-bottom:none; }
+  .compare-cell { padding:10px 18px; font-size:12.5px; color:var(--text-dim); line-height:1.6; border-right:1px solid var(--border); }
+  .compare-cell:last-child { border-right:none; }
+  .compare-cell:first-child { font-weight:600; color:var(--text); display:flex; align-items:center; }
+  .compare-cell strong { color:var(--text); font-weight:500; }
+
+  /* ============ PRINCIPLES ============ */
+  .principles { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:24px; }
+  .principle-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 18px; border-top:3px solid var(--bmad); }
+  .principle-title { font-size:14px; font-weight:700; color:var(--text-bright); margin-bottom:5px; }
+  .principle-desc { font-size:12px; color:var(--text-dim); line-height:1.6; }
+
+  @media (max-width:960px) {
+    body { padding:20px 12px; }
+    h1 { font-size:26px; }
+    .phases-grid { grid-template-columns:repeat(2,1fr); }
+    .agents-grid { grid-template-columns:repeat(2,1fr); }
+    .phase-content { grid-template-columns:1fr; }
+    .lane-cell:first-child { border-right:none; border-bottom:1px solid var(--border); }
+    .compare-header,.compare-row { grid-template-columns:1fr; }
+    .compare-header-cell:first-child { display:none; }
+    .principles { grid-template-columns:repeat(2,1fr); }
+    .artifacts-grid { grid-template-columns:1fr; }
+    .art-col:first-child { border-right:none; border-bottom:1px solid var(--border); }
+    .flow-line { justify-content:flex-start; }
+  }
+  @media (max-width:600px) {
+    .phases-grid { grid-template-columns:1fr; }
+    .agents-grid { grid-template-columns:1fr; }
+    .principles { grid-template-columns:1fr; }
+    .phase-agents-inline { display:none; }
+  }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle light/dark theme"></button>
+<script>
+(function(){
+  var t=document.getElementById('themeToggle'),s=localStorage.getItem('theme');
+  var i=s||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(s) document.documentElement.setAttribute('data-theme',i);
+  t.textContent=i==='dark'?'\u2600':'\u263E';
+  t.addEventListener('click',function(){
+    var c=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+    var n=c==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',n);
+    localStorage.setItem('theme',n);
+    t.textContent=n==='dark'?'\u2600':'\u263E';
+  });
+})();
+</script>
+
+<div class="container">
+
+  <h1 class="anim" style="--i:0"><span class="bmad-logo">BMAD</span>Method &times; Software Development Workflow</h1>
+  <p class="subtitle anim" style="--i:1">bmad-code-org &mdash; Breakthrough Method for Agile AI-Driven Development</p>
+  <p class="intro anim" style="--i:2">
+    <strong>BMAD</strong> coi AI la <strong>thinking partner chuyen nghiep</strong>, khong phai autonomous code generator.
+    Framework chia quy trinh thanh <strong>4 phases</strong> voi <strong>12+ specialized agents</strong> (PM, Architect, Developer, Test Architect...).
+    Moi phase co <strong>quality gate</strong> va <strong>artifacts ro rang</strong>. Ho tro dac biet <strong>brownfield (du an cu)</strong> voi workflow rieng.
+  </p>
+
+  <!-- Legend -->
+  <div class="legend anim" style="--i:3">
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--green-dim);border:1.5px solid var(--green)"></div>Greenfield &mdash; Du an moi</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--blue-dim);border:1.5px solid var(--blue)"></div>Brownfield &mdash; Du an cu</div>
+    <div class="legend-item"><span class="tag tag--agent" style="margin:0">AGENT</span> BMAD Agent role</div>
+    <div class="legend-item"><span class="tag tag--artifact" style="margin:0">DOC</span> Artifact output</div>
+    <div class="legend-item"><span class="tag tag--gate" style="margin:0">GATE</span> Quality gate</div>
+    <div class="legend-item"><span class="tag tag--brown" style="margin:0">BROWN</span> Brownfield-only</div>
+  </div>
+
+  <!-- ============ 4 PHASES OVERVIEW ============ -->
+  <div class="section-title anim" style="--i:4">4-Phase Lifecycle</div>
+
+  <div class="phases-grid anim" style="--i:5">
+    <div class="phase-card phase-card--p1">
+      <div class="phase-card-num">Phase 1</div>
+      <div class="phase-card-title">Analysis</div>
+      <div class="phase-card-desc">Hieu bai toan, scope, requirements ban dau. Brainstorm va discovery.</div>
+      <div class="phase-card-agents"><strong>Agents:</strong> Analyst, PM</div>
+    </div>
+    <div class="phase-card phase-card--p2">
+      <div class="phase-card-num">Phase 2</div>
+      <div class="phase-card-title">Planning</div>
+      <div class="phase-card-desc">Tao PRD, user stories, epics, acceptance criteria chi tiet.</div>
+      <div class="phase-card-agents"><strong>Agents:</strong> PM, Scrum Master, UX</div>
+    </div>
+    <div class="phase-card phase-card--p3">
+      <div class="phase-card-num">Phase 3</div>
+      <div class="phase-card-title">Solutioning</div>
+      <div class="phase-card-desc">Architecture design, test strategy, sprint plan, technical decisions.</div>
+      <div class="phase-card-agents"><strong>Agents:</strong> Architect, Test Architect (TEA)</div>
+    </div>
+    <div class="phase-card phase-card--p4">
+      <div class="phase-card-num">Phase 4</div>
+      <div class="phase-card-title">Implementation</div>
+      <div class="phase-card-desc">Code development, test execution, quality validation, release.</div>
+      <div class="phase-card-agents"><strong>Agents:</strong> Developer, QA</div>
+    </div>
+  </div>
+
+  <!-- ============ AGENT ROSTER ============ -->
+  <div class="section-title anim" style="--i:6">12+ Specialized Agents</div>
+
+  <div class="agents-grid anim" style="--i:7">
+    <div class="agent-card">
+      <div class="agent-avatar">AN</div>
+      <div class="agent-info"><div class="agent-name">Analyst</div><div class="agent-role">Discovery &amp; context</div></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">PM</div>
+      <div class="agent-info"><div class="agent-name">Product Manager</div><div class="agent-role">Vision &amp; PRD</div></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">SM</div>
+      <div class="agent-info"><div class="agent-name">Scrum Master</div><div class="agent-role">Story prep &amp; sprint</div></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">UX</div>
+      <div class="agent-info"><div class="agent-name">UX Designer</div><div class="agent-role">Experience design</div></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">AR</div>
+      <div class="agent-info"><div class="agent-name">Architect</div><div class="agent-role">System design &amp; ASR</div></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">TEA</div>
+      <div class="agent-info"><div class="agent-name">Test Architect</div><div class="agent-role">Risk-based testing</div></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">DEV</div>
+      <div class="agent-info"><div class="agent-name">Developer</div><div class="agent-role">Code implementation</div></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">QA</div>
+      <div class="agent-info"><div class="agent-name">QA / Advisor</div><div class="agent-role">Test exec &amp; NFR</div></div>
+    </div>
+  </div>
+
+  <!-- ============ MANDATORY FLOW ============ -->
+  <div class="section-title anim" style="--i:8">Flow Voi Quality Gates</div>
+
+  <div class="flow-line anim" style="--i:9">
+    <div class="flow-step">
+      <div class="flow-box flow-box--p1">Analysis</div>
+      <div class="flow-sub">Analyst + PM</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--gate">Gate 1</div>
+      <div class="flow-sub"><span class="tag tag--gate" style="font-size:8px">GATE</span> Brief approved</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--p2">Planning</div>
+      <div class="flow-sub">PM + SM + UX</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--gate">Gate 2</div>
+      <div class="flow-sub"><span class="tag tag--gate" style="font-size:8px">GATE</span> PRD signed off</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--p3">Solutioning</div>
+      <div class="flow-sub">Architect + TEA</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--gate">Gate 3</div>
+      <div class="flow-sub"><span class="tag tag--gate" style="font-size:8px">GATE</span> Arch approved</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--p4">Implementation</div>
+      <div class="flow-sub">Dev + QA</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--gate">Gate 4</div>
+      <div class="flow-sub"><span class="tag tag--gate" style="font-size:8px">GATE</span> Release ready</div>
+    </div>
+  </div>
+
+  <!-- ============ PHASE DETAILS ============ -->
+  <div class="section-title anim" style="--i:10">Chi Tiet Tung Phase &mdash; Greenfield vs Brownfield</div>
+
+  <!-- PHASE 1: Analysis -->
+  <div class="phase-section phase-section--p1 open anim" style="--i:11">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">1</span>
+      <div class="phase-title-group">
+        <span class="phase-title">Phase 1: Analysis</span>
+        <span class="phase-title-sub">Discovery &mdash; Hieu bai toan</span>
+      </div>
+      <div class="phase-agents-inline">
+        <span class="tag tag--agent">Analyst</span>
+        <span class="tag tag--agent">PM</span>
+      </div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Greenfield &mdash; Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Brainstorming &amp; Project Brief <span class="tag tag--agent">Analyst</span></div>
+              <div class="action-desc">Analyst agent dan dat <strong>brainstorming session</strong>: muc tieu, stakeholders, problem statement, success criteria. Output: project brief.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Scope Definition <span class="tag tag--agent">PM</span></div>
+              <div class="action-desc">PM agent <strong>define scope va constraints</strong>: MVP boundaries, out-of-scope items, timeline assumptions. Bat dau tu mot to giay trang.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Context Documentation <span class="tag tag--artifact">DOC</span></div>
+              <div class="action-desc">Output: <strong>project-brief.md, context.md</strong>. Ngan gon, tap trung vao "what" va "why", chua "how".</div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Brownfield &mdash; Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">MANDATORY: Document Existing System <span class="tag tag--brown">BROWN</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Buoc bat buoc:</strong> truoc khi lam bat ky thu gi, phai document codebase. Skip buoc nay se gay ra documentation debt khong the phuc hoi.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Analyst Scan Codebase <span class="tag tag--agent">Analyst</span></div>
+              <div class="action-desc">Analyst <strong>doc source tree, identify tech stack, map modules</strong>. Tao source-tree-analysis.md. Interview stakeholders de hieu business context.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Choose Strategy: PRD-First vs Document-First <span class="tag tag--brown">BROWN</span></div>
+              <div class="action-desc"><strong>Large codebase:</strong> PRD-first (chi document areas lien quan feature moi). <strong>Small codebase:</strong> Document-first (doc het roi moi viet PRD).</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector"><svg viewBox="0 0 20 20"><path d="M10 3 L10 17 M6 13 L10 17 L14 13"/></svg></div>
+
+  <!-- PHASE 2: Planning -->
+  <div class="phase-section phase-section--p2 open anim" style="--i:12">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">2</span>
+      <div class="phase-title-group">
+        <span class="phase-title">Phase 2: Planning</span>
+        <span class="phase-title-sub">PRD &amp; User Stories</span>
+      </div>
+      <div class="phase-agents-inline">
+        <span class="tag tag--agent">PM</span>
+        <span class="tag tag--agent">SM</span>
+        <span class="tag tag--agent">UX</span>
+      </div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Greenfield &mdash; Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">PRD Generation (15-25 pages) <span class="tag tag--agent">PM</span> <span class="tag tag--artifact">DOC</span></div>
+              <div class="action-desc">PM agent tao <strong>Product Requirements Document</strong>: features, user personas, business goals, success metrics, non-functional requirements.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Epic &amp; User Story Breakdown <span class="tag tag--agent">SM</span></div>
+              <div class="action-desc">Scrum Master <strong>breakdown PRD thanh epics &rarr; user stories</strong>. Moi story co acceptance criteria ro rang, size-able trong 1 sprint.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">UX Specs &amp; Mockups <span class="tag tag--agent">UX</span> <span class="tag tag--artifact">DOC</span></div>
+              <div class="action-desc">UX Designer tao wireframes, user flows, design system. Output: <strong>ux-spec.md</strong> voi screens va interactions.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Brownfield &mdash; Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Brownfield PRD Template <span class="tag tag--brown">BROWN</span> <span class="tag tag--artifact">DOC</span></div>
+              <div class="action-desc">Dung <strong>brownfield-prd-tmpl</strong>: template co san section cho integration points, existing features affected, migration concerns.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Incremental Stories <span class="tag tag--agent">SM</span></div>
+              <div class="action-desc">Stories <strong>nho hon binh thuong</strong>. Moi story chi touch 1-2 modules. Co explicit section: "code areas affected", "tests to update".</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Integration Specs <span class="tag tag--brown">BROWN</span></div>
+              <div class="action-desc">Moi story co <strong>integration spec</strong>: API contracts giu nguyen hay thay doi? Database migrations can khong? Backward compatibility policy?</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector"><svg viewBox="0 0 20 20"><path d="M10 3 L10 17 M6 13 L10 17 L14 13"/></svg></div>
+
+  <!-- PHASE 3: Solutioning -->
+  <div class="phase-section phase-section--p3 open anim" style="--i:13">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">3</span>
+      <div class="phase-title-group">
+        <span class="phase-title">Phase 3: Solutioning</span>
+        <span class="phase-title-sub">Architecture &amp; Test Strategy</span>
+      </div>
+      <div class="phase-agents-inline">
+        <span class="tag tag--agent">Architect</span>
+        <span class="tag tag--agent">TEA</span>
+      </div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Greenfield &mdash; Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Architecture Design <span class="tag tag--agent">Architect</span> <span class="tag tag--artifact">DOC</span></div>
+              <div class="action-desc">Architect <strong>thiet ke system tu dau</strong>: components, data flow, tech stack choice, ASR (Architecturally Significant Requirements).</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Test Strategy &amp; Test Design <span class="tag tag--agent">TEA</span> <span class="tag tag--artifact">DOC</span></div>
+              <div class="action-desc">Test Architect (TEA) tao <strong>test-design-architecture.md, test-design-epic-N.md</strong>. Risk-based: uu tien test cho critical paths.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Sprint Planning <span class="tag tag--agent">Architect</span> <span class="tag tag--agent">SM</span></div>
+              <div class="action-desc">Architect va SM <strong>align technical sequence voi business priorities</strong>. Dependencies giua stories duoc identify.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Brownfield &mdash; Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Brownfield Architecture Template <span class="tag tag--brown">BROWN</span> <span class="tag tag--artifact">DOC</span></div>
+              <div class="action-desc">Dung <strong>brownfield-architecture-tmpl</strong>: focus vao <strong>delta giua hien tai va tuong lai</strong>. Khong lam lai architecture toan bo.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Regression Test Strategy <span class="tag tag--agent">TEA</span> <span class="tag tag--brown">BROWN</span></div>
+              <div class="action-desc">TEA <strong>uu tien regression tests</strong>: identify breaking change points, viet test cho existing behavior truoc khi thay doi. Legacy dependency risks duoc flag.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Migration &amp; Rollback Plan <span class="tag tag--agent">Architect</span> <span class="tag tag--brown">BROWN</span></div>
+              <div class="action-desc">Architect tao <strong>migration plan chi tiet</strong>: steps, order, feature flags. Rollback plan bat buoc cho moi breaking change.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector"><svg viewBox="0 0 20 20"><path d="M10 3 L10 17 M6 13 L10 17 L14 13"/></svg></div>
+
+  <!-- PHASE 4: Implementation -->
+  <div class="phase-section phase-section--p4 open anim" style="--i:14">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">4</span>
+      <div class="phase-title-group">
+        <span class="phase-title">Phase 4: Implementation</span>
+        <span class="phase-title-sub">Code, Test, Quality Gates</span>
+      </div>
+      <div class="phase-agents-inline">
+        <span class="tag tag--agent">Developer</span>
+        <span class="tag tag--agent">QA</span>
+      </div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Greenfield &mdash; Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Dev-Story Format <span class="tag tag--agent">Developer</span></div>
+              <div class="action-desc">Developer agent implement <strong>theo dev-story format</strong>: moi story co self-contained spec, acceptance criteria, test plan.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Automated Test Suite <span class="tag tag--agent">QA</span></div>
+              <div class="action-desc">QA agent <strong>chay full test suite moi story</strong>: unit + integration + e2e. Test pass la precondition cho quality gate.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Quality Gate: Pass/Fail/Defer <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc">TEA danh gia: <strong>PASS</strong> (ship), <strong>FAIL</strong> (fix), <strong>DEFER</strong> (ship voi known debt). Quyet dinh duoc document.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Brownfield &mdash; Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Regression-First Implementation <span class="tag tag--agent">Developer</span> <span class="tag tag--brown">BROWN</span></div>
+              <div class="action-desc">Developer <strong>chay regression tests TRUOC khi bat dau</strong> story. Bat ky test nao fail ngay lap tuc = stop, investigate truoc.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Feature Flags &amp; Gradual Rollout <span class="tag tag--brown">BROWN</span></div>
+              <div class="action-desc"><strong>Moi breaking change ship behind feature flag.</strong> Gradual rollout: internal &rarr; beta users &rarr; 10% &rarr; 100%. Monitor metrics sau moi stage.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Extended Quality Gate <span class="tag tag--gate">GATE</span> <span class="tag tag--agent">QA</span></div>
+              <div class="action-desc">Quality gate check them: <strong>regression suite pass? performance khong giam? backward compat verified? rollback tested?</strong> Cao hon greenfield.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ARTIFACTS COMPARISON ============ -->
+  <div class="section-title anim" style="--i:15">Artifacts Outputs</div>
+
+  <div class="artifacts-section anim" style="--i:16">
+    <div class="artifacts-grid">
+      <div class="art-col">
+        <div class="art-title">Greenfield Artifacts</div>
+        <ul class="art-list">
+          <li class="art-item"><strong>project-brief.md</strong><span class="art-desc">Phase 1 &mdash; context</span></li>
+          <li class="art-item"><strong>PRD.md</strong> (15-25 pages)<span class="art-desc">Phase 2 &mdash; requirements</span></li>
+          <li class="art-item"><strong>ux-spec.md</strong><span class="art-desc">Phase 2 &mdash; design</span></li>
+          <li class="art-item"><strong>epics/ &amp; stories/</strong><span class="art-desc">Phase 2 &mdash; breakdown</span></li>
+          <li class="art-item"><strong>architecture.md</strong><span class="art-desc">Phase 3 &mdash; system design</span></li>
+          <li class="art-item"><strong>test-design-architecture.md</strong><span class="art-desc">Phase 3 &mdash; test strategy</span></li>
+          <li class="art-item"><strong>test-design-epic-N.md</strong><span class="art-desc">Phase 3 &mdash; per-epic tests</span></li>
+          <li class="art-item"><strong>dev-story/*.md</strong><span class="art-desc">Phase 4 &mdash; impl specs</span></li>
+        </ul>
+      </div>
+      <div class="art-col">
+        <div class="art-title">Brownfield Artifacts (them)</div>
+        <ul class="art-list">
+          <li class="art-item art-extra"><strong>project-overview.md</strong><span class="art-desc">Phase 1 &mdash; existing stack</span></li>
+          <li class="art-item art-extra"><strong>source-tree-analysis.md</strong><span class="art-desc">Phase 1 &mdash; code structure</span></li>
+          <li class="art-item art-extra"><strong>api-contracts.md</strong><span class="art-desc">Phase 1 &mdash; endpoints</span></li>
+          <li class="art-item art-extra"><strong>data-models.md</strong><span class="art-desc">Phase 1 &mdash; DB schemas</span></li>
+          <li class="art-item art-extra"><strong>brownfield-prd-tmpl</strong><span class="art-desc">Phase 2 &mdash; incremental PRD</span></li>
+          <li class="art-item art-extra"><strong>brownfield-architecture-tmpl</strong><span class="art-desc">Phase 3 &mdash; delta arch</span></li>
+          <li class="art-item art-extra"><strong>migration-plan.md</strong><span class="art-desc">Phase 3 &mdash; rollout steps</span></li>
+          <li class="art-item art-extra"><strong>regression-test-strategy.md</strong><span class="art-desc">Phase 3 &mdash; safety net</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ COMPARISON TABLE ============ -->
+  <div class="section-title anim" style="--i:17">So Sanh Greenfield vs Brownfield</div>
+
+  <div class="compare-section anim" style="--i:18">
+    <div class="compare-header">
+      <div class="compare-header-cell">Aspect</div>
+      <div class="compare-header-cell">Greenfield</div>
+      <div class="compare-header-cell">Brownfield</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Buoc dau tien</div>
+      <div class="compare-cell">Brainstorm &amp; scope &mdash; bat dau tu giay trang</div>
+      <div class="compare-cell"><strong>MANDATORY:</strong> document existing system truoc</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">PRD Template</div>
+      <div class="compare-cell">Standard PRD template &mdash; comprehensive 15-25 pages</div>
+      <div class="compare-cell"><strong>brownfield-prd-tmpl</strong> &mdash; focus incremental, integration points</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Architecture</div>
+      <div class="compare-cell">Thiet ke tu dau &mdash; chon tech stack tu do</div>
+      <div class="compare-cell"><strong>Delta architecture</strong> &mdash; chi document changes vs current</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Test Strategy (TEA)</div>
+      <div class="compare-cell">Risk-based testing cho new features</div>
+      <div class="compare-cell"><strong>Regression-first</strong> &mdash; safety net truoc moi change</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Story Size</div>
+      <div class="compare-cell">Standard size, theo business value</div>
+      <div class="compare-cell"><strong>Nho hon</strong>, chi touch 1-2 modules, co integration spec</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Implementation</div>
+      <div class="compare-cell">Dev-story format &mdash; implement theo PRD</div>
+      <div class="compare-cell"><strong>Feature flags + gradual rollout</strong> bat buoc</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Quality Gate</div>
+      <div class="compare-cell">Pass/Fail/Defer &mdash; test pass + acceptance met</div>
+      <div class="compare-cell">Extended: <strong>+ regression + perf + backward compat + rollback tested</strong></div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Biggest Risk</div>
+      <div class="compare-cell">Scope creep &mdash; thieu discipline</div>
+      <div class="compare-cell"><strong>Skip documentation phase</strong> &mdash; khong the recover</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Core Principle</div>
+      <div class="compare-cell"><strong>"Build right from scratch."</strong></div>
+      <div class="compare-cell"><strong>"Document first, change second."</strong></div>
+    </div>
+  </div>
+
+  <!-- ============ PRINCIPLES ============ -->
+  <div class="section-title anim" style="--i:19">Nguyen Tac Cot Loi Cua BMAD</div>
+
+  <div class="principles anim" style="--i:20">
+    <div class="principle-card">
+      <div class="principle-title">AI La Thinking Partner</div>
+      <div class="principle-desc">AI khong tu sinh code. AI la <strong>specialist expert</strong> ho tro quyet dinh o moi phase. Human drive process.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Quality Gates Giua Phases</div>
+      <div class="principle-desc">Moi phase co checkpoint validation. <strong>Artifact khong pass gate thi khong sang phase ke tiep</strong>. Prevent downstream corruption.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Specialized Agent Roles</div>
+      <div class="principle-desc">12+ agents voi input/output ro rang. <strong>"Agent-as-Code"</strong> &mdash; dinh nghia trong markdown files, reproducible.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Scale-Adaptive</div>
+      <div class="principle-desc">Workflow tu dong dieu chinh do phuc tap: <strong>bug fix = nhe, enterprise = full pipeline</strong>. Khong one-size-fits-all.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Brownfield-First Thinking</div>
+      <div class="principle-desc">BMAD <strong>khac biet</strong>: co workflow rieng cho legacy. Documentation phase la bat buoc, khong optional.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Test Architecture (TEA)</div>
+      <div class="principle-desc">Risk-based testing tich hop natively. <strong>Regression &amp; NFR</strong> duoc consider tu phase Solutioning, khong phai afterthought.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Artifact-Driven</div>
+      <div class="principle-desc">Moi phase co output files cu the (PRD.md, architecture.md...). <strong>Auditable</strong>, versionable, handover-ready.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Party Mode</div>
+      <div class="principle-desc">Multi-agent collaborative session: <strong>PM + Architect + TEA cung discuss</strong> mot van de. Cross-functional decisions.</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

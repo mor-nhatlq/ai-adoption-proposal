@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superpowers &mdash; Software Development Workflow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'Outfit', system-ui, sans-serif;
+    --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8eef4;
+    --surface-elevated: #ffffff;
+    --border: rgba(30, 58, 95, 0.1);
+    --border-bright: rgba(30, 58, 95, 0.2);
+    --text: #1a2a3a;
+    --text-dim: #5a7090;
+    --text-bright: #0d1b2a;
+    --accent: #1e3a5f;
+    --accent-dim: rgba(30, 58, 95, 0.06);
+    --green: #059669; --green-dim: rgba(5,150,105,0.07); --green-bg: rgba(5,150,105,0.03);
+    --blue: #0369a1; --blue-dim: rgba(3,105,161,0.07); --blue-bg: rgba(3,105,161,0.03);
+    --gold: #d4a73a; --gold-dim: rgba(212,167,58,0.08);
+    --amber: #b45309; --amber-dim: rgba(180,83,9,0.07);
+    --teal: #0891b2; --teal-dim: rgba(8,145,178,0.07);
+    --plum: #7e22ce; --plum-dim: rgba(126,34,206,0.07);
+    --rose: #be123c; --rose-dim: rgba(190,18,60,0.07);
+    --phase-bg: rgba(30,58,95,0.03);
+    --sp-color: #d946ef; --sp-dim: rgba(217,70,239,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1421; --surface: #111d2e; --surface2: #162438; --surface-elevated: #1a2d42;
+      --border: rgba(100,160,220,0.1); --border-bright: rgba(100,160,220,0.2);
+      --text: #c8d8e8; --text-dim: #607080; --text-bright: #e8f0f8;
+      --accent: #4a90d9; --accent-dim: rgba(74,144,217,0.08);
+      --green: #34d399; --green-dim: rgba(52,211,153,0.1); --green-bg: rgba(52,211,153,0.03);
+      --blue: #38bdf8; --blue-dim: rgba(56,189,248,0.1); --blue-bg: rgba(56,189,248,0.03);
+      --gold: #fbbf24; --gold-dim: rgba(251,191,36,0.1);
+      --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.1);
+      --teal: #22d3ee; --teal-dim: rgba(34,211,238,0.1);
+      --plum: #c084fc; --plum-dim: rgba(192,132,252,0.1);
+      --rose: #fb7185; --rose-dim: rgba(251,113,133,0.1);
+      --phase-bg: rgba(74,144,217,0.04);
+      --sp-color: #e879f9; --sp-dim: rgba(232,121,249,0.1);
+    }
+  }
+  [data-theme="dark"] {
+    --bg: #0d1421; --surface: #111d2e; --surface2: #162438; --surface-elevated: #1a2d42;
+    --border: rgba(100,160,220,0.1); --border-bright: rgba(100,160,220,0.2);
+    --text: #c8d8e8; --text-dim: #607080; --text-bright: #e8f0f8;
+    --accent: #4a90d9; --accent-dim: rgba(74,144,217,0.08);
+    --green: #34d399; --green-dim: rgba(52,211,153,0.1); --green-bg: rgba(52,211,153,0.03);
+    --blue: #38bdf8; --blue-dim: rgba(56,189,248,0.1); --blue-bg: rgba(56,189,248,0.03);
+    --gold: #fbbf24; --gold-dim: rgba(251,191,36,0.1);
+    --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.1);
+    --teal: #22d3ee; --teal-dim: rgba(34,211,238,0.1);
+    --plum: #c084fc; --plum-dim: rgba(192,132,252,0.1);
+    --rose: #fb7185; --rose-dim: rgba(251,113,133,0.1);
+    --phase-bg: rgba(74,144,217,0.04);
+    --sp-color: #e879f9; --sp-dim: rgba(232,121,249,0.1);
+  }
+
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 300;
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text-dim); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: background .15s, color .15s;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .theme-toggle:hover { background: var(--surface2); color: var(--text); }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--text); font-family: var(--font-body);
+    padding: 40px 24px; min-height: 100vh;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  .anim { animation: fadeUp .4s ease-out both; animation-delay: calc(var(--i,0)*.06s); }
+  @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+
+  .container { max-width: 1300px; margin: 0 auto; }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 6px; color: var(--text-bright); }
+  .subtitle { font-family: var(--font-mono); font-size: 13px; color: var(--text-dim); margin-bottom: 8px; }
+  .intro { font-size: 15px; color: var(--text-dim); line-height: 1.7; max-width: 860px; margin-bottom: 32px; }
+  .intro strong { color: var(--text); font-weight: 600; }
+
+  /* Legend */
+  .legend { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:28px; }
+  .legend-item { display:flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:12px; color:var(--text-dim); }
+  .legend-swatch { width:14px; height:14px; border-radius:4px; }
+
+  /* Tags */
+  .tag { font-family:var(--font-mono); font-size:10px; font-weight:600; padding:2px 7px; border-radius:4px; text-transform:uppercase; letter-spacing:.5px; display:inline-block; white-space:nowrap; }
+  .tag--sp { background:var(--sp-dim); color:var(--sp-color); border:1px solid var(--sp-color); text-transform:none; letter-spacing:0; }
+  .tag--human { background:var(--teal-dim); color:var(--teal); border:1px solid var(--teal); }
+  .tag--gate { background:var(--rose-dim); color:var(--rose); border:1px solid var(--rose); }
+  .tag--tdd { background:var(--amber-dim); color:var(--amber); border:1px solid var(--amber); }
+
+  /* Section title */
+  .section-title { font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); margin-top:36px; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+  .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* ============ SUPERPOWERS GRID ============ */
+  .sp-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:28px; }
+  .sp-card {
+    background: var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:12px 10px; text-align:center; position:relative; border-top:3px solid var(--sp-color);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .sp-card:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,0,.08); }
+  .sp-num { font-family:var(--font-mono); font-size:10px; font-weight:700; color:var(--sp-color); margin-bottom:4px; }
+  .sp-name { font-size:12px; font-weight:600; color:var(--text-bright); line-height:1.3; }
+  .sp-cat { font-family:var(--font-mono); font-size:9px; color:var(--text-dim); margin-top:4px; text-transform:uppercase; letter-spacing:.5px; }
+
+  /* ============ PHASE SECTIONS ============ */
+  .phase-section { margin-bottom:20px; border-radius:14px; background:var(--phase-bg); border:1px solid var(--border); overflow:hidden; }
+  .phase-header {
+    display:flex; align-items:center; gap:14px; padding:16px 22px;
+    border-bottom:1px solid var(--border); cursor:pointer; user-select:none; transition:background .15s;
+  }
+  .phase-header:hover { background:var(--accent-dim); }
+  .phase-num { font-family:var(--font-mono); font-size:13px; font-weight:700; width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:var(--accent-dim); color:var(--accent); border:1.5px solid var(--accent); }
+  .phase-title { font-size:17px; font-weight:700; letter-spacing:-.3px; color:var(--text-bright); }
+  .phase-sp { display:flex; gap:4px; margin-left:auto; flex-wrap:wrap; }
+  .phase-sp .tag--sp { font-size:9px; padding:1px 6px; }
+  .phase-arrow { font-size:13px; color:var(--text-dim); transition:transform .2s; margin-left:8px; }
+  .phase-section.open .phase-arrow { transform:rotate(180deg); }
+  .phase-body { display:none; }
+  .phase-section.open .phase-body { display:block; }
+
+  .phase-content { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+  .lane-cell { padding:18px 22px; }
+  .lane-cell:first-child { border-right:1px solid var(--border); }
+  .lane-cell--green { background:var(--green-bg); }
+  .lane-cell--blue { background:var(--blue-bg); }
+  .cell-label { font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .lane-cell--green .cell-label { color:var(--green); }
+  .lane-cell--blue .cell-label { color:var(--blue); }
+  .cell-label::before { content:''; width:8px; height:8px; border-radius:50%; }
+  .lane-cell--green .cell-label::before { background:var(--green); }
+  .lane-cell--blue .cell-label::before { background:var(--blue); }
+
+  .action-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .action-item { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+  .lane-cell--green .action-item { border-left:3px solid var(--green); }
+  .lane-cell--blue .action-item { border-left:3px solid var(--blue); }
+  .action-title { font-size:13.5px; font-weight:600; color:var(--text-bright); margin-bottom:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .action-desc { font-size:12.5px; color:var(--text-dim); line-height:1.6; }
+  .action-desc strong { color:var(--text); font-weight:500; }
+  .action-tags { display:flex; gap:4px; margin-top:5px; flex-wrap:wrap; }
+
+  /* Phase connector */
+  .phase-connector { display:flex; justify-content:center; padding:3px 0; }
+  .phase-connector svg { width:18px; height:18px; fill:none; stroke:var(--accent); stroke-width:2; stroke-linecap:round; opacity:.3; }
+
+  /* ============ FLOW DIAGRAM ============ */
+  .flow-diagram {
+    display:flex; align-items:center; gap:0; margin-bottom:28px;
+    overflow-x:auto; padding:12px 0;
+  }
+  .flow-step {
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    min-width:130px; text-align:center; position:relative;
+  }
+  .flow-box {
+    background:var(--surface); border:2px solid var(--accent);
+    border-radius:10px; padding:10px 14px; font-size:13px; font-weight:600;
+    color:var(--text-bright); width:130px;
+  }
+  .flow-box--gate { border-color:var(--rose); background:var(--rose-dim); }
+  .flow-box--gate .flow-box-label { color:var(--rose); }
+  .flow-sub { font-family:var(--font-mono); font-size:9px; color:var(--text-dim); }
+  .flow-arrow { display:flex; align-items:center; color:var(--accent); opacity:.4; font-size:18px; padding:0 2px; }
+
+  /* ============ COMPARE TABLE ============ */
+  .compare-section { margin-top:28px; background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .compare-header { display:grid; grid-template-columns:180px 1fr 1fr; border-bottom:2px solid var(--border); }
+  .compare-header-cell { padding:12px 18px; font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-dim); border-right:1px solid var(--border); }
+  .compare-header-cell:last-child { border-right:none; }
+  .compare-header-cell:nth-child(2) { color:var(--green); background:var(--green-bg); }
+  .compare-header-cell:nth-child(3) { color:var(--blue); background:var(--blue-bg); }
+  .compare-row { display:grid; grid-template-columns:180px 1fr 1fr; border-bottom:1px solid var(--border); }
+  .compare-row:last-child { border-bottom:none; }
+  .compare-cell { padding:10px 18px; font-size:12.5px; color:var(--text-dim); line-height:1.6; border-right:1px solid var(--border); }
+  .compare-cell:last-child { border-right:none; }
+  .compare-cell:first-child { font-weight:600; color:var(--text); display:flex; align-items:center; }
+  .compare-cell strong { color:var(--text); font-weight:500; }
+
+  /* ============ PRINCIPLES ============ */
+  .principles { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:24px; }
+  .principle-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 18px; border-top:3px solid var(--gold); }
+  .principle-title { font-size:14px; font-weight:700; color:var(--text-bright); margin-bottom:5px; }
+  .principle-desc { font-size:12px; color:var(--text-dim); line-height:1.6; }
+
+  /* Responsive */
+  @media (max-width:960px) {
+    body { padding:20px 12px; }
+    h1 { font-size:26px; }
+    .sp-grid { grid-template-columns:repeat(4,1fr); }
+    .phase-content { grid-template-columns:1fr; }
+    .lane-cell:first-child { border-right:none; border-bottom:1px solid var(--border); }
+    .compare-header,.compare-row { grid-template-columns:1fr; }
+    .compare-header-cell:first-child { display:none; }
+    .principles { grid-template-columns:repeat(2,1fr); }
+    .flow-diagram { justify-content:flex-start; }
+  }
+  @media (max-width:600px) {
+    .sp-grid { grid-template-columns:repeat(2,1fr); }
+    .principles { grid-template-columns:1fr; }
+    .phase-sp { display:none; }
+  }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle light/dark theme"></button>
+<script>
+(function(){
+  var t=document.getElementById('themeToggle'),s=localStorage.getItem('theme');
+  var i=s||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(s) document.documentElement.setAttribute('data-theme',i);
+  t.textContent=i==='dark'?'\u2600':'\u263E';
+  t.addEventListener('click',function(){
+    var c=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+    var n=c==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',n);
+    localStorage.setItem('theme',n);
+    t.textContent=n==='dark'?'\u2600':'\u263E';
+  });
+})();
+</script>
+
+<div class="container">
+
+  <h1 class="anim" style="--i:0">Superpowers &times; Software Development Workflow</h1>
+  <p class="subtitle anim" style="--i:1">obra/superpowers &mdash; ap dung vao du an moi vs du an cu</p>
+  <p class="intro anim" style="--i:2">
+    <strong>Superpowers</strong> la framework bat buoc AI agents di theo quy trinh:
+    Brainstorm &rarr; Design &rarr; Plan &rarr; Execute &rarr; Test (TDD) &rarr; Review &rarr; Finalize.
+    <strong>Khong duoc skip buoc nao.</strong>
+    Duoi day la cach ap dung <strong>14 superpowers</strong> vao tung phase cua SDLC cho 2 loai du an.
+  </p>
+
+  <!-- Legend -->
+  <div class="legend anim" style="--i:3">
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--green-dim);border:1.5px solid var(--green)"></div>Du an moi (Greenfield)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--blue-dim);border:1.5px solid var(--blue)"></div>Du an cu (Legacy)</div>
+    <div class="legend-item"><span class="tag tag--sp" style="margin:0">SP</span> Superpower duoc dung</div>
+    <div class="legend-item"><span class="tag tag--gate" style="margin:0">GATE</span> Hard gate / bat buoc</div>
+    <div class="legend-item"><span class="tag tag--tdd" style="margin:0">TDD</span> Test-Driven</div>
+    <div class="legend-item"><span class="tag tag--human" style="margin:0">HUMAN</span> Nguoi quyet dinh</div>
+  </div>
+
+  <!-- ============ 14 SUPERPOWERS OVERVIEW ============ -->
+  <div class="section-title anim" style="--i:4">14 Superpowers</div>
+
+  <div class="sp-grid anim" style="--i:5">
+    <div class="sp-card"><div class="sp-num">#1</div><div class="sp-name">Brainstorming</div><div class="sp-cat">Design</div></div>
+    <div class="sp-card"><div class="sp-num">#2</div><div class="sp-name">Writing Plans</div><div class="sp-cat">Planning</div></div>
+    <div class="sp-card"><div class="sp-num">#3</div><div class="sp-name">Verification</div><div class="sp-cat">Quality</div></div>
+    <div class="sp-card"><div class="sp-num">#4</div><div class="sp-name">Git Worktrees</div><div class="sp-cat">Dev Infra</div></div>
+    <div class="sp-card"><div class="sp-num">#5</div><div class="sp-name">Subagent Driving</div><div class="sp-cat">Orchestration</div></div>
+    <div class="sp-card"><div class="sp-num">#6</div><div class="sp-name">Test-Driven Dev</div><div class="sp-cat">Quality</div></div>
+    <div class="sp-card"><div class="sp-num">#7</div><div class="sp-name">Systematic Debug</div><div class="sp-cat">Debug</div></div>
+    <div class="sp-card"><div class="sp-num">#8</div><div class="sp-name">Executing Plans</div><div class="sp-cat">Execution</div></div>
+    <div class="sp-card"><div class="sp-num">#9</div><div class="sp-name">Parallel Dispatch</div><div class="sp-cat">Orchestration</div></div>
+    <div class="sp-card"><div class="sp-num">#10</div><div class="sp-name">Receive Review</div><div class="sp-cat">Review</div></div>
+    <div class="sp-card"><div class="sp-num">#11</div><div class="sp-name">Request Review</div><div class="sp-cat">Review</div></div>
+    <div class="sp-card"><div class="sp-num">#12</div><div class="sp-name">Branch Finalize</div><div class="sp-cat">Release</div></div>
+    <div class="sp-card"><div class="sp-num">#13</div><div class="sp-name">Framework Literacy</div><div class="sp-cat">Meta</div></div>
+    <div class="sp-card"><div class="sp-num">#14</div><div class="sp-name">Writing Skills</div><div class="sp-cat">Meta</div></div>
+  </div>
+
+  <!-- ============ MANDATORY FLOW ============ -->
+  <div class="section-title anim" style="--i:6">Mandatory Flow (khong duoc skip)</div>
+
+  <div class="flow-diagram anim" style="--i:7">
+    <div class="flow-step">
+      <div class="flow-box">Brainstorm</div>
+      <div class="flow-sub">#1 Socratic Q&A</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--gate"><span class="flow-box-label">Design Doc</span></div>
+      <div class="flow-sub"><span class="tag tag--gate" style="font-size:8px">GATE</span> Human approve</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box">Plan</div>
+      <div class="flow-sub">#2 TDD tasks</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box">Execute</div>
+      <div class="flow-sub">#4 #5 #8 #9</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box">Test (TDD)</div>
+      <div class="flow-sub">#6 Red-Green-Refactor</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box">Review</div>
+      <div class="flow-sub">#10 #11</div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box flow-box--gate"><span class="flow-box-label">Verify</span></div>
+      <div class="flow-sub">#3 <span class="tag tag--gate" style="font-size:8px">GATE</span></div>
+    </div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-step">
+      <div class="flow-box">Finalize</div>
+      <div class="flow-sub">#12 Merge</div>
+    </div>
+  </div>
+
+  <!-- ============ PHASE DETAILS ============ -->
+  <div class="section-title anim" style="--i:8">Chi Tiet Tung Phase &mdash; Du An Moi vs Du An Cu</div>
+
+  <!-- PHASE 1: Brainstorm + Design -->
+  <div class="phase-section open anim" style="--i:9">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">1</span>
+      <span class="phase-title">Brainstorm & Design</span>
+      <div class="phase-sp"><span class="tag tag--sp">Brainstorming</span><span class="tag tag--sp">Framework Literacy</span></div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Socratic Brainstorming <span class="tag tag--sp">Brainstorming</span></div>
+              <div class="action-desc">AI dat cau hoi Socratic 9 buoc: <strong>context &rarr; constraints &rarr; goals &rarr; 2-3 approaches &rarr; trade-offs</strong>. Khong viet code, chi hieu bai toan.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Tao Design Doc <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc">Output: <strong>design spec file</strong>. Bao gom: goals, architecture, data flow, API contracts. <strong>Human PHAI approve truoc khi code.</strong></div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Bat dau tu zero &mdash; tu do chon architecture <span class="tag tag--human">HUMAN</span></div>
+              <div class="action-desc">Khong rang buoc boi code cu. AI de xuat architecture tot nhat, team chon. <strong>Co the dung greenfield-first approach.</strong></div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Scan & Hieu Codebase Truoc <span class="tag tag--sp">Framework Literacy</span></div>
+              <div class="action-desc">AI <strong>doc toan bo code, map dependencies, hieu conventions</strong> dang dung. Framework Literacy (#13) de AI hieu "luat choi" cua du an.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Brainstorm Trong Rang Buoc <span class="tag tag--sp">Brainstorming</span></div>
+              <div class="action-desc">AI brainstorm nhung <strong>phai phu hop voi architecture hien tai</strong>. Cac approach deu can backward compatible. Khong de xuat "lam lai tu dau".</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Impact Analysis trong Design Doc <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc">Design doc PHAI co them: <strong>files bi anh huong, risk of breaking changes, rollback plan</strong>. Human approve.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector"><svg viewBox="0 0 20 20"><path d="M10 3 L10 17 M6 13 L10 17 L14 13"/></svg></div>
+
+  <!-- PHASE 2: Planning -->
+  <div class="phase-section open anim" style="--i:10">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">2</span>
+      <span class="phase-title">Planning (TDD-First Tasks)</span>
+      <div class="phase-sp"><span class="tag tag--sp">Writing Plans</span><span class="tag tag--sp">Subagent Driving</span></div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Breakdown thanh TDD Tasks <span class="tag tag--sp">Writing Plans</span> <span class="tag tag--tdd">TDD</span></div>
+              <div class="action-desc">Moi task 2-5 phut: <strong>viet failing test &rarr; implement &rarr; verify &rarr; commit</strong>. Exact file paths, code blocks, test commands. Khong placeholders.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Subagent Assignment <span class="tag tag--sp">Subagent Driving</span></div>
+              <div class="action-desc">Phan cong: <strong>Planner tao plan &rarr; Coder implement &rarr; Tester verify &rarr; Reviewer check</strong>. Moi agent co role ro rang.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Plan tu design doc truc tiep</div>
+              <div class="action-desc">Plan sinh tu design doc da approve. <strong>Khong can tim hieu code cu</strong> vi chua co code. Nhanh va ro rang.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Plan Phai Reference Code Cu <span class="tag tag--sp">Writing Plans</span></div>
+              <div class="action-desc">Moi task phai ghi ro: <strong>file nao can sua, function nao bi anh huong, test nao can update</strong>. AI doc code truoc khi tao plan.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Test Coverage Tasks TRUOC <span class="tag tag--tdd">TDD</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Buoc bat buoc cho du an cu:</strong> tasks dau tien la viet test cho code chua co test. Tao safety net truoc khi thay doi bat ky code nao.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Incremental Plan <span class="tag tag--sp">Subagent Driving</span></div>
+              <div class="action-desc">Plan <strong>chia nho hon binh thuong</strong>. Moi batch chi thay doi 1-2 files. Verify sau moi batch. Khong lam nhieu cung luc.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector"><svg viewBox="0 0 20 20"><path d="M10 3 L10 17 M6 13 L10 17 L14 13"/></svg></div>
+
+  <!-- PHASE 3: Execution -->
+  <div class="phase-section open anim" style="--i:11">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">3</span>
+      <span class="phase-title">Execution (Coding)</span>
+      <div class="phase-sp"><span class="tag tag--sp">Git Worktrees</span><span class="tag tag--sp">Executing Plans</span><span class="tag tag--sp">Parallel Dispatch</span></div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Git Worktrees cho Parallel Work <span class="tag tag--sp">Git Worktrees</span> <span class="tag tag--sp">Parallel Dispatch</span></div>
+              <div class="action-desc"><strong>Nhieu agents code song song</strong>, moi agent trong 1 worktree rieng. Backend/Frontend/DB dong thoi. Khong conflict.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Execute Plan tung task <span class="tag tag--sp">Executing Plans</span> <span class="tag tag--tdd">TDD</span></div>
+              <div class="action-desc">Moi task: <strong>viet failing test truoc &rarr; implement code &rarr; test pass &rarr; commit</strong>. Khong skip buoc test. Khong commit code chua test.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Toc do cao tu sprint 1 <span class="tag tag--sp">Parallel Dispatch</span></div>
+              <div class="action-desc">Khong co code cu can tim hieu. AI <strong>generate code truc tiep tu spec</strong>. Parallel dispatch (#9) cho max throughput.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Worktree de Isolate Changes <span class="tag tag--sp">Git Worktrees</span></div>
+              <div class="action-desc"><strong>KHONG code truc tiep tren main.</strong> Dung worktree de isolate. Neu fail thi discard, khong anh huong codebase chinh.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Bat dau tu Bug Fixes & Small Tasks <span class="tag tag--sp">Executing Plans</span></div>
+              <div class="action-desc"><strong>Xay dung trust truoc.</strong> Cho AI lam task nho, verify dung, roi moi tang do phuc tap. Khong de AI refactor lon ngay.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Sequential, Khong Parallel Luc Dau <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Du an cu: lam tuan tu tung task.</strong> Verify xong moi task truoc khi lam task tiep. Parallel dispatch (#9) chi dung khi da confident.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector"><svg viewBox="0 0 20 20"><path d="M10 3 L10 17 M6 13 L10 17 L14 13"/></svg></div>
+
+  <!-- PHASE 4: Testing -->
+  <div class="phase-section open anim" style="--i:12">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">4</span>
+      <span class="phase-title">Testing (TDD Mandatory)</span>
+      <div class="phase-sp"><span class="tag tag--sp">TDD</span><span class="tag tag--sp">Systematic Debug</span></div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">RED-GREEN-REFACTOR <span class="tag tag--sp">TDD</span> <span class="tag tag--tdd">TDD</span></div>
+              <div class="action-desc">Moi feature: <strong>viet test fail truoc (RED) &rarr; code du de pass (GREEN) &rarr; refactor cho dep (REFACTOR)</strong>. Khong bo qua buoc nao.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Edge Case Discovery</div>
+              <div class="action-desc">AI <strong>generate edge cases, boundary tests, error scenarios</strong>. Coverage cao tu dau. Khong no test debt.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Debug = 4-Phase Root Cause <span class="tag tag--sp">Systematic Debug</span></div>
+              <div class="action-desc">Khi test fail: <strong>investigate &rarr; pattern analysis &rarr; hypothesis &rarr; minimal fix</strong>. Khong patch symptom, fix root cause.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Viet Test Cho Code Cu TRUOC <span class="tag tag--sp">TDD</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Quan trong nhat!</strong> AI generate tests cho code chua co test. Regression safety net phai co <strong>TRUOC khi thay doi bat ky dong code nao</strong>.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Systematic Debug cho Legacy Bugs <span class="tag tag--sp">Systematic Debug</span></div>
+              <div class="action-desc">Bug cu: AI <strong>khong guess fix</strong>. 4-phase debug: hieu root cause &rarr; viet failing test cho bug &rarr; fix &rarr; verify. 15-30 min thay vi 2-3h random fixes.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Human Verify Test Logic <span class="tag tag--human">HUMAN</span></div>
+              <div class="action-desc">Developer <strong>review test de dam bao test dung business logic</strong>. AI co the tao tests pass nhung khong verify dung. Dac biet quan trong voi code cu.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector"><svg viewBox="0 0 20 20"><path d="M10 3 L10 17 M6 13 L10 17 L14 13"/></svg></div>
+
+  <!-- PHASE 5: Review -->
+  <div class="phase-section open anim" style="--i:13">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">5</span>
+      <span class="phase-title">Code Review</span>
+      <div class="phase-sp"><span class="tag tag--sp">Receive Review</span><span class="tag tag--sp">Request Review</span></div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">AI Request Review <span class="tag tag--sp">Request Review</span></div>
+              <div class="action-desc">Agent <strong>tu dong request review</strong>: check plan alignment, test coverage, code quality. Severity-based: blocking vs non-blocking issues.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">AI Receive & Fix Feedback <span class="tag tag--sp">Receive Review</span></div>
+              <div class="action-desc">Agent <strong>doc feedback, phan loai severity, fix blocking issues</strong> truoc khi human review. Giam thoi gian review 60%+.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Human Final Approve <span class="tag tag--human">HUMAN</span></div>
+              <div class="action-desc">Senior developer review ket qua cuoi cung. <strong>AI da xu ly 80% issues, human chi can focus vao design decisions.</strong></div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Review Trong Context Code Cu <span class="tag tag--sp">Request Review</span></div>
+              <div class="action-desc">Review check them: <strong>consistency voi patterns cu, backward compatibility, no unintended side effects</strong> tren code khac.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Regression Risk Assessment <span class="tag tag--sp">Receive Review</span></div>
+              <div class="action-desc">AI <strong>list tat ca files/features co the bi anh huong</strong>. Suggest test commands can chay de verify. Khong chi review code moi.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Domain Expert PHAI Review <span class="tag tag--human">HUMAN</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Bat buoc:</strong> Nguoi hieu business domain review. AI khong hieu het business rules cua du an cu. Khong duoc skip.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-connector"><svg viewBox="0 0 20 20"><path d="M10 3 L10 17 M6 13 L10 17 L14 13"/></svg></div>
+
+  <!-- PHASE 6: Verify & Finalize -->
+  <div class="phase-section open anim" style="--i:14">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-num">6</span>
+      <span class="phase-title">Verify & Finalize</span>
+      <div class="phase-sp"><span class="tag tag--sp">Verification</span><span class="tag tag--sp">Branch Finalize</span></div>
+      <span class="phase-arrow">&#9660;</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-content">
+        <div class="lane-cell lane-cell--green">
+          <div class="cell-label">Du an moi</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Verification Checklist <span class="tag tag--sp">Verification</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>AI verify:</strong> code match plan? tests all pass? coverage met? no TODOs left? no placeholders? Evidence-based, khong tu claim "done".</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Branch Finalize & Merge <span class="tag tag--sp">Branch Finalize</span></div>
+              <div class="action-desc">AI <strong>clean up branch, squash commits neu can, tao PR summary</strong>. Merge strategy: merge commit hoac rebase tuy team convention.</div>
+            </li>
+          </ul>
+        </div>
+        <div class="lane-cell lane-cell--blue">
+          <div class="cell-label">Du an cu</div>
+          <ul class="action-list">
+            <li class="action-item">
+              <div class="action-title">Extended Verification <span class="tag tag--sp">Verification</span> <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc">Verify them: <strong>regression tests pass? Khong break existing features? Performance khong giam? Backward compatible?</strong></div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Gradual Merge <span class="tag tag--sp">Branch Finalize</span> <span class="tag tag--human">HUMAN</span></div>
+              <div class="action-desc"><strong>Deploy tung batch nho.</strong> Monitor sau moi merge. Feature flags neu can. Khong merge tat ca AI changes cung luc.</div>
+            </li>
+            <li class="action-item">
+              <div class="action-title">Rollback Plan PHAI Co <span class="tag tag--gate">GATE</span></div>
+              <div class="action-desc"><strong>Moi merge phai co rollback plan.</strong> Neu something breaks, revert trong 5 phut. Khong chap nhan "chac khong sao dau".</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ COMPARISON TABLE ============ -->
+  <div class="section-title anim" style="--i:15">So Sanh Nhanh</div>
+
+  <div class="compare-section anim" style="--i:16">
+    <div class="compare-header">
+      <div class="compare-header-cell">Superpower</div>
+      <div class="compare-header-cell">Du An Moi</div>
+      <div class="compare-header-cell">Du An Cu</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">#1 Brainstorming</div>
+      <div class="compare-cell"><strong>Tu do chon architecture.</strong> AI de xuat, human chon.</div>
+      <div class="compare-cell"><strong>Brainstorm trong rang buoc.</strong> Phai compatible voi code cu.</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">#2 Writing Plans</div>
+      <div class="compare-cell"><strong>Plan tu zero.</strong> Tasks don gian, truc tiep.</div>
+      <div class="compare-cell"><strong>Plan phai reference code cu.</strong> Tasks kem: files can sua, impact.</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">#4 Git Worktrees</div>
+      <div class="compare-cell"><strong>Parallel tu ngay 1.</strong> Nhieu agents song song.</div>
+      <div class="compare-cell"><strong>Isolate changes.</strong> Worktree de test truoc khi merge vao main.</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">#6 TDD</div>
+      <div class="compare-cell"><strong>Test song song voi code.</strong> Coverage cao tu dau.</div>
+      <div class="compare-cell"><strong>Viet test cho code cu TRUOC.</strong> Safety net roi moi thay doi code.</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">#7 Systematic Debug</div>
+      <div class="compare-cell"><strong>It bug hon</strong> vi TDD tu dau.</div>
+      <div class="compare-cell"><strong>Dung nhieu hon.</strong> Legacy bugs can 4-phase root cause analysis.</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">#9 Parallel Dispatch</div>
+      <div class="compare-cell"><strong>Dung ngay.</strong> Max throughput tu sprint 1.</div>
+      <div class="compare-cell"><strong>Dung sau.</strong> Sequential truoc, parallel khi da confident.</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">#12 Branch Finalize</div>
+      <div class="compare-cell"><strong>Merge nhanh.</strong> It risk vi khong co code cu.</div>
+      <div class="compare-cell"><strong>Merge can than.</strong> Gradual, co rollback plan, feature flags.</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Time to Full Speed</div>
+      <div class="compare-cell"><strong>~3-4 tuan</strong></div>
+      <div class="compare-cell"><strong>~8-10 tuan</strong></div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell">Core Principle</div>
+      <div class="compare-cell"><strong>"Move fast, AI lead."</strong></div>
+      <div class="compare-cell"><strong>"Move carefully, AI assist."</strong></div>
+    </div>
+  </div>
+
+  <!-- ============ PRINCIPLES ============ -->
+  <div class="section-title anim" style="--i:17">Nguyen Tac Cot Loi Cua Superpowers</div>
+
+  <div class="principles anim" style="--i:18">
+    <div class="principle-card">
+      <div class="principle-title">Design Truoc, Code Sau</div>
+      <div class="principle-desc">KHONG viet code khi chua co design doc duoc human approve. Hard gate, khong exception.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">TDD La Bat Buoc</div>
+      <div class="principle-desc">Moi task: viet test fail truoc, implement, verify. Khong co "viet test sau" hay "skip test vi gap".</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Evidence, Khong Tu Claim</div>
+      <div class="principle-desc">Verification (#3): AI phai CHUNG MINH work done bang evidence (test pass, coverage report), khong duoc noi "da xong".</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-title">Human La Owner</div>
+      <div class="principle-desc">AI la force multiplier, khong phai replacement. Developer hieu 100% code, approve moi decision. Trach nhiem thuoc developer.</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
