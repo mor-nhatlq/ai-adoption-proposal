@@ -519,60 +519,6 @@
   </div>
 </section>
 
-<!-- ===== 6 QUALITY GATES ===== -->
-<section class="section">
-  <div class="section-title anim" style="--i:0">05 &middot; Coding &middot; Quality Gates</div>
-  <h2 class="section-heading anim" style="--i:1">6 Hard Gates &mdash; không skip</h2>
-  <p class="section-intro anim" style="--i:2">Mỗi gate có <strong>trigger</strong> rõ ràng và <strong>điều kiện pass</strong> verifiable. Trong đó 3 gates chỉ áp dụng cho Dự án cũ.</p>
-  <div class="gates-grid">
-    <div class="gate-card anim" style="--i:3;--c:var(--rose);--cdim:var(--rose-dim)">
-      <div class="gate-head"><div class="gate-name">Design Gate</div><span class="gate-scope">Always</span></div>
-      <div class="gate-trigger">Trigger: Sau Phase 1 &middot; trước Plan</div>
-      <div class="gate-pass"><strong>Pass:</strong> Design doc được human approve. Legacy: thêm Impact Analysis.</div>
-    </div>
-    <div class="gate-card optional anim" style="--i:4;--c:var(--blue);--cdim:var(--blue-dim)">
-      <div class="gate-head"><div class="gate-name">Safety Net Gate</div><span class="gate-scope">Legacy only</span></div>
-      <div class="gate-trigger">Trigger: Sau Phase 2 &middot; trước Execution</div>
-      <div class="gate-pass"><strong>Pass:</strong> Test coverage cho code sẽ bị sửa đã có TRƯỚC khi đụng vào.</div>
-    </div>
-    <div class="gate-card anim" style="--i:5;--c:var(--amber);--cdim:var(--amber-dim)">
-      <div class="gate-head"><div class="gate-name">TDD Gate</div><span class="gate-scope">Always</span></div>
-      <div class="gate-trigger">Trigger: Mỗi task trong Phase 3-4</div>
-      <div class="gate-pass"><strong>Pass:</strong> Có failing test TRƯỚC khi có implementation.</div>
-    </div>
-    <div class="gate-card anim" style="--i:6;--c:var(--rose);--cdim:var(--rose-dim)">
-      <div class="gate-head"><div class="gate-name">Verification Gate</div><span class="gate-scope">Always</span></div>
-      <div class="gate-trigger">Trigger: Sau Phase 5 &middot; trước Finalize</div>
-      <div class="gate-pass"><strong>Pass:</strong> Evidence-based verification pass toàn bộ checklist (tests, coverage, no TODOs, no placeholders).</div>
-    </div>
-    <div class="gate-card optional anim" style="--i:7;--c:var(--blue);--cdim:var(--blue-dim)">
-      <div class="gate-head"><div class="gate-name">Domain Gate</div><span class="gate-scope">Legacy only</span></div>
-      <div class="gate-trigger">Trigger: Trước merge</div>
-      <div class="gate-pass"><strong>Pass:</strong> Domain Expert approve business logic changes.</div>
-    </div>
-    <div class="gate-card optional anim" style="--i:8;--c:var(--blue);--cdim:var(--blue-dim)">
-      <div class="gate-head"><div class="gate-name">Rollback Gate</div><span class="gate-scope">Legacy only</span></div>
-      <div class="gate-trigger">Trigger: Trước merge</div>
-      <div class="gate-pass"><strong>Pass:</strong> Rollback plan có + đã test revert thành công.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== COMPARE TABLE ===== -->
-<section class="section">
-  <div class="section-title anim" style="--i:0">06 &middot; Coding &middot; Quick Compare</div>
-  <h2 class="section-heading anim" style="--i:1">Greenfield vs Legacy</h2>
-  <div class="compare anim" style="--i:2">
-    <div class="compare-head"><div>Khía cạnh</div><div>Dự án mới</div><div>Dự án cũ</div></div>
-    <div class="compare-row"><div class="compare-cell">Core principle</div><div class="compare-cell"><strong>"Move fast, AI lead."</strong></div><div class="compare-cell"><strong>"Move carefully, AI assist."</strong></div></div>
-    <div class="compare-row"><div class="compare-cell">Time to full speed</div><div class="compare-cell">~3-4 tuần</div><div class="compare-cell">~8-10 tuần</div></div>
-    <div class="compare-row"><div class="compare-cell">Parallel dispatch</div><div class="compare-cell">Ngay từ sprint 1</div><div class="compare-cell">Sau khi team confident</div></div>
-    <div class="compare-row"><div class="compare-cell">Test strategy</div><div class="compare-cell">TDD song song code</div><div class="compare-cell">Test code cũ TRƯỚC khi đổi</div></div>
-    <div class="compare-row"><div class="compare-cell">Merge strategy</div><div class="compare-cell">Nhanh, ít risk</div><div class="compare-cell">Gradual + feature flags + rollback</div></div>
-    <div class="compare-row"><div class="compare-cell">Bug volume</div><div class="compare-cell">Ít (TDD từ đầu)</div><div class="compare-cell">Nhiều &rarr; 4-phase debug bắt buộc</div></div>
-    <div class="compare-row"><div class="compare-cell">Gates required</div><div class="compare-cell">3 (Design, TDD, Verify)</div><div class="compare-cell">6 (+ Safety Net, Domain, Rollback)</div></div>
-  </div>
-</section>
 
 <!-- ===== TRACK B BANNER ===== -->
 <div class="track-banner anim" style="--c:var(--amber);--cdim:var(--amber-dim)">
@@ -697,19 +643,17 @@
         <ul>
           <li>5 bước workflow: Strategy &rarr; Plan &rarr; Write &rarr; Review &rarr; Execute</li>
           <li>3 Quality Gates: Strategy / Plan / Review</li>
-          <li>Template Testcase chuẩn (9 trường, traceability)</li>
           <li>Checklist review testcase (8 tiêu chí)</li>
         </ul>
       </div>
       <div class="proc-sec"><div class="proc-sec-title">Deliverables</div>
         <ul>
           <li>Tài liệu quy trình Testing &mdash; 5 bước, ví dụ end-to-end</li>
-          <li>Template Test Strategy Doc (Step 1)</li>
-          <li>Template Testcase Backlog (Step 2)</li>
-          <li>Template Testcase &mdash; Excel/Markdown (Step 3)</li>
-          <li>Checklist Review Testcase (Step 4)</li>
-          <li>Prompt Library cho Step 1/2/3</li>
-          <li>Training material &mdash; workshop 1 ngày QA + demo</li>
+          <li>Template Test Strategy Doc </li>
+          <li>Template Testcase &mdash; Excel/Markdown </li>
+          <li>Checklist Review Testcase </li>
+          <li>Prompt Library </li>
+          <li>Training material</li>
         </ul>
       </div>
     </div>
@@ -722,10 +666,7 @@
   <h2 class="section-heading anim" style="--i:1">Outputs Phase 1 &mdash; Coding (9) + Testing (7)</h2>
   <h3 style="font-size:14px;font-weight:700;color:var(--green);margin:8px 0 10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1.3px">&rtrif; AI Coding (W1-W2)</h3>
   <div class="deliv-list">
-    <div class="deliv anim" style="--i:2;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text"><strong>Tài liệu quy trình Coding</strong> &mdash; 6 phases, 2 nhánh, có ví dụ</div></div>
-    <div class="deliv anim" style="--i:3;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text">Template <code>CLAUDE.md</code> chuẩn cho dự án</div></div>
-    <div class="deliv anim" style="--i:4;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text">Bộ <code>.claude/rules/</code> templates (dev-rules, orchestration, workflow)</div></div>
-    <div class="deliv anim" style="--i:5;--c:var(--plum)"><div class="deliv-box"></div><div class="deliv-text"><strong>Superpowers skill pack</strong> cài &amp; tested trên máy dev</div></div>
+    <div class="deliv anim" style="--i:2;--c:var(--green)"><div class="deliv-box"></div><div class="deliv-text"><strong>Tài liệu quy trình Coding</strong> </div></div>
     <div class="deliv anim" style="--i:6;--c:var(--rose)"><div class="deliv-box"></div><div class="deliv-text">Checklist 6 Gates (Design/Safety/TDD/Verify/Domain/Rollback)</div></div>
     <div class="deliv anim" style="--i:7;--c:var(--teal)"><div class="deliv-box"></div><div class="deliv-text">Template Design Doc (Greenfield + Legacy Impact Analysis)</div></div>
     <div class="deliv anim" style="--i:8;--c:var(--teal)"><div class="deliv-box"></div><div class="deliv-text">Template Plan với TDD-first tasks (paths, code, commands)</div></div>
@@ -735,13 +676,12 @@
 
   <h3 style="font-size:14px;font-weight:700;color:var(--amber);margin:22px 0 10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1.3px">&rtrif; AI Testing (W3)</h3>
   <div class="deliv-list">
-    <div class="deliv anim" style="--i:11;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text"><strong>Tài liệu quy trình Testing</strong> &mdash; 5 bước, ví dụ end-to-end</div></div>
-    <div class="deliv anim" style="--i:12;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text">Template <strong>Test Strategy Doc</strong> (Step 1 output)</div></div>
-    <div class="deliv anim" style="--i:13;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text">Template <strong>Testcase Backlog</strong> (Step 2 output)</div></div>
-    <div class="deliv anim" style="--i:14;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text">Template <strong>Testcase</strong> chuẩn &mdash; 9 trường, Excel/Markdown (Step 3)</div></div>
-    <div class="deliv anim" style="--i:15;--c:var(--rose)"><div class="deliv-box"></div><div class="deliv-text">Checklist <strong>Review Testcase</strong> &mdash; 8 tiêu chí (Step 4)</div></div>
-    <div class="deliv anim" style="--i:16;--c:var(--plum)"><div class="deliv-box"></div><div class="deliv-text"><strong>Prompt Library</strong> &mdash; prompt mẫu cho Step 1/2/3</div></div>
-    <div class="deliv anim" style="--i:17;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text"><strong>Training material</strong> &mdash; workshop 1 ngày QA + demo feature end-to-end</div></div>
+    <div class="deliv anim" style="--i:11;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text"><strong>Tài liệu quy trình Testing</strong> </div></div>
+    <div class="deliv anim" style="--i:12;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text">Template <strong>Test Strategy Doc</strong> </div></div>
+    <div class="deliv anim" style="--i:13;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text">Template <strong>Testcase Backlog</strong> </div></div>
+    <div class="deliv anim" style="--i:15;--c:var(--rose)"><div class="deliv-box"></div><div class="deliv-text">Checklist <strong>Review Testcase</strong> </div></div>
+    <div class="deliv anim" style="--i:16;--c:var(--plum)"><div class="deliv-box"></div><div class="deliv-text"><strong>Prompt Library</strong> </div></div>
+    <div class="deliv anim" style="--i:17;--c:var(--amber)"><div class="deliv-box"></div><div class="deliv-text"><strong>Training material</strong> </div></div>
   </div>
 </section>
 
