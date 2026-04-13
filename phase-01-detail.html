@@ -160,6 +160,18 @@
   .deliv-text strong{color:var(--text-bright);font-weight:600}
   .deliv-text code{font-family:var(--font-mono);font-size:11.5px;background:var(--accent-dim);color:var(--accent);padding:1px 5px;border-radius:3px}
 
+  /* ===== TRACK BANNER ===== */
+  .track-banner{border-radius:16px;padding:24px 28px;margin:40px 0 20px;position:relative;overflow:hidden;border:1.5px solid var(--c);background:linear-gradient(135deg,var(--cdim),transparent)}
+  .track-banner::before{content:'';position:absolute;top:0;left:0;width:6px;height:100%;background:var(--c)}
+  .track-tag{font-family:var(--font-mono);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--c);display:inline-block;padding:4px 10px;background:var(--cdim);border-radius:6px;margin-bottom:10px}
+  .track-title{font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--text-bright);line-height:1.2;margin-bottom:8px}
+  .track-title em{font-style:normal;color:var(--c)}
+  .track-sub{font-size:14px;color:var(--text);line-height:1.6;max-width:780px}
+  .track-sub strong{color:var(--text-bright)}
+  .track-meta{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap}
+  .track-meta-item{font-family:var(--font-mono);font-size:11px;color:var(--text-dim)}
+  .track-meta-item strong{color:var(--c);font-weight:700}
+
   /* ===== TESTING WORKFLOW (5 Steps) ===== */
   .tw-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
   @media(max-width:900px){.tw-steps{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}}
@@ -286,9 +298,21 @@
   </div>
 </section>
 
+<!-- ===== TRACK A BANNER ===== -->
+<div class="track-banner anim" style="--c:var(--green);--cdim:var(--green-dim)">
+  <div class="track-tag">Track A &middot; W1-W2</div>
+  <div class="track-title">AI <em>Coding</em> Workflow &mdash; cho Developer</div>
+  <p class="track-sub">Framework <strong>Superpowers</strong> &mdash; 8-step mandatory flow, 6 phases × 2 tracks (Greenfield / Legacy), 6 Quality Gates. Sau đây là cấu trúc chi tiết của quy trình Coding.</p>
+  <div class="track-meta">
+    <div class="track-meta-item">Owner: <strong>Tech Lead</strong></div>
+    <div class="track-meta-item">Framework: <strong>obra/superpowers</strong></div>
+    <div class="track-meta-item">Gates: <strong>6 hard gates</strong></div>
+  </div>
+</div>
+
 <!-- ===== MANDATORY FLOW ===== -->
 <section class="section">
-  <div class="section-title anim" style="--i:0">03 &middot; Mandatory Flow</div>
+  <div class="section-title anim" style="--i:0">03 &middot; Coding &middot; Mandatory Flow</div>
   <h2 class="section-heading anim" style="--i:1">8 bước bắt buộc (không skip)</h2>
   <p class="section-intro anim" style="--i:2">Mỗi feature/task đi qua đúng 8 bước này. 2 bước là <strong>HARD GATES</strong> &mdash; không vượt qua thì không được sang bước kế.</p>
   <div class="flow-h anim" style="--i:3">
@@ -317,7 +341,7 @@
 
 <!-- ===== 6 PHASES DETAIL ===== -->
 <section class="section">
-  <div class="section-title anim" style="--i:0">04 &middot; 6 Phases &middot; Greenfield vs Legacy</div>
+  <div class="section-title anim" style="--i:0">04 &middot; Coding &middot; 6 Phases &middot; Greenfield vs Legacy</div>
   <h2 class="section-heading anim" style="--i:1">Chi tiết từng phase &mdash; 2 tracks</h2>
   <p class="section-intro anim" style="--i:2">Click vào mỗi phase để mở chi tiết. Lane <strong style="color:var(--green)">xanh lá</strong> = Dự án mới · Lane <strong style="color:var(--blue)">xanh dương</strong> = Dự án cũ.</p>
 
@@ -495,9 +519,76 @@
   </div>
 </section>
 
+<!-- ===== 6 QUALITY GATES ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">05 &middot; Coding &middot; Quality Gates</div>
+  <h2 class="section-heading anim" style="--i:1">6 Hard Gates &mdash; không skip</h2>
+  <p class="section-intro anim" style="--i:2">Mỗi gate có <strong>trigger</strong> rõ ràng và <strong>điều kiện pass</strong> verifiable. Trong đó 3 gates chỉ áp dụng cho Dự án cũ.</p>
+  <div class="gates-grid">
+    <div class="gate-card anim" style="--i:3;--c:var(--rose);--cdim:var(--rose-dim)">
+      <div class="gate-head"><div class="gate-name">Design Gate</div><span class="gate-scope">Always</span></div>
+      <div class="gate-trigger">Trigger: Sau Phase 1 &middot; trước Plan</div>
+      <div class="gate-pass"><strong>Pass:</strong> Design doc được human approve. Legacy: thêm Impact Analysis.</div>
+    </div>
+    <div class="gate-card optional anim" style="--i:4;--c:var(--blue);--cdim:var(--blue-dim)">
+      <div class="gate-head"><div class="gate-name">Safety Net Gate</div><span class="gate-scope">Legacy only</span></div>
+      <div class="gate-trigger">Trigger: Sau Phase 2 &middot; trước Execution</div>
+      <div class="gate-pass"><strong>Pass:</strong> Test coverage cho code sẽ bị sửa đã có TRƯỚC khi đụng vào.</div>
+    </div>
+    <div class="gate-card anim" style="--i:5;--c:var(--amber);--cdim:var(--amber-dim)">
+      <div class="gate-head"><div class="gate-name">TDD Gate</div><span class="gate-scope">Always</span></div>
+      <div class="gate-trigger">Trigger: Mỗi task trong Phase 3-4</div>
+      <div class="gate-pass"><strong>Pass:</strong> Có failing test TRƯỚC khi có implementation.</div>
+    </div>
+    <div class="gate-card anim" style="--i:6;--c:var(--rose);--cdim:var(--rose-dim)">
+      <div class="gate-head"><div class="gate-name">Verification Gate</div><span class="gate-scope">Always</span></div>
+      <div class="gate-trigger">Trigger: Sau Phase 5 &middot; trước Finalize</div>
+      <div class="gate-pass"><strong>Pass:</strong> Evidence-based verification pass toàn bộ checklist (tests, coverage, no TODOs, no placeholders).</div>
+    </div>
+    <div class="gate-card optional anim" style="--i:7;--c:var(--blue);--cdim:var(--blue-dim)">
+      <div class="gate-head"><div class="gate-name">Domain Gate</div><span class="gate-scope">Legacy only</span></div>
+      <div class="gate-trigger">Trigger: Trước merge</div>
+      <div class="gate-pass"><strong>Pass:</strong> Domain Expert approve business logic changes.</div>
+    </div>
+    <div class="gate-card optional anim" style="--i:8;--c:var(--blue);--cdim:var(--blue-dim)">
+      <div class="gate-head"><div class="gate-name">Rollback Gate</div><span class="gate-scope">Legacy only</span></div>
+      <div class="gate-trigger">Trigger: Trước merge</div>
+      <div class="gate-pass"><strong>Pass:</strong> Rollback plan có + đã test revert thành công.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPARE TABLE ===== -->
+<section class="section">
+  <div class="section-title anim" style="--i:0">06 &middot; Coding &middot; Quick Compare</div>
+  <h2 class="section-heading anim" style="--i:1">Greenfield vs Legacy</h2>
+  <div class="compare anim" style="--i:2">
+    <div class="compare-head"><div>Khía cạnh</div><div>Dự án mới</div><div>Dự án cũ</div></div>
+    <div class="compare-row"><div class="compare-cell">Core principle</div><div class="compare-cell"><strong>"Move fast, AI lead."</strong></div><div class="compare-cell"><strong>"Move carefully, AI assist."</strong></div></div>
+    <div class="compare-row"><div class="compare-cell">Time to full speed</div><div class="compare-cell">~3-4 tuần</div><div class="compare-cell">~8-10 tuần</div></div>
+    <div class="compare-row"><div class="compare-cell">Parallel dispatch</div><div class="compare-cell">Ngay từ sprint 1</div><div class="compare-cell">Sau khi team confident</div></div>
+    <div class="compare-row"><div class="compare-cell">Test strategy</div><div class="compare-cell">TDD song song code</div><div class="compare-cell">Test code cũ TRƯỚC khi đổi</div></div>
+    <div class="compare-row"><div class="compare-cell">Merge strategy</div><div class="compare-cell">Nhanh, ít risk</div><div class="compare-cell">Gradual + feature flags + rollback</div></div>
+    <div class="compare-row"><div class="compare-cell">Bug volume</div><div class="compare-cell">Ít (TDD từ đầu)</div><div class="compare-cell">Nhiều &rarr; 4-phase debug bắt buộc</div></div>
+    <div class="compare-row"><div class="compare-cell">Gates required</div><div class="compare-cell">3 (Design, TDD, Verify)</div><div class="compare-cell">6 (+ Safety Net, Domain, Rollback)</div></div>
+  </div>
+</section>
+
+<!-- ===== TRACK B BANNER ===== -->
+<div class="track-banner anim" style="--c:var(--amber);--cdim:var(--amber-dim)">
+  <div class="track-tag">Track B &middot; W3</div>
+  <div class="track-title">AI <em>Testing</em> Workflow &mdash; cho Tester / QA</div>
+  <p class="track-sub">AI là <strong>content generator</strong>, Tester là <strong>quality gate</strong>. 5 bước workflow + 3 Quality Gates. Chưa build auto-execution (YAGNI &mdash; đánh giá lại sau 6 tháng).</p>
+  <div class="track-meta">
+    <div class="track-meta-item">Owner: <strong>QA Lead</strong></div>
+    <div class="track-meta-item">Workflow: <strong>5 steps</strong></div>
+    <div class="track-meta-item">Gates: <strong>3 hard gates</strong></div>
+  </div>
+</div>
+
 <!-- ===== TESTING WORKFLOW FOR TESTER ===== -->
 <section class="section">
-  <div class="section-title anim" style="--i:0">07 &middot; Testing Workflow cho Tester</div>
+  <div class="section-title anim" style="--i:0">07 &middot; Testing &middot; 5-Step Workflow</div>
   <h2 class="section-heading anim" style="--i:1">Quy trình AI cho Testing &mdash; 5 bước</h2>
   <p class="section-intro anim" style="--i:2">
     Workflow dành cho <strong>QA / Tester</strong>. AI là <strong style="color:var(--amber)">content generator</strong> (viết testcase), Tester là <strong style="color:var(--blue)">quality gate</strong> (review + execute). Không để AI tự chạy test &amp; tự claim pass. 5 bước, 3 hard gates.
